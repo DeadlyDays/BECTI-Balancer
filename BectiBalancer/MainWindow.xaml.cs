@@ -72,6 +72,12 @@ namespace BectiBalancer
         private void btnImport_Click(object sender, RoutedEventArgs e)
             //Attempt Formatted File Import
         {
+            if (tbFilePath.Text == "")
+            {
+                Log("Invalid Path");
+                return;
+            }
+                
             workingList.populateFromFormatedFile(tbFilePath.Text, "Unit");
             Log("Pulled Data");
             populateFields();
@@ -81,6 +87,11 @@ namespace BectiBalancer
         private void btnCreateNewFileFromList_Click(object sender, RoutedEventArgs e)
             //New Collection Generated from csv List of items
         {
+            if (tbImportExportPath.Text == "")
+            {
+                Log("Invalid Path");
+                return;
+            }
             String type = cbListTypeNewExport.Text;
 
             String path = tbImportExportPath.Text;
@@ -207,8 +218,11 @@ namespace BectiBalancer
         private void btnExportList_Click(object sender, RoutedEventArgs e)
         {
             if (tbExportPath.Text == "")
+            {
+                Log("Invalid Path");
                 return;
-            if(Directory.Exists(tbExportPath.Text))
+            }
+            if (Directory.Exists(tbExportPath.Text))
                 //If this is a directory
             {
                 //Create a file

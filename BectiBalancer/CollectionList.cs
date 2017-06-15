@@ -122,6 +122,7 @@ namespace BectiBalancer
 
         public void populateFromFormatedFile(String path, String type)
         {
+            
             String file = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
             //populates String file with entire documents text
 

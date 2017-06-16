@@ -207,7 +207,7 @@ namespace BectiBalancer
             dgBalancingFields.CommitEdit();
             dgViewBalance.ItemsSource = null;
             dgViewBalance.ItemsSource = workingList.ItemList;
-            
+            dgViewBalance.CanUserAddRows = true;
         }
 
         private void dgBalancingFields_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -253,6 +253,9 @@ namespace BectiBalancer
             
         }
 
-        
+        private void dgViewBalance_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

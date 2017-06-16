@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BectiBalancer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="850.462" Width="747.387">
-    <Grid Margin="0,0,2,0">
+        Title="MainWindow" Height="850.462" Width="1500">
+    <Grid Margin="0,0,758,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="475*"/>
             <RowDefinition Height="324*"/>
@@ -17,60 +17,60 @@
             <ColumnDefinition Width="200*"/>
             <ColumnDefinition Width="299*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnConnect" Content="Connect" IsEnabled="False" HorizontalAlignment="Left" Margin="118,93,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnConnect_Click"/>
-        <Label x:Name="lblLog" Content="Log" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Height="31" Width="41"/>
-        <Label x:Name="lblAddress" Content="Address:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="55" Margin="0,8,0,0"/>
-        <Label x:Name="lblUsername" Content="Username:" HorizontalAlignment="Left" Margin="-1,45,0,0" VerticalAlignment="Top" Height="26" Width="66"/>
+        <Button x:Name="btnConnect" Content="Connect" IsEnabled="False" HorizontalAlignment="Left" Margin="190,33,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnConnect_Click" Grid.Column="2"/>
+        <Label x:Name="lblLog" Content="Log" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Height="31" Width="41"/>
+        <Label x:Name="lblAddress" Content="Address:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="55" Margin="10,27,0,0" Grid.Column="1"/>
+        <Label x:Name="lblUsername" Content="Username:" HorizontalAlignment="Left" Margin="5,6,0,0" VerticalAlignment="Top" Height="26" Width="66"/>
         <Label x:Name="lblPassword" Content="Password:" HorizontalAlignment="Left" Margin="113,8,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
-        <Label x:Name="lblDBName" Content="Database Name:" HorizontalAlignment="Left" Margin="113,45,0,0" VerticalAlignment="Top" Height="26" Width="97"/>
-        <TextBox x:Name="tbAddress" HorizontalAlignment="Left" Height="23" Margin="5,29,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="tbUsername" HorizontalAlignment="Left" Height="23" Margin="4,65,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="lblDBName" Content="Database Name:" HorizontalAlignment="Left" Margin="182,29,0,0" VerticalAlignment="Top" Height="26" Width="97" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <TextBox x:Name="tbAddress" HorizontalAlignment="Left" Height="23" Margin="70,30,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
+        <TextBox x:Name="tbUsername" HorizontalAlignment="Left" Height="23" Margin="10,26,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100"/>
         <TextBox x:Name="tbPassword" HorizontalAlignment="Left" Height="23" Margin="118,29,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="tbDBName" HorizontalAlignment="Left" Height="23" Margin="118,65,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100"/>
-        <ListBox x:Name="lbItemList" Grid.Column="1" HorizontalAlignment="Left" Height="417" VerticalAlignment="Top" Width="198" Background="#FFD1D1D1" SelectionChanged="listBox_SelectionChanged"/>
-        <Label x:Name="lblClassName" Content="Classname:" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="262" Height="26"/>
-        <Label x:Name="lblValueFields" Content="Value Fields(do not get Output:" Grid.Column="2" HorizontalAlignment="Left" Margin="0,18,0,0" VerticalAlignment="Top" Height="26" Width="175"/>
-        <Label x:Name="lblBalancingFields" Content="Balancing Fields(get Output):" Grid.Column="2" HorizontalAlignment="Left" Margin="1,106,0,0" VerticalAlignment="Top" Height="26" Width="163"/>
-        <DataGrid x:Name="dgValueFields" Grid.Column="2" HorizontalAlignment="Left" Height="27" Margin="1,44,0,0" VerticalAlignment="Top" Width="244">
+        <TextBox x:Name="tbDBName" HorizontalAlignment="Left" Height="23" Margin="79,32,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="100" Grid.Column="2"/>
+        <ListBox x:Name="lbItemList" HorizontalAlignment="Left" Height="102" VerticalAlignment="Top" Width="198" Background="#FFD1D1D1" SelectionChanged="listBox_SelectionChanged" Margin="0,77,0,0" Grid.Column="1"/>
+        <Label x:Name="lblClassName" Content="Classname:" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="262" Height="26" Margin="316,63,-271,0"/>
+        <Label x:Name="lblValueFields" Content="Value Fields(do not get Output:" Grid.Column="2" HorizontalAlignment="Left" Margin="316,81,-184,0" VerticalAlignment="Top" Height="26" Width="175"/>
+        <Label x:Name="lblBalancingFields" Content="Balancing Fields(get Output):" Grid.Column="2" HorizontalAlignment="Left" Margin="317,169,-173,0" VerticalAlignment="Top" Height="26" Width="163"/>
+        <DataGrid x:Name="dgValueFields" Grid.Column="2" HorizontalAlignment="Left" Height="27" Margin="317,107,-254,0" VerticalAlignment="Top" Width="244">
 
         </DataGrid>
-        <DataGrid x:Name="dgBalancingFields" Grid.Column="2" HorizontalAlignment="Left" Height="280" Margin="1,137,0,0" VerticalAlignment="Top" Width="244" SelectionChanged="dgBalancingFields_SelectionChanged">
+        <DataGrid x:Name="dgBalancingFields" Grid.Column="2" HorizontalAlignment="Left" Height="110" Margin="5,77,0,0" VerticalAlignment="Top" Width="244" SelectionChanged="dgBalancingFields_SelectionChanged">
 
         </DataGrid>
-        <DataGrid x:Name="dgViewBalance" IsReadOnly="True" HorizontalAlignment="Left" Margin="4,4,0,0" VerticalAlignment="Top" Height="310" Width="718" BorderBrush="#FFAAAAAA" Background="#FFC3C3C3" Grid.ColumnSpan="3" Grid.Row="1"/>
-        <Button x:Name="btnImport" Content="Import" IsEnabled="True" HorizontalAlignment="Left" Margin="73,200,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnImport_Click"/>
-        <TextBox x:Name="tbFilePath" HorizontalAlignment="Left" Height="23" Margin="73,172,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="142"/>
-        <ComboBox x:Name="cbImportFormated" HorizontalAlignment="Left" Margin="73,146,0,0" VerticalAlignment="Top" Width="142" Height="22">
+        <DataGrid x:Name="dgViewBalance" IsReadOnly="False" HorizontalAlignment="Left" Margin="0,200,-502,0" VerticalAlignment="Top" Height="589" Width="1014" BorderBrush="#FFAAAAAA" Background="#FFC3C3C3" Grid.ColumnSpan="2" Grid.Column="1" Grid.RowSpan="2" SelectionChanged="dgViewBalance_SelectionChanged"/>
+        <Button x:Name="btnImport" Content="Import" IsEnabled="True" HorizontalAlignment="Left" Margin="270,3,-38,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnImport_Click" Grid.Column="2"/>
+        <TextBox x:Name="tbFilePath" HorizontalAlignment="Left" Height="23" Margin="50,3,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="142" Grid.Column="2"/>
+        <ComboBox x:Name="cbImportFormated" HorizontalAlignment="Left" Margin="182,5,0,0" VerticalAlignment="Top" Width="68" Height="22" Grid.ColumnSpan="2" Grid.Column="1">
             <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="140"/>
         </ComboBox>
-        <Label x:Name="lblListType" Content="List Type" HorizontalAlignment="Left" Margin="0,146,0,0" VerticalAlignment="Top" Height="26" Width="56"/>
-        <Button x:Name="btnBrowseForFormatedImport" Content="Browse" IsEnabled="True" HorizontalAlignment="Left" Margin="0,172,0,0" VerticalAlignment="Top" Width="68" Height="23" Click="btnBrowse_Click"/>
-        <Button x:Name="btnChange" Content="Change" IsEnabled="True" Grid.Column="2" HorizontalAlignment="Left" Margin="245,137,0,0" VerticalAlignment="Top" Width="48" Height="280" Click="btnChange_Click"/>
-        <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" Grid.Column="2" HorizontalAlignment="Left" Margin="189,447,0,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
-        <Button x:Name="btnCreateNewFileFromList" Content="New File From CSV" Grid.Column="2" HorizontalAlignment="Left" Margin="190,420,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="btnCreateNewFileFromList_Click"/>
+        <Label x:Name="lblListType" Content="List Type" HorizontalAlignment="Left" Margin="121,3,0,0" VerticalAlignment="Top" Height="26" Width="56" Grid.Column="1"/>
+        <Button x:Name="btnBrowseForFormatedImport" Content="Browse" IsEnabled="True" HorizontalAlignment="Left" Margin="197,3,0,0" VerticalAlignment="Top" Width="68" Height="23" Click="btnBrowse_Click" Grid.Column="2"/>
+        <Button x:Name="btnChange" Content="Change" IsEnabled="True" Grid.Column="2" HorizontalAlignment="Left" Margin="249,77,0,0" VerticalAlignment="Top" Width="48" Height="110" Click="btnChange_Click"/>
+        <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" Grid.Column="2" HorizontalAlignment="Left" Margin="740,32,-537,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
+        <Button x:Name="btnCreateNewFileFromList" Content="New File From CSV" Grid.Column="2" HorizontalAlignment="Left" Margin="741,5,-537,0" VerticalAlignment="Top" Width="103" Height="25" Click="btnCreateNewFileFromList_Click"/>
         <Label x:Name="lblConnectToDB" Content="Connect to a Database" HorizontalAlignment="Left" Margin="0,-5,0,0" VerticalAlignment="Top" Height="26" Width="130"/>
-        <Label x:Name="lblImportFormatedFile" Content="Import Formated File" HorizontalAlignment="Left" Margin="0,115,0,0" VerticalAlignment="Top" Height="26" Width="121"/>
-        <ComboBox x:Name="cbListTypeNewExport" Grid.Column="1" HorizontalAlignment="Left" Margin="82,422,0,0" VerticalAlignment="Top" Width="94" Height="22">
+        <Label x:Name="lblImportFormatedFile" Content="Import Formated File" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Height="26" Width="121" Grid.Column="1"/>
+        <ComboBox x:Name="cbListTypeNewExport" Grid.Column="2" HorizontalAlignment="Left" Margin="428,7,-215,0" VerticalAlignment="Top" Width="94" Height="22">
             <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
         </ComboBox>
-        <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" Grid.Column="2" HorizontalAlignment="Left" Margin="115,420,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
-        <TextBox x:Name="tbImportExportPath" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="176,422,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="139" Grid.ColumnSpan="2"/>
-        <Label x:Name="lblTypeOfFile" Content="Type of File:" HorizontalAlignment="Left" Margin="0,420,0,0" VerticalAlignment="Top" Height="26" Width="73" Grid.Column="1"/>
-        <Button x:Name="btnNewField" Content="New Field" IsEnabled="False" Grid.Column="2" HorizontalAlignment="Left" Margin="121,78,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
-        <TextBox x:Name="textBox1" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="1,78,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <RichTextBox x:Name="rtbLog" HorizontalAlignment="Left" Height="248" Margin="4,226,0,0" VerticalAlignment="Top" Width="206" Background="LightGray" IsEnabled="False">
+        <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" Grid.Column="2" HorizontalAlignment="Left" Margin="666,5,-434,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
+        <TextBox x:Name="tbImportExportPath" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="522,7,-354,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="139"/>
+        <Label x:Name="lblTypeOfFile" Content="Type of File:" HorizontalAlignment="Left" Margin="346,5,-112,0" VerticalAlignment="Top" Height="26" Width="73" Grid.Column="2"/>
+        <Button x:Name="btnNewField" Content="New Field" IsEnabled="False" Grid.Column="2" HorizontalAlignment="Left" Margin="442,141,-210,0" VerticalAlignment="Top" Width="75" Height="22"/>
+        <TextBox x:Name="textBox1" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="317,141,-130,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <RichTextBox x:Name="rtbLog" HorizontalAlignment="Left" Height="634" Margin="4,155,0,0" VerticalAlignment="Top" Width="206" Background="LightGray" IsEnabled="False" Grid.RowSpan="2">
             <FlowDocument>
                 <Paragraph>
                     <Run Text=""/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <TextBox x:Name="tbExportPath" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="176,449,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="139" Grid.ColumnSpan="2"/>
-        <ComboBox x:Name="cbListTypeExport" Grid.Column="1" HorizontalAlignment="Left" Margin="82,449,0,0" VerticalAlignment="Top" Width="94" Height="22">
+        <TextBox x:Name="tbExportPath" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="522,34,-354,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="139"/>
+        <ComboBox x:Name="cbListTypeExport" Grid.Column="2" HorizontalAlignment="Left" Margin="428,34,-215,0" VerticalAlignment="Top" Width="94" Height="22">
             <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
         </ComboBox>
-        <Label x:Name="lblTypeOfFile_Copy" Content="Type of File:" HorizontalAlignment="Left" Margin="0,445,0,0" VerticalAlignment="Top" Height="26" Width="73" Grid.Column="1"/>
-        <Button x:Name="btnBrowseForExportPath" Content="Browse" Grid.Column="2" HorizontalAlignment="Left" Margin="115,447,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
+        <Label x:Name="lblTypeOfFile_Copy" Content="Type of File:" HorizontalAlignment="Left" Margin="346,30,-112,0" VerticalAlignment="Top" Height="26" Width="73" Grid.Column="2"/>
+        <Button x:Name="btnBrowseForExportPath" Content="Browse" Grid.Column="2" HorizontalAlignment="Left" Margin="666,32,-434,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
 
     </Grid>
 </Window>

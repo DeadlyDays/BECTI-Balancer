@@ -39,26 +39,16 @@ namespace BectiBalancer
             rtbLog.AppendText(s);
             rtbLog.ScrollToEnd();
         }
-        private void populateFields()
+        private void populateFields(String type)
             //Populate the List of Items
         {
             /*lbItemList.ItemsSource = workingList.ItemList;*/
             Log("Populating Fields...");
             for (int i = 0; i < workingList.ItemList.Count; i++)
             {
-                lbItemList.Items.Add(workingList.ItemList[i].ClassName);
+                //lbItemList.Items.Add(workingList.ItemList[i].ClassName);
             }
             Log("Populated Fields.");
-        }
-
-        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            //Item Selected, Populate Details Field
-        {
-            String className = lbItemList.SelectedItem.ToString();
-
-            dgBalancingFields.ItemsSource = workingList.returnFieldsOfItemNamed(className);
-            lblClassName.Content = "Classname: " + className;
-
         }
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
@@ -66,8 +56,6 @@ namespace BectiBalancer
         {
 
         }
-
-        
 
         private void btnImport_Click(object sender, RoutedEventArgs e)
             //Attempt Formatted File Import
@@ -78,9 +66,20 @@ namespace BectiBalancer
                 return;
             }
                 
-            workingList.populateFromFormatedFile(tbFilePath.Text, "Unit");
-            Log("Pulled Data");
-            populateFields();
+            if(cbImportFormated.Text == "Unit")
+            {
+                workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                Log("Pulled Data");
+                populateFields("Unit");
+                
+                //dgBalancingFields.CommitEdit();
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = workingList.UnitList;
+                dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                dgViewBalance.CanUserAddRows = true;
+            }
+            
+            
             
         }
 
@@ -108,7 +107,7 @@ namespace BectiBalancer
                 case "Unit":
                     workingList = new CollectionList();
                     workingList.populateFromCSV(path, type);
-                    populateFields();
+                    populateFields(type);
                     Log("Populated Item List as Unit Type");
                     break;
                 default:
@@ -200,26 +199,17 @@ namespace BectiBalancer
                 tbFilePath.Text = filename;
             }
         }
-
-        private void btnChange_Click(object sender, RoutedEventArgs e)
-        {
-            dgBalancingFields.IsSynchronizedWithCurrentItem = true;
-            dgBalancingFields.CommitEdit();
-            dgViewBalance.ItemsSource = null;
-            dgViewBalance.ItemsSource = workingList.ItemList;
-            dgViewBalance.CanUserAddRows = true;
-        }
-
-        private void dgBalancingFields_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
+        
         private void btnExportList_Click(object sender, RoutedEventArgs e)
         {
             if (tbExportPath.Text == "")
             {
                 Log("Invalid Path");
+                return;
+            }
+            if(cbListTypeExport.Text == "")
+            {
+                Log("Invalid Type");
                 return;
             }
             if (Directory.Exists(tbExportPath.Text))
@@ -228,7 +218,7 @@ namespace BectiBalancer
                 //Create a file
                 using (StreamWriter sw = File.CreateText(tbExportPath.Text + "\\Export.sqf"))
                 {
-                    sw.Write(workingList.returnFormatedFile("Unit"));
+                    sw.Write(workingList.returnFormatedFile(cbListTypeExport.Text));
                 }
                 Log("File Written");
             }
@@ -238,7 +228,7 @@ namespace BectiBalancer
                 //Create this file
                 using (StreamWriter sw = File.CreateText(tbExportPath.Text))
                 {
-                    sw.Write(workingList.returnFormatedFile("Unit"));
+                    sw.Write(workingList.returnFormatedFile(cbListTypeExport.Text));
                 }
                 Log("File Written");
             }
@@ -255,7 +245,15 @@ namespace BectiBalancer
 
         private void dgViewBalance_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            dgViewBalance.CommitEdit();
+        }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            System.Windows.Data.CollectionViewSource collectionListViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("collectionListViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            // collectionListViewSource.Source = [generic data source]
         }
     }
 }

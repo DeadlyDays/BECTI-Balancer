@@ -30,7 +30,9 @@ namespace BectiBalancer
         {
             get
             {
-                string returnString = fieldList[0].Name + " pushBack " + fieldList[0].Value;
+                string returnString = "";
+                if (fieldList.Count > 0)
+                returnString = fieldList[0].Name + " pushBack " + fieldList[0].Value;
                 for(int i = 1; i < fieldList.Count; i++)
                 {
                     returnString += "; " + fieldList[i].Name + " pushBack " + fieldList[i].Value;

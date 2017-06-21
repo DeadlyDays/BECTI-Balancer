@@ -78,9 +78,21 @@ namespace BectiBalancer
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
                 dgViewBalance.CanUserAddRows = true;
             }
-            
-            
-            
+            else if (cbImportFormated.Text == "Ammo")
+            {
+                workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                Log("Pulled Data");
+                populateFields("Ammo");
+
+                //dgBalancingFields.CommitEdit();
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = workingList.AmmoList;
+                dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                dgViewBalance.CanUserAddRows = true;
+            }
+
+
+
         }
 
         private void btnCreateNewFileFromList_Click(object sender, RoutedEventArgs e)
@@ -109,6 +121,20 @@ namespace BectiBalancer
                     workingList.populateFromCSV(path, type);
                     populateFields(type);
                     Log("Populated Item List as Unit Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = workingList.UnitList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                case "Ammo":
+                    workingList = new CollectionList();
+                    workingList.populateFromCSV(path, type);
+                    populateFields(type);
+                    Log("Populated Item List as Ammo Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = workingList.AmmoList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
                     break;
                 default:
                     Log("Improper Type Selected");

@@ -266,7 +266,7 @@ namespace BectiBalancer
             Camo = null;
         }
 
-        public new void addField(Field newField, Boolean intern)
+        public void addField(Field newField, Boolean intern)
         {
             if (!intern)
             {

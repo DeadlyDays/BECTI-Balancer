@@ -31,9 +31,9 @@
                         <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="140"/>
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="140"/>
                     </ComboBox>
-                    <TextBox x:Name="tbFilePath" HorizontalAlignment="Left" Height="23" Margin="262,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="142"/>
-                    <Button x:Name="btnBrowseForFormatedImport" Content="Browse" IsEnabled="True" HorizontalAlignment="Left" Margin="409,0,0,0" VerticalAlignment="Top" Width="68" Height="23" Click="btnBrowse_Click"/>
-                    <Button x:Name="btnImport" Content="Import" IsEnabled="True" HorizontalAlignment="Left" Margin="482,0,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnImport_Click"/>
+                    <TextBox x:Name="tbFilePath" HorizontalAlignment="Left" Height="23" Margin="262,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
+                    <Button x:Name="btnBrowseForFormatedImport" Content="Browse" IsEnabled="True" HorizontalAlignment="Left" Margin="570,0,0,0" VerticalAlignment="Top" Width="68" Height="23" Click="btnBrowse_Click"/>
+                    <Button x:Name="btnImport" Content="Import" IsEnabled="True" HorizontalAlignment="Left" Margin="640,0,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnImport_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Import From CSV">
@@ -43,9 +43,9 @@
                         <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="172"/>
                     </ComboBox>
-                    <TextBox x:Name="tbImportExportPath" HorizontalAlignment="Left" Height="23" Margin="176,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="139"/>
-                    <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" HorizontalAlignment="Left" Margin="320,5,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
-                    <Button x:Name="btnCreateNewFileFromList" Content="New File From CSV" HorizontalAlignment="Left" Margin="395,5,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="btnCreateNewFileFromList_Click"/>
+                    <TextBox x:Name="tbImportExportPath" HorizontalAlignment="Left" Height="23" Margin="176,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
+                    <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" HorizontalAlignment="Left" Margin="480,5,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
+                    <Button x:Name="btnCreateNewFileFromList" Content="New File From CSV" HorizontalAlignment="Left" Margin="560,5,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="btnCreateNewFileFromList_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Export as File">
@@ -55,9 +55,9 @@
                         <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="172"/>
                     </ComboBox>
-                    <TextBox x:Name="tbExportPath" HorizontalAlignment="Left" Height="23" Margin="176,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="139"/>
-                    <Button x:Name="btnBrowseForExportPath" Content="Browse" HorizontalAlignment="Left" Margin="320,5,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
-                    <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" HorizontalAlignment="Left" Margin="395,5,0,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
+                    <TextBox x:Name="tbExportPath" HorizontalAlignment="Left" Height="23" Margin="176,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
+                    <Button x:Name="btnBrowseForExportPath" Content="Browse" HorizontalAlignment="Left" Margin="480,5,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
+                    <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" HorizontalAlignment="Left" Margin="560,5,0,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="DB Connect">
@@ -84,7 +84,7 @@
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Mass Edit: Highlight Rows then use dropbox to select column. Write new Value in Text Box and hit Edit" VerticalAlignment="Top" Height="30" Width="293"/>
 
         <TextBox x:Name="txtEdit" HorizontalAlignment="Left" Height="23" Margin="443,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="584,72,0,0" VerticalAlignment="Top" Width="75" Height="23"/>
+        <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="584,72,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnEdit_Click"/>
 
     </Grid>
 </Window>

@@ -281,5 +281,12 @@ namespace BectiBalancer
             // Load data by setting the CollectionViewSource.Source property:
             // collectionListViewSource.Source = [generic data source]
         }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            //Enable Editing more than one cell at a time
+
+            //dgViewBalance.selecte
+        }
     }
 }

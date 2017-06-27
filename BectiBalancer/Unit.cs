@@ -15,6 +15,7 @@ namespace BectiBalancer
             get
             {
                 return classNameVar;
+                
             }
             set
             {
@@ -25,7 +26,7 @@ namespace BectiBalancer
                 }
                 else
                 {
-                    addField(new Field("_c", "\"\"", value, "Classname", "\""), true);
+                    addField(new Field("_c", "\"\"", value, "ClassNameVar", "\""), true);
                     classNameVar = value;
                 }
                 
@@ -39,6 +40,7 @@ namespace BectiBalancer
             get
             {
                 return picture;
+                
             }
             set
             {
@@ -61,6 +63,7 @@ namespace BectiBalancer
             get
             {
                 return name;
+               
             }
             set
             {
@@ -84,6 +87,7 @@ namespace BectiBalancer
             get
             {
                 return price;
+                
             }
             set
             {
@@ -107,6 +111,7 @@ namespace BectiBalancer
             get
             {
                 return buildTime;
+                
             }
             set
             {
@@ -119,7 +124,7 @@ namespace BectiBalancer
                 else
                 {
                     buildTime = value;
-                    addField(new Field("_t", "", value, "Build time"), true);
+                    addField(new Field("_t", "", value, "BuildTime"), true);
                 }
             }
         }
@@ -129,7 +134,8 @@ namespace BectiBalancer
         {
             get
             {
-                return upgradeLevel;
+               return upgradeLevel;
+                
             }
             set
             {
@@ -142,7 +148,7 @@ namespace BectiBalancer
                 else
                 {
                     upgradeLevel = value;
-                    addField(new Field("_u", "", value, "Upgrade level"), true);
+                    addField(new Field("_u", "", value, "UpgradeLevel"), true);
                 }
             }
         }
@@ -153,6 +159,7 @@ namespace BectiBalancer
             get
             {
                 return factory;
+                
             }
             set
             {
@@ -176,6 +183,7 @@ namespace BectiBalancer
             get
             {
                 return script;
+                
             }
             set
             {
@@ -199,6 +207,7 @@ namespace BectiBalancer
             get
             {
                 return distance;
+                
             }
             set
             {
@@ -211,7 +220,7 @@ namespace BectiBalancer
                 else
                 {
                     distance = value;
-                    addField(new Field("_d", "", value, "Extra Distance"), true);
+                    addField(new Field("_d", "", value, "Distance"), true);
                 }
             }
         }
@@ -222,6 +231,7 @@ namespace BectiBalancer
             get
             {
                 return camo;
+                
             }
             set
             {
@@ -238,6 +248,7 @@ namespace BectiBalancer
                 }
             }
         }
+        
 
         public Unit()
         {
@@ -351,6 +362,52 @@ namespace BectiBalancer
                 }
             }
             FieldList.Add(newField);
+        }
+
+        public new void editValue(String fieldName, String value)
+        {
+            //Edit the value of all fields with a matching fieldName
+            for (int i = 0; i < FieldList.Count; i++)
+            {
+                if (FieldList[i].DisplayName == fieldName)
+                {
+                    FieldList[i].Value = value;
+                }
+            }
+            //Also check the static Fields
+            switch(fieldName)
+            {
+                case "ClassNameVar":
+                    ClassNameVar = value;
+                    break;
+                case "Picture":
+                    Picture = value;
+                    break;
+                case "Name":
+                    Name = value;
+                    break;
+                case "Price":
+                    Price = value;
+                    break;
+                case "BuildTime":
+                    BuildTime = value;
+                    break;
+                case "UpgradeLevel":
+                    UpgradeLevel = value;
+                    break;
+                case "Factory":
+                    Factory = value;
+                    break;
+                case "Script":
+                    Script = value;
+                    break;
+                case "Distance":
+                    Distance = value;
+                    break;
+                case "Camo":
+                    Camo = value;
+                    break;
+            }
         }
 
     }

@@ -25,7 +25,7 @@ namespace BectiBalancer
                 }
                 else
                 {
-                    addField(new Field("_i", "\"\"", value, "Ammo Classname", "\""), true);
+                    addField(new Field("_i", "\"\"", value, "ClassNameVar", "\""), true);
                     classNameVar = value;
                 }
                 
@@ -50,7 +50,7 @@ namespace BectiBalancer
                 else
                 {
                     ordinanceLevel = value;
-                    addField(new Field("_o", "\"\"", value, "Ordinance Type", "\""), true);
+                    addField(new Field("_o", "\"\"", value, "OrdinanceLevel", "\""), true);
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace BectiBalancer
                 else
                 {
                     upgradeLevel = value;
-                    addField(new Field("_u", "", value, "Upgrade Level"), true);
+                    addField(new Field("_u", "", value, "UpgradeLevel"), true);
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace BectiBalancer
                 else
                 {
                     rearmTimeRound = value;
-                    addField(new Field("_t", "", value, "Rearm time per round"), true);
+                    addField(new Field("_t", "", value, "RearmTimeRound"), true);
                 }
             }
         }
@@ -205,6 +205,41 @@ namespace BectiBalancer
                 }
             }
             FieldList.Add(newField);
+        }
+
+        public new void editValue(String fieldName, String value)
+        {
+            //Edit the value of all fields with a matching fieldName
+            for (int i = 0; i < FieldList.Count; i++)
+            {
+                if (FieldList[i].DisplayName == fieldName)
+                {
+                    FieldList[i].Value = value;
+                }
+            }
+            //Also check the static Fields
+            switch (fieldName)
+            {
+                case "ClassNameVar":
+                    ClassNameVar = value;
+                    break;
+                case "ClassName":
+                    ClassName = value;
+                    break;
+                case "OrdinanceLevel":
+                    OrdinanceLevel = value;
+                    break;
+                case "UpgradeLevel":
+                    UpgradeLevel = value;
+                    break;
+                case "Price":
+                    Price = value;
+                    break;
+                case "RearmTimeRound":
+                    RearmTimeRound = value;
+                    break;
+                
+            }
         }
 
     }

@@ -87,5 +87,25 @@ namespace BectiBalancer
                     ClassName = newField.Value;
             FieldList.Add(newField);
         }
+        public void editValue(String fieldName, String value)
+        {
+            //Edit the value of all fields with a matching fieldName
+            for(int i = 0; i < FieldList.Count; i++)
+            {
+                if (FieldList[i].DisplayName == fieldName)
+                {
+                    FieldList[i].Value = value;
+                }
+            }
+        }
+        public Field returnField(String fieldName)
+        {
+            foreach (Field x in FieldList)
+            {
+                if (x.DisplayName == fieldName)
+                    return x;
+            }
+            return new Field();
+        }
     }
 }

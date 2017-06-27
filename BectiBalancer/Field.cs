@@ -142,5 +142,6 @@ namespace BectiBalancer
             DisplayName = displayName;
             Tags = tags;
         }
+
     }
 }

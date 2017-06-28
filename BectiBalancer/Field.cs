@@ -70,6 +70,7 @@ namespace BectiBalancer
             }
         }
 
+        //
         private String tags;
         public String Tags
         {
@@ -85,7 +86,23 @@ namespace BectiBalancer
                     tags = value;
             }
         }
-        
+
+        //
+        private List<Group> grouping;
+        public List<Group> Grouping
+        {
+            get
+            {
+                return grouping;
+            }
+            set
+            {
+                if (value == null)
+                    grouping = new List<Group>();
+                else
+                    grouping = value;
+            }
+        }
 
         public Field()
             //Empty Constructor
@@ -143,5 +160,34 @@ namespace BectiBalancer
             Tags = tags;
         }
 
+        public void addGrouping(String name)
+        {
+            Grouping.Add(new Group(name));
+        }
+        public void addGrouping(String name, int weight)
+        {
+            Grouping.Add(new Group(name, weight));
+        }
+
+        public int returnGroupingWeight(String name)
+        {
+
+            foreach(Group x in Grouping)
+            {
+                if (x.GroupName == name)
+                    return x.Weight;
+            }
+            return 0;
+        }
+
+        public List<String> returnGroupingNames()
+        {
+            List<String> temp = new List<string>();
+            foreach(Group x in Grouping)
+            {
+                temp.Add(x.GroupName);
+            }
+            return temp;
+        }
     }
 }

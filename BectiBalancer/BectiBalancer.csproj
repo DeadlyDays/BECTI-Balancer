@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="Ammo.cs" />
     <Compile Include="Gear.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="Unit.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

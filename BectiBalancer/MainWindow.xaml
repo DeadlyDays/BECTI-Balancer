@@ -30,6 +30,7 @@
                     <ComboBox x:Name="cbImportFormated" HorizontalAlignment="Left" Margin="186,0,0,0" VerticalAlignment="Top" Width="68" Height="22">
                         <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="140"/>
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="140"/>
+                        <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="140"/>
                     </ComboBox>
                     <TextBox x:Name="tbFilePath" HorizontalAlignment="Left" Height="23" Margin="262,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
                     <Button x:Name="btnBrowseForFormatedImport" Content="Browse" IsEnabled="True" HorizontalAlignment="Left" Margin="570,0,0,0" VerticalAlignment="Top" Width="68" Height="23" Click="btnBrowse_Click"/>
@@ -42,6 +43,7 @@
                     <ComboBox x:Name="cbListTypeNewExport" HorizontalAlignment="Left" Margin="82,7,0,0" VerticalAlignment="Top" Width="94" Height="22">
                         <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="172"/>
+                        <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="172"/>
                     </ComboBox>
                     <TextBox x:Name="tbImportExportPath" HorizontalAlignment="Left" Height="23" Margin="176,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
                     <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" HorizontalAlignment="Left" Margin="480,5,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
@@ -54,6 +56,7 @@
                     <ComboBox x:Name="cbListTypeExport" HorizontalAlignment="Left" Margin="82,7,0,0" VerticalAlignment="Top" Width="94" Height="22">
                         <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="172"/>
+                        <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="172"/>
                     </ComboBox>
                     <TextBox x:Name="tbExportPath" HorizontalAlignment="Left" Height="23" Margin="176,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
                     <Button x:Name="btnBrowseForExportPath" Content="Browse" HorizontalAlignment="Left" Margin="480,5,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
@@ -91,6 +94,7 @@
         <ComboBox x:Name="cbEditType" HorizontalAlignment="Left" Margin="308,72,0,0" VerticalAlignment="Top" Width="101">
             <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="99"/>
             <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="99"/>
+            <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="99"/>
         </ComboBox>
 
     </Grid>

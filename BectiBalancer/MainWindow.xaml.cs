@@ -65,13 +65,13 @@ namespace BectiBalancer
                 Log("Invalid Path");
                 return;
             }
-                
-            if(cbImportFormated.Text == "Unit")
+
+            if (cbImportFormated.Text == "Unit")
             {
                 workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Unit");
-                
+
                 //dgBalancingFields.CommitEdit();
                 dgViewBalance.ItemsSource = null;
                 dgViewBalance.ItemsSource = workingList.UnitList;
@@ -90,10 +90,22 @@ namespace BectiBalancer
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
                 dgViewBalance.CanUserAddRows = true;
             }
+            else if (cbImportFormated.Text == "Gear")
+            {
+                workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                Log("Pulled Data");
+                populateFields("Gear");
+
+                //dgBalancingFields.CommitEdit();
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = workingList.GearList;
+                dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                dgViewBalance.CanUserAddRows = true;
+            }
 
 
 
-        }
+            }
 
         private void btnCreateNewFileFromList_Click(object sender, RoutedEventArgs e)
             //New Collection Generated from csv List of items
@@ -133,6 +145,16 @@ namespace BectiBalancer
                     Log("Populated Item List as Ammo Type");
                     dgViewBalance.ItemsSource = null;
                     dgViewBalance.ItemsSource = workingList.AmmoList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                case "Gear":
+                    workingList = new CollectionList();
+                    workingList.populateFromCSV(path, type);
+                    populateFields(type);
+                    Log("Populated Item List as Gear Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = workingList.GearList;
                     dgViewBalance.IsSynchronizedWithCurrentItem = true;
                     dgViewBalance.CanUserAddRows = true;
                     break;
@@ -305,6 +327,9 @@ namespace BectiBalancer
                 {
                     x.editValue(cbEditColumn.Text, txtEditValue.Text);
                 }
+                dgViewBalance.CommitEdit();
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = workingList.UnitList;
             }
             else if (cbEditType.Text == "Ammo")
             {
@@ -312,10 +337,20 @@ namespace BectiBalancer
                 {
                     x.editValue(cbEditColumn.Text, txtEditValue.Text);
                 }
+                dgViewBalance.CommitEdit();
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = workingList.AmmoList;
             }
-            dgViewBalance.CommitEdit();
-            dgViewBalance.ItemsSource = null;
-            dgViewBalance.ItemsSource = workingList.UnitList;
+            else if (cbEditType.Text == "Gear")
+            {
+                foreach (Gear x in dgViewBalance.SelectedItems)
+                {
+                    x.editValue(cbEditColumn.Text, txtEditValue.Text);
+                }
+                dgViewBalance.CommitEdit();
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = workingList.GearList;
+            }
             
         }
 

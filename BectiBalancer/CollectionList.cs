@@ -114,18 +114,12 @@ namespace BectiBalancer
         {
             if (type == "Unit")
                 UnitList.Add((Unit)item);
-            else
-                ItemList.Add((Item)item);
-
-            if (type == "Ammo")
+            else if (type == "Ammo")
                 AmmoList.Add((Ammo)item);
-            else
-                ItemList.Add((Item)item);
-
-            if (type == "Gear")
+            else if (type == "Gear")
                 GearList.Add((Gear)item);
             else
-                ItemList.Add((Gear)item);
+                ItemList.Add((Item)item);
             //new Item
         }
         public List<Field> returnFieldsOfItemNamed(String name)

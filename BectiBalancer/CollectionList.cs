@@ -144,7 +144,7 @@ namespace BectiBalancer
                 //Populate Units
             {
                 Type = "Unit";
-                String _c, _p, _n, _o, _t, _u, _f, _s, _d;
+                //String _c, _p, _n, _o, _t, _u, _f, _s, _d;
                 //values to populate
 
                 //int iPointer = 0;//current index Number
@@ -186,7 +186,7 @@ namespace BectiBalancer
             //Populate Units
             {
                 Type = "Ammo";
-                String _i, _o, _u, _p, _t;
+                //String _i, _o, _u, _p, _t;
                 //values to populate
 
                 //int iPointer = 0;//current index Number
@@ -224,7 +224,7 @@ namespace BectiBalancer
             //Populate Units
             {
                 Type = "Gear";
-                String _i, _u, _p, _g;
+                //String _i, _u, _p, _g;
                 //values to populate
 
                 //int iPointer = 0;//current index Number
@@ -281,8 +281,8 @@ namespace BectiBalancer
                 _d = new List<String>();
                 _g = new List<String>();
 
-                int iPointer;//current line Number
-                String sPointer;//current line Value
+                //int iPointer;//current line Number
+                //String sPointer;//current line Value
                 while (file.Contains("/*"))
                 {
                     file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks
@@ -418,8 +418,8 @@ namespace BectiBalancer
                 _p = new List<String>();
                 _t = new List<String>();
 
-                int iPointer;//current line Number
-                String sPointer;//current line Value
+                //int iPointer;//current line Number
+                //String sPointer;//current line Value
                 while (file.Contains("/*"))
                 {
                     file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks
@@ -510,8 +510,8 @@ namespace BectiBalancer
                 _p = new List<String>();
                 _g = new List<String>();
 
-                int iPointer;//current line Number
-                String sPointer;//current line Value
+                //int iPointer;//current line Number
+                //String sPointer;//current line Value
                 while (file.Contains("/*"))
                 {
                     file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks

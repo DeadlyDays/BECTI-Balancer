@@ -26,7 +26,7 @@ namespace BectiBalancer
                 }
                 else
                 {
-                    addField(new Field("_c", "\"\"", value, "ClassNameVar", "\""), true);
+                    addField(new Field("_c", "''", value, "ClassNameVar", "'"), true);
                     classNameVar = value;
                 }
                 
@@ -76,7 +76,7 @@ namespace BectiBalancer
                 else
                 {
                     name = value;
-                    addField(new Field("_n", "''", value, "Name", "'"), true);
+                    addField(new Field("_n", "''", value, "Name", ""), true);
                 }
             }
         }
@@ -196,7 +196,7 @@ namespace BectiBalancer
                 else
                 {
                     script = value;
-                    addField(new Field("_s", "\"\"", value, "Script", "\""), true);
+                    addField(new Field("_s", "''", value, "Script", "'"), true);
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace BectiBalancer
                 else
                 {
                     camo = value;
-                    addField(new Field("_g", "\"\"", value, "Camo", "\""), true);
+                    addField(new Field("_g", "''", value, "Camo", "'"), true);
                 }
             }
         }

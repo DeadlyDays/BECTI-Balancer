@@ -286,7 +286,7 @@ namespace BectiBalancer
         {
             //Enable Editing more than one cell at a time
 
-            //dgViewBalance.selecte
+            IList<DataGridCellInfo> selected = dgViewBalance.SelectedCells;
         }
     }
 }

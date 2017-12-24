@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BectiBalancer
 {
-    class Ammo : Item
+    class Gear : Item
     {
         //Classname _c
         private String classNameVar;
@@ -28,30 +28,7 @@ namespace BectiBalancer
                     addField(new Field("_i", "\"\"", value, "ClassNameVar", "\""), true);
                     classNameVar = value;
                 }
-                
-            }
-        }
 
-        //Picture _p
-        private String ordinanceLevel;
-        public String OrdinanceLevel
-        {
-            get
-            {
-                return ordinanceLevel;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    ordinanceLevel = "";
-                    //addField(new Field("_o", "", "", "Ordinance Type", "\""), true);
-                }
-                else
-                {
-                    ordinanceLevel = value;
-                    addField(new Field("_o", "\"\"", value, "OrdinanceLevel", "\""), true);
-                }
             }
         }
         //Name _n
@@ -64,7 +41,7 @@ namespace BectiBalancer
             }
             set
             {
-                
+
                 if (value == null)
                 {
                     upgradeLevel = "";
@@ -87,7 +64,7 @@ namespace BectiBalancer
             }
             set
             {
-                
+
                 if (value == null)
                 {
                     price = "";
@@ -101,47 +78,45 @@ namespace BectiBalancer
             }
         }
         //Build Time _t
-        private String rearmTimeRound;
-        public String RearmTimeRound
+        private String filter;
+        public String Filter
         {
             get
             {
-                return rearmTimeRound;
+                return filter;
             }
             set
             {
-                
+
                 if (value == null)
                 {
-                    rearmTimeRound = "";
+                    filter = "";
                     //addField(new Field("_t", "", "", "Build time"), true);
                 }
                 else
                 {
-                    rearmTimeRound = value;
-                    addField(new Field("_t", "", value, "RearmTimeRound"), true);
+                    filter = value;
+                    addField(new Field("_g", "", value, "Filter", "\""), true);
                 }
             }
         }
-        
 
-        public Ammo()
+
+        public Gear()
         {
             ClassNameVar = "";
             ClassName = "";
-            OrdinanceLevel = "";
             UpgradeLevel = "";
             Price = "";
-            RearmTimeRound = "";
+            Filter = "";
         }
-        public Ammo(String name)
+        public Gear(String name)
         {
             ClassNameVar = name;
             ClassName = name;
-            OrdinanceLevel = null;
             UpgradeLevel = null;
             Price = null;
-            RearmTimeRound = null;
+            Filter = null;
         }
 
         public void addField(Field newField, Boolean intern)
@@ -161,11 +136,6 @@ namespace BectiBalancer
                     ClassNameVar = newField.Value;
                     return;
                 }
-                else if (newField.Name == "_o")
-                {
-                    OrdinanceLevel = newField.Value;
-                    return;
-                }
                 else if (newField.Name == "_u")
                 {
                     UpgradeLevel = newField.Value;
@@ -176,18 +146,18 @@ namespace BectiBalancer
                     Price = newField.Value;
                     return;
                 }
-                else if (newField.Name == "_t")
+                else if (newField.Name == "_g")
                 {
-                    RearmTimeRound = newField.Value;
+                    Filter = newField.Value;
                     return;
                 }
-                
+
             }
             else
             {
-                for(int i = 0; i < FieldList.Count; i++)
+                for (int i = 0; i < FieldList.Count; i++)
                 {
-                    if(FieldList[i].Name == newField.Name)
+                    if (FieldList[i].Name == newField.Name)
                     {
                         FieldList[i].Value = newField.Value;
                         return;
@@ -226,19 +196,16 @@ namespace BectiBalancer
                 case "ClassName":
                     ClassName = value;
                     break;
-                case "OrdinanceLevel":
-                    OrdinanceLevel = value;
-                    break;
                 case "UpgradeLevel":
                     UpgradeLevel = value;
                     break;
                 case "Price":
                     Price = value;
                     break;
-                case "RearmTimeRound":
-                    RearmTimeRound = value;
+                case "Filter":
+                    Filter = value;
                     break;
-                
+
             }
         }
 

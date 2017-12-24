@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Application;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Forms;
 
+
 namespace BectiBalancer
 {
     /// <summary>
@@ -29,7 +31,19 @@ namespace BectiBalancer
             InitializeComponent();
             workingList = new BectiBalancer.CollectionList();
             isConnected = false;
+
+            showVersion();
+        }
+
+        private void showVersion()
+        {
             
+            //lblVersion.Content = "Version: " + System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                ApplicationDeployment ver = ApplicationDeployment.CurrentDeployment;
+                lblVersion.Content = "Version: " + ver.CurrentVersion;
+            }
         }
 
         private void Log(string text)

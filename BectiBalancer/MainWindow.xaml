@@ -109,9 +109,9 @@
                     </ComboBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Grouping">
+            <TabItem Header="Tagging/Commenting">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="tbTextGrouping" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Grouping: Add a new Column, each value of that column will be exported into it's own section." VerticalAlignment="Top" Height="43" Width="269"/>
+                    <TextBlock x:Name="tbTextTagging" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tagging: Add a new Tag. The input format is Name:Value As an example Caliber:5.56mm" VerticalAlignment="Top" Height="43" Width="269"/>
                     <Label x:Name="lblTypeAddColumn" Content="Type:" HorizontalAlignment="Left" Margin="274,-3,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbTypeAddColumn" HorizontalAlignment="Left" Margin="274,19,0,0" VerticalAlignment="Top" Width="120">
                         <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="118"/>
@@ -119,11 +119,12 @@
                         <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="118"/>
                     </ComboBox>
                     <TextBox x:Name="tbAddColumn" HorizontalAlignment="Left" Height="23" Margin="399,18,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-                    <Label x:Name="lblAddColumnName" Content="Column Name:" HorizontalAlignment="Left" Margin="399,-3,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lblAddTag" Content="Tag:" HorizontalAlignment="Left" Margin="399,-3,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="btnAddColumn" Content="Add Column" HorizontalAlignment="Left" Margin="543,18,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnAddColumn_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
+        <Label x:Name="lblVersion" Content="Version:" HorizontalAlignment="Left" Margin="786,0,0,0" VerticalAlignment="Top" Background="White" Foreground="Black" FontFamily="Segoe UI Black" Width="145"/>
 
 
     </Grid>

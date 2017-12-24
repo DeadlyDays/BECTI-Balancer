@@ -48,7 +48,21 @@ namespace BectiBalancer
             }
         }
 
-        
+        private List<Tag> tagList;//Tags, used for commenting and sorting
+        public List<Tag> TagList
+        {
+            get
+            {
+                return tagList;
+            }
+            set
+            {
+                if (value == null)
+                    tagList = new List<Tag>();
+                else
+                    tagList = value;
+            }
+        }
 
         private List<Field> fieldList;//List of fields belonging to Item
         public List<Field> FieldList

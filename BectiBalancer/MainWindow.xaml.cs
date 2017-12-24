@@ -376,5 +376,37 @@ namespace BectiBalancer
             //box gains focus(highlight all text)
             //txtEditValue.SelectAll();
         }
+
+        private void btnAddColumn_Click(object sender, RoutedEventArgs e)
+        {
+            //Type of data
+            String type = cbTypeAddColumn.Text;
+
+            //New Tag
+            String tag = tbAddColumn.Text;
+            
+            //Tag Format - tenative
+            //Name:Value
+            //examples
+            //Name:Kaliba 6.5mm
+            //Caliber: 6.5mm
+            //Color:Red
+
+
+        }
+
+        private void btnCopyToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            //Copy output to clipboard instead of to a file so it can be pasted into a text document
+            if (cbListTypeToClipboard.Text != "")
+            {
+                System.Windows.Clipboard.SetText(workingList.returnFormatedFile(cbListTypeToClipboard.Text));
+                Log("Dataset Copied to Clipboard");
+            }
+            else
+            {
+                Log("Error: No Type Set");
+            }
+        }
     }
 }

@@ -256,13 +256,8 @@ namespace BectiBalancer
 
             }
         }
-
-        public void populateFromFormatedFile(String path, String type)
+        public void populateFromFormatedText(String file, String type)
         {
-            
-            String file = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
-            //populates String file with entire documents text
-
             //UNITS
             if (type == "Unit")
             //Populate Units
@@ -287,13 +282,13 @@ namespace BectiBalancer
                 {
                     file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks
                 }
-                    List<String> contentList = splitStringBy(file, "\n");
-                
-                
-                for(int i = 0; i < contentList.Count; i++)
+                List<String> contentList = splitStringBy(file, "\n");
+
+
+                for (int i = 0; i < contentList.Count; i++)
                 {
                     //get rid of comments
-                    if(contentList[i].Contains("//"))
+                    if (contentList[i].Contains("//"))
                     {
                         contentList[i] = contentList[i].Remove(contentList[i].IndexOf("//"));
                     }
@@ -340,9 +335,9 @@ namespace BectiBalancer
                     }
                 }
 
-                
 
-                if((_c.Count == _p.Count) && (_c.Count == _n.Count) && (_c.Count == _o.Count) && (_c.Count == _t.Count) && (_c.Count == _u.Count)
+
+                if ((_c.Count == _p.Count) && (_c.Count == _n.Count) && (_c.Count == _o.Count) && (_c.Count == _t.Count) && (_c.Count == _u.Count)
                     && (_c.Count == _f.Count) && (_c.Count == _s.Count) && (_c.Count == _d.Count) && (_g.Count == _c.Count))
                     for (int i = 0; i < _c.Count; i++)
                     {
@@ -401,7 +396,7 @@ namespace BectiBalancer
                         newItem.addField(new Field("_g", "", _g[i], "Camo", "\""), false);
                         addItem(newItem, type);
                     }
-                
+
 
             }
 
@@ -455,7 +450,7 @@ namespace BectiBalancer
                     {
                         _t.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
                     }
-                    
+
                 }
 
 
@@ -483,7 +478,7 @@ namespace BectiBalancer
                             _t[i] = _t[i].Substring(1, _t[i].Count() - 2);//cut first and last char
                         else if (_t[i].IndexOf("'") == 0)
                             _t[i] = _t[i].Substring(1, _t[i].Count() - 2);//cut first and last char
-                       
+
 
 
                         Ammo newItem = new Ammo();
@@ -580,6 +575,13 @@ namespace BectiBalancer
 
 
             }
+        }
+        public void populateFromFormatedFile(String path, String type)
+        {
+            
+            String file = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
+            //populates String file with entire documents text
+            populateFromFormatedText(file, type);
         }
 
         public String returnFormatedFile(String Type)

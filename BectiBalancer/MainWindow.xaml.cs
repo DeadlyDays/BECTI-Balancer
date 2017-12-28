@@ -24,14 +24,14 @@ namespace BectiBalancer
     /// </summary>
     public partial class MainWindow : Window
     {
-        CollectionList workingList;//Current Collection of Items
+        CollectionList backupList, filteredList, currentList;//Current Collection of Items
         Boolean isConnected;//Database Connection
         public MainWindow()
         {
             InitializeComponent();
-            workingList = new BectiBalancer.CollectionList();
+            currentList = new BectiBalancer.CollectionList();
             isConnected = false;
-
+            //currentList = workingList;//point at workingList
             showVersion();
         }
 
@@ -58,7 +58,7 @@ namespace BectiBalancer
         {
             /*lbItemList.ItemsSource = workingList.ItemList;*/
             Log("Populating Fields...");
-            for (int i = 0; i < workingList.ItemList.Count; i++)
+            for (int i = 0; i < currentList.ItemList.Count; i++)
             {
                 //lbItemList.Items.Add(workingList.ItemList[i].ClassName);
             }
@@ -82,37 +82,37 @@ namespace BectiBalancer
 
             if (cbImportFormated.Text == "Unit")
             {
-                workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                currentList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Unit");
 
                 //dgBalancingFields.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = workingList.UnitList;
+                dgViewBalance.ItemsSource = currentList.UnitList;
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
                 dgViewBalance.CanUserAddRows = true;
             }
             else if (cbImportFormated.Text == "Ammo")
             {
-                workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                currentList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Ammo");
 
                 //dgBalancingFields.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = workingList.AmmoList;
+                dgViewBalance.ItemsSource = currentList.AmmoList;
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
                 dgViewBalance.CanUserAddRows = true;
             }
             else if (cbImportFormated.Text == "Gear")
             {
-                workingList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                currentList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Gear");
 
                 //dgBalancingFields.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = workingList.GearList;
+                dgViewBalance.ItemsSource = currentList.GearList;
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
                 dgViewBalance.CanUserAddRows = true;
             }
@@ -143,32 +143,32 @@ namespace BectiBalancer
                 //Switch to populate different types of CollectionLists
             {
                 case "Unit":
-                    workingList = new CollectionList();
-                    workingList.populateFromCSV(path, type);
+                    currentList = new CollectionList();
+                    currentList.populateFromCSV(path, type);
                     populateFields(type);
                     Log("Populated Item List as Unit Type");
                     dgViewBalance.ItemsSource = null;
-                    dgViewBalance.ItemsSource = workingList.UnitList;
+                    dgViewBalance.ItemsSource = currentList.UnitList;
                     dgViewBalance.IsSynchronizedWithCurrentItem = true;
                     dgViewBalance.CanUserAddRows = true;
                     break;
                 case "Ammo":
-                    workingList = new CollectionList();
-                    workingList.populateFromCSV(path, type);
+                    currentList = new CollectionList();
+                    currentList.populateFromCSV(path, type);
                     populateFields(type);
                     Log("Populated Item List as Ammo Type");
                     dgViewBalance.ItemsSource = null;
-                    dgViewBalance.ItemsSource = workingList.AmmoList;
+                    dgViewBalance.ItemsSource = currentList.AmmoList;
                     dgViewBalance.IsSynchronizedWithCurrentItem = true;
                     dgViewBalance.CanUserAddRows = true;
                     break;
                 case "Gear":
-                    workingList = new CollectionList();
-                    workingList.populateFromCSV(path, type);
+                    currentList = new CollectionList();
+                    currentList.populateFromCSV(path, type);
                     populateFields(type);
                     Log("Populated Item List as Gear Type");
                     dgViewBalance.ItemsSource = null;
-                    dgViewBalance.ItemsSource = workingList.GearList;
+                    dgViewBalance.ItemsSource = currentList.GearList;
                     dgViewBalance.IsSynchronizedWithCurrentItem = true;
                     dgViewBalance.CanUserAddRows = true;
                     break;
@@ -280,7 +280,7 @@ namespace BectiBalancer
                 //Create a file
                 using (StreamWriter sw = File.CreateText(tbExportPath.Text + "\\Export.sqf"))
                 {
-                    sw.Write(workingList.returnFormatedFile(cbListTypeExport.Text));
+                    sw.Write(currentList.returnFormatedFile(cbListTypeExport.Text));
                 }
                 Log("File Written");
             }
@@ -290,7 +290,7 @@ namespace BectiBalancer
                 //Create this file
                 using (StreamWriter sw = File.CreateText(tbExportPath.Text))
                 {
-                    sw.Write(workingList.returnFormatedFile(cbListTypeExport.Text));
+                    sw.Write(currentList.returnFormatedFile(cbListTypeExport.Text));
                 }
                 Log("File Written");
             }
@@ -343,7 +343,7 @@ namespace BectiBalancer
                 }
                 dgViewBalance.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = workingList.UnitList;
+                dgViewBalance.ItemsSource = currentList.UnitList;
             }
             else if (cbEditType.Text == "Ammo")
             {
@@ -353,7 +353,7 @@ namespace BectiBalancer
                 }
                 dgViewBalance.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = workingList.AmmoList;
+                dgViewBalance.ItemsSource = currentList.AmmoList;
             }
             else if (cbEditType.Text == "Gear")
             {
@@ -363,7 +363,7 @@ namespace BectiBalancer
                 }
                 dgViewBalance.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = workingList.GearList;
+                dgViewBalance.ItemsSource = currentList.GearList;
             }
             
         }
@@ -414,7 +414,7 @@ namespace BectiBalancer
             //Copy output to clipboard instead of to a file so it can be pasted into a text document
             if (cbListTypeToClipboard.Text != "")
             {
-                System.Windows.Clipboard.SetText(workingList.returnFormatedFile(cbListTypeToClipboard.Text));
+                System.Windows.Clipboard.SetText(currentList.returnFormatedFile(cbListTypeToClipboard.Text));
                 Log("Dataset Copied to Clipboard");
             }
             else
@@ -422,5 +422,28 @@ namespace BectiBalancer
                 Log("Error: No Type Set");
             }
         }
+
+        private void tbFilterText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            String type = cbFilterType.Text;
+            String filterKeyword = tbFilterText.Text;
+            //being filter
+            if(tbFilterText.Text == "")
+            {
+                //if empty go back to default worklist
+                currentList = backupList;
+            }
+            else
+            {
+                backupList = currentList;
+                //show a custom worklist
+                filteredList = new CollectionList();
+                filteredList.populateFromFormatedText(currentList.returnFormatedFile(type), type);
+                Item Type = new Item();
+
+                dgViewBalance.Items
+            }
+        }
+
     }
 }

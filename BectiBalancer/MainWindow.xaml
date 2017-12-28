@@ -93,6 +93,19 @@
 
 
         <TabControl x:Name="tbTabs2" HorizontalAlignment="Left" Height="71" Margin="223,54,0,0" VerticalAlignment="Top" Width="791">
+
+            <TabItem Header="Filter">
+                <Grid Background="#FFE5E5E5">
+                    <Label x:Name="lblFilter" Content="Type in Filter Keyword, then hit enter or tab out:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="33" Width="268"/>
+                    <TextBox x:Name="tbFilterText" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="225" Margin="10,22,0,0" LostKeyboardFocus="tbFilterText_LostKeyboardFocus"/>
+                    <ComboBox x:Name="cbFilterType" HorizontalAlignment="Left" Margin="273,20,0,0" VerticalAlignment="Top" Width="101">
+                        <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="99"/>
+                        <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="99"/>
+                        <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="99"/>
+                    </ComboBox>
+                </Grid>
+            </TabItem>
+
             <TabItem Header="Mass Edit">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Mass Edit: Highlight Rows then use dropbox to select column. Write new Value in Text Box and hit Edit" VerticalAlignment="Top" Height="30" Width="293"/>

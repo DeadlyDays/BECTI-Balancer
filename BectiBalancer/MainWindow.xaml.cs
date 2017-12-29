@@ -74,12 +74,14 @@ namespace BectiBalancer
         private void btnImport_Click(object sender, RoutedEventArgs e)
             //Attempt Formatted File Import
         {
-            
+
             if (tbImportFilePath.Text == "")
             {
                 Log("Invalid Path");
                 return;
             }
+            else
+                currentList.clearCollection();
 
             if (cbImportFormated.Text == "Unit")
             {

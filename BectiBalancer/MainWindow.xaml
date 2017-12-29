@@ -147,15 +147,18 @@
             <TabItem Header="Tagging/Commenting">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock x:Name="tbTextTagging" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Tagging: Add a new Tag. The input format is Name:Value As an example Caliber:5.56mm" VerticalAlignment="Top" Height="43" Width="269"/>
-                    <Label x:Name="lblTypeAddColumn" Content="Type:" HorizontalAlignment="Left" Margin="274,-3,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbTypeAddColumn" HorizontalAlignment="Left" Margin="274,19,0,0" VerticalAlignment="Top" Width="120">
-                        <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="118"/>
-                        <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="118"/>
-                        <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="118"/>
-                    </ComboBox>
-                    <TextBox x:Name="tbAddColumn" HorizontalAlignment="Left" Height="23" Margin="399,18,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-                    <Label x:Name="lblAddTag" Content="Tag:" HorizontalAlignment="Left" Margin="399,-3,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btnAddColumn" Content="Add Column" HorizontalAlignment="Left" Margin="543,18,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnAddColumn_Click"/>
+                    <TextBox x:Name="tbTagName" HorizontalAlignment="Left" Height="23" Margin="340,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                    <TextBox x:Name="tbTagWeight" HorizontalAlignment="Left" Height="23" Margin="248,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="72"/>
+                    <TextBox x:Name="tbTagValue" HorizontalAlignment="Left" Height="23" Margin="465,20,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                    <Label x:Name="lblTagName" Content="Tag Name:" HorizontalAlignment="Left" Margin="340,-3,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lblTagValue" Content="Tag Value:" HorizontalAlignment="Left" Margin="465,-2,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lblTagWeight" Content="Tag Weight:" HorizontalAlignment="Left" Margin="248,-3,0,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lblTagOrder" Content="Order By:" HorizontalAlignment="Left" Margin="585,-4,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="btnAddTag" Content="Add Tag" HorizontalAlignment="Left" Margin="699,3,0,0" VerticalAlignment="Top" Width="75" Height="18" Click="btnAddTag_Click"/>
+                    <Button x:Name="btnTagOrderByName" Content="Name" HorizontalAlignment="Left" Margin="590,22,0,3.333"  Width="39" Height="18" />
+                    <Button x:Name="btnTagOrderByValue" Content="Value" HorizontalAlignment="Left" Margin="634,22,0,3.333"  Width="42" Height="18" />
+                    <CheckBox x:Name="cbShowTag" Content="Show Tags" HorizontalAlignment="Left" Margin="699,23,0,0" VerticalAlignment="Top"/>
+
                 </Grid>
             </TabItem>
         </TabControl>

@@ -400,13 +400,13 @@ namespace BectiBalancer
             //txtEditValue.SelectAll();
         }
 
-        private void btnAddColumn_Click(object sender, RoutedEventArgs e)
+        private void btnAddTag_Click(object sender, RoutedEventArgs e)
         {
             //Type of data
-            String type = cbTypeAddColumn.Text;
+            String type = cbTypeAddTag.Text;
 
             //New Tag
-            String tag = tbAddColumn.Text;
+            String tag = tbAddTag.Text;
             
             //Tag Format - tenative
             //Name:Value

@@ -83,7 +83,7 @@ namespace BectiBalancer
 
             if (cbImportFormated.Text == "Unit")
             {
-                currentList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                currentList.populateFromFormatedFile(tbImportFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Unit");
 
@@ -95,7 +95,7 @@ namespace BectiBalancer
             }
             else if (cbImportFormated.Text == "Ammo")
             {
-                currentList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                currentList.populateFromFormatedFile(tbImportFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Ammo");
 
@@ -107,7 +107,7 @@ namespace BectiBalancer
             }
             else if (cbImportFormated.Text == "Gear")
             {
-                currentList.populateFromFormatedFile(tbFilePath.Text, cbImportFormated.Text);
+                currentList.populateFromFormatedFile(tbImportFilePath.Text, cbImportFormated.Text);
                 Log("Pulled Data");
                 populateFields("Gear");
 
@@ -251,7 +251,7 @@ namespace BectiBalancer
         private void btnBrowse_Click(object sender, RoutedEventArgs e)
         //Browse for Path to Import Formatted File
         {
-            Microsoft.Win32.OpenFileDialog dlg = browseForFile(tbFilePath.Text, "sqf");
+            Microsoft.Win32.OpenFileDialog dlg = browseForFile(tbImportFilePath.Text, "sqf");
             // Display OpenFileDialog by calling ShowDialog method
             Nullable<bool> result = dlg.ShowDialog();
             // Get the selected file name and display in a TextBox
@@ -414,6 +414,7 @@ namespace BectiBalancer
             //Color:Red
 
 
+
         }
 
         private void btnCopyToClipboard_Click(object sender, RoutedEventArgs e)
@@ -498,13 +499,51 @@ namespace BectiBalancer
             filterLists();
         }
 
+        private void btnClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+            currentList.unfilterList(cbFilterType.Text);
+            Log("Cleared Filter");
+        }
+
         //Filter things out
         private void filterLists()
         {
             String type = cbFilterType.Text;
             String filterKeyword = tbFilterText.Text;
 
+            currentList.filterList(type, filterKeyword);
 
+            switch (type)
+            //Switch to populate different types of CollectionLists
+            {
+                case "Unit":
+                    
+                    Log("Filtered Item List as Unit Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.UnitList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                case "Ammo":
+                    
+                    Log("Populated Item List as Ammo Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.AmmoList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                case "Gear":
+                    
+                    Log("Filtered Item List as Gear Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.GearList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                default:
+                    Log("Error: Improper Filter Type Selected");
+                    break;
+            }
 
         }
 

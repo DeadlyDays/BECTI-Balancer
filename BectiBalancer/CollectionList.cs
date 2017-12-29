@@ -682,14 +682,89 @@ namespace BectiBalancer
         public void filterList(String type, String keyword)
         //edits the list, takes and stores things that dont have keyword into filteredOutItemList and leaves the rest
         {
+            unfilterList(type);//unfilter before filtering so we are always checking against the whole
 
+            if (type == "Gear")
+            {
+                foreach (Gear i in GearList)
+                {
+                    if(i.ClassName.Contains(keyword) || i.Price.Contains(keyword) || i.UpgradeLevel.Contains(keyword) || i.Filter.Contains(keyword))
+                    {
+                        //Contains keyword
+                    }
+                    else
+                    {
+                        //Does not contain keyword
+                        filteredOutItemList.Add(i);
+                        GearList.Remove(i);
+                    }
+                }
+            }
+            else if(type == "Unit")
+            {
+                foreach (Unit i in UnitList)
+                {
+                    if (i.ClassName.Contains(keyword) || i.Picture.Contains(keyword) || i.Name.Contains(keyword) || i.Price.Contains(keyword)
+                        || i.BuildTime.Contains(keyword) || i.UpgradeLevel.Contains(keyword) || i.Factory.Contains(keyword) || i.Script.Contains(keyword)
+                        || i.Distance.Contains(keyword) || i.Camo.Contains(keyword))
+                    {
+                        //Contains keyword
+                    }
+                    else
+                    {
+                        //Does not contain keyword
+                        filteredOutItemList.Add(i);
+                        UnitList.Remove(i);
+                    }
+                }
+            }
+            else if(type == "Ammo")
+            {
+                foreach (Ammo i in AmmoList)
+                {
+                    if (i.ClassName.Contains(keyword) || i.Price.Contains(keyword) || i.UpgradeLevel.Contains(keyword) || i.RearmTimeRound.Contains(keyword)
+                        || i.OrdinanceLevel.Contains(keyword))
+                    {
+                        //Contains keyword
+                    }
+                    else
+                    {
+                        //Does not contain keyword
+                        filteredOutItemList.Add(i);
+                        AmmoList.Remove(i);
+                    }
+                }
+            }
 
             filtered = true;
         }
         public void unfilterList(String type)
         //reconstitutes items in filteredOutItemList back into List
         {
-
+            if (type == "Gear")
+            {
+                foreach(Gear i in GearList)
+                {
+                    GearList.Add(i);
+                    filteredOutItemList.Remove(i);
+                }
+            }
+            else if (type == "Unit")
+            {
+                foreach (Unit i in UnitList)
+                {
+                    UnitList.Add(i);
+                    filteredOutItemList.Remove(i);
+                }
+            }
+            else if (type == "Ammo")
+            {
+                foreach (Ammo i in AmmoList)
+                {
+                    AmmoList.Add(i);
+                    filteredOutItemList.Remove(i);
+                }
+            }
 
             filtered = false;
         }

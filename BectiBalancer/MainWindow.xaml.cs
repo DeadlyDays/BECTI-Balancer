@@ -24,7 +24,7 @@ namespace BectiBalancer
     /// </summary>
     public partial class MainWindow : Window
     {
-        CollectionList backupList, filteredList, currentList;//Current Collection of Items
+        CollectionList backupList, currentList;//Current Collection of Items
         Boolean isConnected;//Database Connection
         public MainWindow()
         {
@@ -74,7 +74,8 @@ namespace BectiBalancer
         private void btnImport_Click(object sender, RoutedEventArgs e)
             //Attempt Formatted File Import
         {
-            if (tbFilePath.Text == "")
+            
+            if (tbImportFilePath.Text == "")
             {
                 Log("Invalid Path");
                 return;
@@ -258,12 +259,18 @@ namespace BectiBalancer
             {
                 // Open document
                 string filename = dlg.FileName;
-                tbFilePath.Text = filename;
+                tbImportFilePath.Text = filename;
             }
         }
         
         private void btnExportList_Click(object sender, RoutedEventArgs e)
         {
+            if (currentList.filtered)
+            {
+                Log("Error: You must clear the filter before you may continue");
+                return;
+            }
+
             if (tbExportPath.Text == "")
             {
                 Log("Invalid Path");
@@ -411,6 +418,12 @@ namespace BectiBalancer
 
         private void btnCopyToClipboard_Click(object sender, RoutedEventArgs e)
         {
+            if (currentList.filtered)
+            {
+                Log("Error: You must clear the filter before you may continue");
+                return;
+            }
+
             //Copy output to clipboard instead of to a file so it can be pasted into a text document
             if (cbListTypeToClipboard.Text != "")
             {
@@ -423,26 +436,76 @@ namespace BectiBalancer
             }
         }
 
-        private void tbFilterText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void tbFilterText_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            String type = cbFilterType.Text;
-            String filterKeyword = tbFilterText.Text;
-            //being filter
-            if(tbFilterText.Text == "")
+            //
+            if(e.Key == Key.Return)
             {
-                //if empty go back to default worklist
-                currentList = backupList;
+                filterLists();
+            }
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentList.filtered)
+            {
+                Log("Error: You must clear the filter before you may continue");
+                return;
+            }
+
+            //Replace contents of import file with data we now have
+            if (tbImportFilePath.Text != "")
+            {
+                if(File.Exists(tbImportFilePath.Text))
+                {
+                    //Replace the file
+                    /*
+                     * An idea here
+                     * For config files check for a CONFIGSTART comment and add data below that
+                     * Purpose: Won't overwrite the comments made above if there are any
+                     * So, if there is no CONFIGSTART comment, pop a message in GUI warning user to add one if they need one
+                     * endline
+                     */
+
+                    //Grab file content
+
+                    //Check for CONFIGSTART
+
+                    //Remove Text below CONFIGSTART
+
+                    //Add new Text
+
+                    //Replace file
+
+                    Log("*Feature Not Complete(Nothing done)* File: '" + tbImportFilePath.Text + "' updated");
+                }
+                else
+                {
+                    //File doesn't exist at path
+                    Log("Error: File does not exist at path '" + tbImportFilePath.Text + "'");
+                }
             }
             else
             {
-                backupList = currentList;
-                //show a custom worklist
-                filteredList = new CollectionList();
-                filteredList.populateFromFormatedText(currentList.returnFormatedFile(type), type);
-                Item Type = new Item();
-
-                //dgViewBalance.Items
+                //File Path empty
+                Log("Error: File path is Empty");
             }
+        }
+
+        private void tbFilterText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //
+            filterLists();
+        }
+
+        //Filter things out
+        private void filterLists()
+        {
+            String type = cbFilterType.Text;
+            String filterKeyword = tbFilterText.Text;
+
+
+
         }
 
     }

@@ -89,6 +89,8 @@ namespace BectiBalancer
             }
         }
 
+        public Boolean filtered;
+
         private String type;//is this a Unit, Gear, etc type file
         public String Type
         {
@@ -108,6 +110,7 @@ namespace BectiBalancer
             UnitList = null;
             AmmoList = null;
             GearList = null;
+            filtered = false;
         }
 
         public void clearCollection()
@@ -675,15 +678,20 @@ namespace BectiBalancer
             return "";
         }
 
-        //edits the list, takes and stores things that dont have keyword into filteredOutItemList and leaves the rest
+        
         public void filterList(String type, String keyword)
+        //edits the list, takes and stores things that dont have keyword into filteredOutItemList and leaves the rest
         {
 
+
+            filtered = true;
         }
-        //reconstitutes items in filteredOutItemList back into List
         public void unfilterList(String type)
+        //reconstitutes items in filteredOutItemList back into List
         {
 
+
+            filtered = false;
         }
 
         //end

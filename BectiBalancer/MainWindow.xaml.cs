@@ -502,6 +502,7 @@ namespace BectiBalancer
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)
         {
             currentList.unfilterList(cbFilterType.Text);
+            String type = cbFilterType.Text;
             switch (type)
             //Switch to populate different types of CollectionLists
             {

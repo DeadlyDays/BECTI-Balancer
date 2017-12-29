@@ -111,6 +111,7 @@ namespace BectiBalancer
             AmmoList = null;
             GearList = null;
             filtered = false;
+            FilteredOutItemList = new List<Item>();
         }
 
         public void clearCollection()
@@ -721,52 +722,55 @@ namespace BectiBalancer
 
             if (type == "Gear")
             {
-                foreach (Gear i in GearList)
+                for(int i = 0; i < GearList.Count; i++)
                 {
-                    if(i.ClassName.Contains(keyword) || i.Price.Contains(keyword) || i.UpgradeLevel.Contains(keyword) || i.Filter.Contains(keyword))
+                    if(GearList[i].ClassName.Contains(keyword) || GearList[i].Price.Contains(keyword) || GearList[i].UpgradeLevel.Contains(keyword) || GearList[i].Filter.Contains(keyword))
                     {
                         //Contains keyword
                     }
                     else
                     {
                         //Does not contain keyword
-                        filteredOutItemList.Add(i);
-                        GearList.Remove(i);
+                        filteredOutItemList.Add(GearList[i]);
+                        GearList.Remove(GearList[i]);
+                        i--;
                     }
                 }
             }
             else if(type == "Unit")
             {
-                foreach (Unit i in UnitList)
+                for (int i = 0; i < UnitList.Count; i++)
                 {
-                    if (i.ClassName.Contains(keyword) || i.Picture.Contains(keyword) || i.Name.Contains(keyword) || i.Price.Contains(keyword)
-                        || i.BuildTime.Contains(keyword) || i.UpgradeLevel.Contains(keyword) || i.Factory.Contains(keyword) || i.Script.Contains(keyword)
-                        || i.Distance.Contains(keyword) || i.Camo.Contains(keyword))
+                    if (UnitList[i].ClassName.Contains(keyword) || UnitList[i].Picture.Contains(keyword) || UnitList[i].Name.Contains(keyword) || UnitList[i].Price.Contains(keyword)
+                        || UnitList[i].BuildTime.Contains(keyword) || UnitList[i].UpgradeLevel.Contains(keyword) || UnitList[i].Factory.Contains(keyword) || UnitList[i].Script.Contains(keyword)
+                        || UnitList[i].Distance.Contains(keyword) || UnitList[i].Camo.Contains(keyword))
                     {
                         //Contains keyword
                     }
                     else
                     {
                         //Does not contain keyword
-                        filteredOutItemList.Add(i);
-                        UnitList.Remove(i);
+                        filteredOutItemList.Add(UnitList[i]);
+                        UnitList.Remove(UnitList[i]);
+                        i--;
                     }
                 }
             }
             else if(type == "Ammo")
             {
-                foreach (Ammo i in AmmoList)
+                for (int i = 0; i < AmmoList.Count; i++)
                 {
-                    if (i.ClassName.Contains(keyword) || i.Price.Contains(keyword) || i.UpgradeLevel.Contains(keyword) || i.RearmTimeRound.Contains(keyword)
-                        || i.OrdinanceLevel.Contains(keyword))
+                    if (AmmoList[i].ClassName.Contains(keyword) || AmmoList[i].Price.Contains(keyword) || AmmoList[i].UpgradeLevel.Contains(keyword) || AmmoList[i].RearmTimeRound.Contains(keyword)
+                        || AmmoList[i].OrdinanceLevel.Contains(keyword))
                     {
                         //Contains keyword
                     }
                     else
                     {
                         //Does not contain keyword
-                        filteredOutItemList.Add(i);
-                        AmmoList.Remove(i);
+                        filteredOutItemList.Add(AmmoList[i]);
+                        AmmoList.Remove(AmmoList[i]);
+                        i--;
                     }
                 }
             }
@@ -776,28 +780,46 @@ namespace BectiBalancer
         public void unfilterList(String type)
         //reconstitutes items in filteredOutItemList back into List
         {
-            if (type == "Gear")
+            if (FilteredOutItemList.Count > 0)
             {
-                foreach(Gear i in GearList)
+                if (type == "Gear")
                 {
-                    GearList.Add(i);
-                    filteredOutItemList.Remove(i);
+                    /*for (int i = 0; i < FilteredOutItemList.Count; i++)
+                    {
+                        GearList.Add((Gear)FilteredOutItemList[i]);
+                        FilteredOutItemList.Remove(FilteredOutItemList[i]);
+                    }*/
+                    while(FilteredOutItemList.Count > 0)
+                    {
+                        GearList.Add((Gear)FilteredOutItemList[0]);
+                        FilteredOutItemList.Remove(FilteredOutItemList[0]);
+                    }
                 }
-            }
-            else if (type == "Unit")
-            {
-                foreach (Unit i in UnitList)
+                else if (type == "Unit")
                 {
-                    UnitList.Add(i);
-                    filteredOutItemList.Remove(i);
+                    /*for (int i = 0; i < FilteredOutItemList.Count; i++)
+                    {
+                        UnitList.Add((Unit)FilteredOutItemList[i]);
+                        FilteredOutItemList.Remove(FilteredOutItemList[i]);
+                    }*/
+                    while (FilteredOutItemList.Count > 0)
+                    {
+                        UnitList.Add((Unit)FilteredOutItemList[0]);
+                        FilteredOutItemList.Remove(FilteredOutItemList[0]);
+                    }
                 }
-            }
-            else if (type == "Ammo")
-            {
-                foreach (Ammo i in AmmoList)
+                else if (type == "Ammo")
                 {
-                    AmmoList.Add(i);
-                    filteredOutItemList.Remove(i);
+                    /*for (int i = 0; i < FilteredOutItemList.Count; i++)
+                    {
+                        AmmoList.Add((Ammo)FilteredOutItemList[i]);
+                        FilteredOutItemList.Remove(FilteredOutItemList[i]);
+                    }*/
+                    while (FilteredOutItemList.Count > 0)
+                    {
+                        AmmoList.Add((Ammo)FilteredOutItemList[0]);
+                        FilteredOutItemList.Remove(FilteredOutItemList[0]);
+                    }
                 }
             }
 

@@ -502,6 +502,37 @@ namespace BectiBalancer
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)
         {
             currentList.unfilterList(cbFilterType.Text);
+            switch (type)
+            //Switch to populate different types of CollectionLists
+            {
+                case "Unit":
+
+                    Log("Filtered Item List as Unit Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.UnitList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                case "Ammo":
+
+                    Log("Populated Item List as Ammo Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.AmmoList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                case "Gear":
+
+                    Log("Filtered Item List as Gear Type");
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.GearList;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    break;
+                default:
+                    Log("Error: Improper Filter Type Selected");
+                    break;
+            }
             Log("Cleared Filter");
         }
 

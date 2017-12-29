@@ -297,10 +297,21 @@ namespace BectiBalancer
 
                 //int iPointer;//current line Number
                 //String sPointer;//current line Value
-                while (file.Contains("/*"))
-                {
-                    file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks
-                }
+                if (file.Contains("/*") && file.Contains("/*"))
+                    while (file.Contains("/*") && file.Contains("/*"))
+                    {
+                        int startIndex, iCount;
+                        startIndex = file.IndexOf("/*");
+                        if (file[startIndex - 1] == '/')
+                        {
+                            file = file.Insert(startIndex + 1, "_");
+                            continue;
+                        }
+                        iCount = (file.IndexOf("*/") - file.IndexOf("/*") + 2);
+                        if (iCount > 0 && startIndex > 0)
+                            file = file.Remove(startIndex, iCount);//Get rid of comment blocks
+
+                    }
                 List<String> contentList = splitStringBy(file, "\n");
 
 
@@ -434,10 +445,21 @@ namespace BectiBalancer
 
                 //int iPointer;//current line Number
                 //String sPointer;//current line Value
-                while (file.Contains("/*"))
-                {
-                    file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks
-                }
+                if (file.Contains("/*") && file.Contains("/*"))
+                    while (file.Contains("/*") && file.Contains("/*"))
+                    {
+                        int startIndex, iCount;
+                        startIndex = file.IndexOf("/*");
+                        if (file[startIndex - 1] == '/')
+                        {
+                            file = file.Insert(startIndex + 1, "_");
+                            continue;
+                        }
+                        iCount = (file.IndexOf("*/") - file.IndexOf("/*") + 2);
+                        if (iCount > 0 && startIndex > 0)
+                            file = file.Remove(startIndex, iCount);//Get rid of comment blocks
+
+                    }
                 List<String> contentList = splitStringBy(file, "\n");
 
 
@@ -526,10 +548,23 @@ namespace BectiBalancer
 
                 //int iPointer;//current line Number
                 //String sPointer;//current line Value
-                while (file.Contains("/*"))
-                {
-                    file = file.Remove(file.IndexOf("/*"), (file.IndexOf("*/") - file.IndexOf("/*") + 2));//Get rid of comment blocks
-                }
+                
+
+                if (file.Contains("/*") && file.Contains("/*"))
+                    while (file.Contains("/*") && file.Contains("/*") )
+                    {
+                        int startIndex, iCount;
+                        startIndex = file.IndexOf("/*");
+                        if(file[startIndex - 1] == '/')
+                        {
+                            file = file.Insert(startIndex + 1, "_");
+                            continue;
+                        }
+                        iCount = (file.IndexOf("*/") - file.IndexOf("/*") + 2);
+                        if(iCount > 0 && startIndex > 0)
+                            file = file.Remove(startIndex, iCount);//Get rid of comment blocks
+                        
+                    }
                 List<String> contentList = splitStringBy(file, "\n");
 
 

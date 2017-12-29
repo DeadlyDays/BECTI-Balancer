@@ -73,6 +73,22 @@ namespace BectiBalancer
             }
         }
 
+        private List<Item> filteredOutItemList;//list of items that have been filtered out, these are to be added back in on clearing filter
+        public List<Item> FilteredOutItemList
+        {
+            get
+            {
+                return filteredOutItemList;
+            }
+            set
+            {
+                if (value != null)
+                    filteredOutItemList = value;
+                else
+                    filteredOutItemList = new List<Item>();
+            }
+        }
+
         private String type;//is this a Unit, Gear, etc type file
         public String Type
         {
@@ -658,5 +674,18 @@ namespace BectiBalancer
             }
             return "";
         }
+
+        //edits the list, takes and stores things that dont have keyword into filteredOutItemList and leaves the rest
+        public void filterList(String type, String keyword)
+        {
+
+        }
+        //reconstitutes items in filteredOutItemList back into List
+        public void unfilterList(String type)
+        {
+
+        }
+
+        //end
     }
 }

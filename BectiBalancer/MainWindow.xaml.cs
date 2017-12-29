@@ -441,7 +441,7 @@ namespace BectiBalancer
                 filteredList.populateFromFormatedText(currentList.returnFormatedFile(type), type);
                 Item Type = new Item();
 
-                dgViewBalance.Items
+                //dgViewBalance.Items
             }
         }
 

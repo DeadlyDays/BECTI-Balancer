@@ -159,11 +159,11 @@ namespace BectiBalancer
 
         public void addItem(Object item, String type)
         {
-            if (type == "Unit")
+            if (type == "BectiBalancer.Unit")
                 UnitList.Add((Unit)item);
-            else if (type == "Ammo")
+            else if (type == "BectiBalancer.Ammo")
                 AmmoList.Add((Ammo)item);
-            else if (type == "Gear")
+            else if (type == "BectiBalancer.Gear")
                 GearList.Add((Gear)item);
             else
                 ItemList.Add((Item)item);
@@ -311,374 +311,71 @@ namespace BectiBalancer
 
             }
         }
+
+        public void popFromFormatedTextRegex<T> (String file) where T : Item, new()
+        {
+            //
+            //---Wipe Comment Blocks, Comment blocks are just comments we dont give no fuck
+            ///
+            if (file.Contains("/*") && file.Contains("/*"))
+                while (file.Contains("/*") && file.Contains("/*"))
+                {
+                    int startIndex, iCount;
+                    startIndex = file.IndexOf("/*");
+                    if (startIndex > 0)
+                        if (file[startIndex - 1] == '/')
+                        {
+                            file = file.Insert(startIndex + 1, "_");
+                            continue;
+                        }
+                    int istart = file.IndexOf("/*");
+                    int iend = file.IndexOf("*/") + 2;
+                    iCount = (iend - istart);
+                    if (iCount > 0 /*&& startIndex > 0*/)
+                        file = file.Remove(startIndex, iCount);//Get rid of comment blocks
+
+                }
+
+            //
+            //---This block of code customizes what data we are working with base on Type cast to method
+            //
+            System.Reflection.PropertyInfo[] prop = typeof(T).GetProperties();
+            
+            String pattern = "";
+            T thisClass = new T();//we need to get values of the static array to get the names of the arrays declared in the config
+            
+            if(prop.Length > 5)
+                for(int i = 0; i < prop.Length - 5; i++)
+                {
+                    pattern += ".*?" + (thisClass.ArrayNames[i]) + " pushBack (?<" + prop[i].Name.ToString() + ">.+?);.*?\n.*?";
+                    String test = "";
+                }
+
+            //Every item
+            MatchCollection matchCol = Regex.Matches(file, pattern, RegexOptions.None, Regex.InfiniteMatchTimeout);
+            
+            //Populate Items
+            if(matchCol.Count > 0)
+                foreach (Match p in matchCol)//Iterate through each item p in matchCol
+                {
+                    thisClass = new T();
+                    for (int i = 0; i < thisClass.ArrayNames.Length; i++)//Iterate through each property i in matchCol.Group
+                    {
+                        thisClass.addField(new Field(thisClass.ArrayNames[i], "", p.Groups[i+1].Value, prop[i].Name.ToString()), false);
+                    }
+                    addItem(thisClass, typeof(T).ToString());
+                }
+
+        }
         public void populateFromFormatedText(String file, String type)
         {
-            //UNITS
             if (type == "Unit")
-            //Populate Units
-            {
-                Type = "Unit";
-                List<String> _c, _p, _n, _o, _t, _u, _f, _s, _d, _g;
-                //values to populate
-                _c = new List<String>();
-                _p = new List<String>();
-                _n = new List<String>();
-                _o = new List<String>();
-                _t = new List<String>();
-                _u = new List<String>();
-                _f = new List<String>();
-                _s = new List<String>();
-                _d = new List<String>();
-                _g = new List<String>();
-
-                //int iPointer;//current line Number
-                //String sPointer;//current line Value
-
-                //Wipe Comment Blocks
-                if (file.Contains("/*") && file.Contains("/*"))
-                    while (file.Contains("/*") && file.Contains("/*"))
-                    {
-                        int startIndex, iCount;
-                        startIndex = file.IndexOf("/*");
-                        if (file[startIndex - 1] == '/')
-                        {
-                            file = file.Insert(startIndex + 1, "_");
-                            continue;
-                        }
-                        iCount = (file.IndexOf("*/") - file.IndexOf("/*") + 2);
-                        if (iCount > 0 && startIndex > 0)
-                            file = file.Remove(startIndex, iCount);//Get rid of comment blocks
-
-                    }
-
-                List<String> contentList = splitStringBy(file, "\n");
-
-
-                for (int i = 0; i < contentList.Count; i++)
-                {
-                    //Deal with Comments
-                    if (contentList[i].Contains("//"))
-                    {
-                        if (Regex.IsMatch(contentList[i], "[Tag;\B:\B]"))
-                            //Check if this is Tag [Tag;tagName:tagVlue]
-                        {
-                            continue;
-                        }    
-                        
-                        contentList[i] = contentList[i].Remove(contentList[i].IndexOf("//"));
-                    }
-
-                    if (contentList[i].Contains("_c ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _c.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_p ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _p.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_n ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _n.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_o ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _o.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_t ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _t.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_u ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _u.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_f ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _f.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_s ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _s.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_d ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _d.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_g ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _g.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                }
-
-
-
-                if ((_c.Count == _p.Count) && (_c.Count == _n.Count) && (_c.Count == _o.Count) && (_c.Count == _t.Count) && (_c.Count == _u.Count)
-                    && (_c.Count == _f.Count) && (_c.Count == _s.Count) && (_c.Count == _d.Count) && (_g.Count == _c.Count))
-                    for (int i = 0; i < _c.Count; i++)
-                    {
-                        if (_c[i].IndexOf("\"") == 0)
-                            _c[i] = _c[i].Substring(1, _c[i].Count() - 2);//cut first and last char
-                        else if (_c[i].IndexOf("'") == 0)
-                            _c[i] = _c[i].Substring(1, _c[i].Count() - 2);//cut first and last char
-                        if (_p[i].IndexOf("\"") == 0)
-                            _p[i] = _p[i].Substring(1, _p[i].Count() - 2);//cut first and last char
-                        else if (_p[i].IndexOf("'") == 0)
-                            _p[i] = _p[i].Substring(1, _p[i].Count() - 2);//cut first and last char
-                        if (_n[i].IndexOf("\"") == 0)
-                            _n[i] = _n[i].Substring(1, _n[i].Count() - 2);//cut first and last char
-                        else if (_n[i].IndexOf("'") == 0)
-                            _n[i] = _n[i].Substring(1, _n[i].Count() - 2);//cut first and last char
-                        if (_o[i].IndexOf("\"") == 0)
-                            _o[i] = _o[i].Substring(1, _o[i].Count() - 2);//cut first and last char
-                        else if (_o[i].IndexOf("'") == 0)
-                            _o[i] = _o[i].Substring(1, _o[i].Count() - 2);//cut first and last char
-                        if (_t[i].IndexOf("\"") == 0)
-                            _t[i] = _t[i].Substring(1, _t[i].Count() - 2);//cut first and last char
-                        else if (_t[i].IndexOf("'") == 0)
-                            _t[i] = _t[i].Substring(1, _t[i].Count() - 2);//cut first and last char
-                        if (_u[i].IndexOf("\"") == 0)
-                            _u[i] = _u[i].Substring(1, _u[i].Count() - 2);//cut first and last char
-                        else if (_u[i].IndexOf("'") == 0)
-                            _u[i] = _u[i].Substring(1, _u[i].Count() - 2);//cut first and last char
-                        if (_f[i].IndexOf("\"") == 0)
-                            _f[i] = _f[i].Substring(1, _f[i].Count() - 2);//cut first and last char
-                        else if (_f[i].IndexOf("'") == 0)
-                            _f[i] = _f[i].Substring(1, _f[i].Count() - 2);//cut first and last char
-                        if (_s[i].IndexOf("\"") == 0)
-                            _s[i] = _s[i].Substring(1, _s[i].Count() - 2);//cut first and last char
-                        else if (_s[i].IndexOf("'") == 0)
-                            _s[i] = _s[i].Substring(1, _s[i].Count() - 2);//cut first and last char
-                        if (_d[i].IndexOf("\"") == 0)
-                            _d[i] = _d[i].Substring(1, _d[i].Count() - 2);//cut first and last char
-                        else if (_d[i].IndexOf("'") == 0)
-                            _d[i] = _d[i].Substring(1, _d[i].Count() - 2);//cut first and last char
-                        if (_g[i].IndexOf("\"") == 0)
-                            _g[i] = _g[i].Substring(1, _g[i].Count() - 2);//cut first and last char
-                        else if (_g[i].IndexOf("'") == 0)
-                            _g[i] = _g[i].Substring(1, _g[i].Count() - 2);//cut first and last char
-
-
-                        Unit newItem = new Unit();
-                        newItem.addField(new Field("_c", "", _c[i], "ClassNameVar", "\""), false);
-                        newItem.addField(new Field("_p", "", _p[i], "Picture", "'"), false);
-                        newItem.addField(new Field("_n", "", _n[i], "Name", "'"), false);
-                        newItem.addField(new Field("_o", "", _o[i], "Price"), false);
-                        newItem.addField(new Field("_t", "", _t[i], "BuildTime"), false);
-                        newItem.addField(new Field("_u", "", _u[i], "UpgradeLevel"), false);
-                        newItem.addField(new Field("_f", "", _f[i], "Factory"), false);
-                        newItem.addField(new Field("_s", "", _s[i], "Script", "\""), false);
-                        newItem.addField(new Field("_d", "", _d[i], "Distance"), false);
-                        newItem.addField(new Field("_g", "", _g[i], "Camo", "\""), false);
-                        addItem(newItem, type);
-                    }
-
-
-            }
-
-            //AMMO
-            if (type == "Ammo")
-            //Populate Units
-            {
-                Type = "Ammo";
-                List<String> _i, _o, _u, _p, _t;
-                //values to populate
-                _i = new List<String>();
-                _o = new List<String>();
-                _u = new List<String>();
-                _p = new List<String>();
-                _t = new List<String>();
-
-                //int iPointer;//current line Number
-                //String sPointer;//current line Value
-
-                //Wipe Comment Blocks
-                if (file.Contains("/*") && file.Contains("/*"))
-                    while (file.Contains("/*") && file.Contains("/*"))
-                    {
-                        int startIndex, iCount;
-                        startIndex = file.IndexOf("/*");
-                        if (file[startIndex - 1] == '/')
-                        {
-                            file = file.Insert(startIndex + 1, "_");
-                            continue;
-                        }
-                        iCount = (file.IndexOf("*/") - file.IndexOf("/*") + 2);
-                        if (iCount > 0 && startIndex > 0)
-                            file = file.Remove(startIndex, iCount);//Get rid of comment blocks
-
-                    }
-
-
-                List<String> contentList = splitStringBy(file, "\n");
-
-
-                for (int i = 0; i < contentList.Count; i++)
-                {
-                    //get rid of comments
-                    if (contentList[i].Contains("//"))
-                    {
-                        contentList[i] = contentList[i].Remove(contentList[i].IndexOf("//"));
-                    }
-
-                    if (contentList[i].Contains("_i ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _i.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_o ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _o.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_u ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _u.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_p ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _p.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_t ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _t.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-
-                }
-
-
-
-                if ((_i.Count == _o.Count) && (_i.Count == _u.Count) && (_i.Count == _p.Count) && (_i.Count == _t.Count))
-                    for (int i = 0; i < _i.Count; i++)
-                    {
-                        if (_i[i].IndexOf("\"") == 0)
-                            _i[i] = _i[i].Substring(1, _i[i].Count() - 2);//cut first and last char
-                        else if (_i[i].IndexOf("'") == 0)
-                            _i[i] = _i[i].Substring(1, _i[i].Count() - 2);//cut first and last char
-                        if (_o[i].IndexOf("\"") == 0)
-                            _o[i] = _o[i].Substring(1, _o[i].Count() - 2);//cut first and last char
-                        else if (_o[i].IndexOf("'") == 0)
-                            _o[i] = _o[i].Substring(1, _o[i].Count() - 2);//cut first and last char
-                        if (_u[i].IndexOf("\"") == 0)
-                            _u[i] = _u[i].Substring(1, _u[i].Count() - 2);//cut first and last char
-                        else if (_u[i].IndexOf("'") == 0)
-                            _u[i] = _u[i].Substring(1, _u[i].Count() - 2);//cut first and last char
-                        if (_p[i].IndexOf("\"") == 0)
-                            _p[i] = _p[i].Substring(1, _p[i].Count() - 2);//cut first and last char
-                        else if (_p[i].IndexOf("'") == 0)
-                            _p[i] = _p[i].Substring(1, _p[i].Count() - 2);//cut first and last char
-                        if (_t[i].IndexOf("\"") == 0)
-                            _t[i] = _t[i].Substring(1, _t[i].Count() - 2);//cut first and last char
-                        else if (_t[i].IndexOf("'") == 0)
-                            _t[i] = _t[i].Substring(1, _t[i].Count() - 2);//cut first and last char
-
-
-
-                        Ammo newItem = new Ammo();
-                        newItem.addField(new Field("_i", "", _i[i], "ClassNameVar", "\""), false);
-                        newItem.addField(new Field("_o", "", _o[i], "OrdinanceLevel", "\""), false);
-                        newItem.addField(new Field("_u", "", _u[i], "UpgradeLevel"), false);
-                        newItem.addField(new Field("_p", "", _p[i], "Price"), false);
-                        newItem.addField(new Field("_t", "", _t[i], "RearmTimeRound"), false);
-                        addItem(newItem, type);
-                    }
-
-
-            }
-
-            //Gear
-            if (type == "Gear")
-            //Populate Units
-            {
-                Type = "Gear";
-                List<String> _i, _u, _p, _g;
-                //values to populate
-                _i = new List<String>();
-                _u = new List<String>();
-                _p = new List<String>();
-                _g = new List<String>();
-
-                //int iPointer;//current line Number
-                //String sPointer;//current line Value
-
-                //Wipe Comment Blocks
-                if (file.Contains("/*") && file.Contains("/*"))
-                    while (file.Contains("/*") && file.Contains("/*") )
-                    {
-                        int startIndex, iCount;
-                        startIndex = file.IndexOf("/*");
-                        if(file[startIndex - 1] == '/')
-                        {
-                            file = file.Insert(startIndex + 1, "_");
-                            continue;
-                        }
-                        iCount = (file.IndexOf("*/") - file.IndexOf("/*") + 2);
-                        if(iCount > 0 && startIndex > 0)
-                            file = file.Remove(startIndex, iCount);//Get rid of comment blocks
-                        
-                    }
-
-                List<String> contentList = splitStringBy(file, "\n");
-
-
-                for (int i = 0; i < contentList.Count; i++)
-                {
-                    //get rid of comments
-                    if (contentList[i].Contains("//"))
-                    {
-                        contentList[i] = contentList[i].Remove(contentList[i].IndexOf("//"));
-                    }
-
-                    if (contentList[i].Contains("_i ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _i.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_u ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _u.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_p ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _p.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-                    else if (contentList[i].Contains("_g ") && contentList[i].Contains("pushBack") && contentList[i].Contains(";"))
-                    {
-                        _g.Add(contentList[i].Substring(contentList[i].IndexOf("pushBack") + 9, contentList[i].IndexOf(';') - contentList[i].IndexOf("pushBack") - 9));// from end of pushBack to ;
-                    }
-
-                }
-
-
-
-                if ((_i.Count == _u.Count) && (_i.Count == _p.Count) && (_i.Count == _g.Count))
-                    for (int i = 0; i < _i.Count; i++)
-                    {
-                        if (_i[i].IndexOf("\"") == 0)
-                            _i[i] = _i[i].Substring(1, _i[i].Count() - 2);//cut first and last char
-                        else if (_i[i].IndexOf("'") == 0)
-                            _i[i] = _i[i].Substring(1, _i[i].Count() - 2);//cut first and last char
-                        if (_u[i].IndexOf("\"") == 0)
-                            _u[i] = _u[i].Substring(1, _u[i].Count() - 2);//cut first and last char
-                        else if (_u[i].IndexOf("'") == 0)
-                            _u[i] = _u[i].Substring(1, _u[i].Count() - 2);//cut first and last char
-                        if (_p[i].IndexOf("\"") == 0)
-                            _p[i] = _p[i].Substring(1, _p[i].Count() - 2);//cut first and last char
-                        else if (_p[i].IndexOf("'") == 0)
-                            _p[i] = _p[i].Substring(1, _p[i].Count() - 2);//cut first and last char
-                        if (_g[i].IndexOf("\"") == 0)
-                            _g[i] = _g[i].Substring(1, _g[i].Count() - 2);//cut first and last char
-                        else if (_g[i].IndexOf("'") == 0)
-                            _g[i] = _g[i].Substring(1, _g[i].Count() - 2);//cut first and last char
-
-
-
-                        Gear newItem = new Gear();
-                        newItem.addField(new Field("_i", "", _i[i], "ClassNameVar", "\""), false);
-                        newItem.addField(new Field("_u", "", _u[i], "UpgradeLevel"), false);
-                        newItem.addField(new Field("_p", "", _p[i], "Price"), false);
-                        newItem.addField(new Field("_g", "", _g[i], "Filter"), false);
-                        addItem(newItem, type);
-                    }
-
-
-            }
+                popFromFormatedTextRegex<Unit>(file);
+            else if (type == "Gear")
+                popFromFormatedTextRegex<Gear>(file);
+            else if (type == "Ammo")
+                popFromFormatedTextRegex<Ammo>(file);
+            
         }
         public void populateFromFormatedFile(String path, String type)
         {

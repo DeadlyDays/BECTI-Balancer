@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BectiBalancer
 {
-    class Item
+    abstract class Item
         //An Item is an object that is/can be defined in a units/gear/etc file
     {
         private String className;//The Arma 3 Classname
@@ -79,22 +79,26 @@ namespace BectiBalancer
                     fieldList = value;
             }
         }
-        
+
+        private String[] arrayNames = { };
+        public virtual String[] ArrayNames
+        { get; set; }
 
         public Item()
         {
             ClassName = "";
             FieldList = null;
+            ArrayNames = new String[] { "" };
         }
 
         public Item(String className)
         {
             ClassName = className;
             FieldList = null;
-            addField(new BectiBalancer.Field("_c", ClassName));
+            addField(new BectiBalancer.Field("_c", ClassName), false);
         }
 
-        public void addField(Field newField)
+        public virtual void addField(Field newField, Boolean intern)
         {
             if (ClassName == "DefaultClassName")
                 if (newField.Name == "_c")

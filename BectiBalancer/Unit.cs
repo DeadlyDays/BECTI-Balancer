@@ -248,7 +248,10 @@ namespace BectiBalancer
                 }
             }
         }
-        
+
+        private String[] arrayNames;
+        public override String[] ArrayNames
+        { get { return arrayNames; } set { arrayNames = value; } }
 
         public Unit()
         {
@@ -262,6 +265,7 @@ namespace BectiBalancer
             Script = "";
             Distance = "";
             Camo = "";
+            ArrayNames = new String[] { "_c", "_p", "_n", "_o", "_t", "_u", "_f", "_s", "_d", "_g" };
         }
         public Unit(String name)
         {
@@ -277,7 +281,7 @@ namespace BectiBalancer
             Camo = null;
         }
 
-        public void addField(Field newField, Boolean intern)
+        public override void addField(Field newField, Boolean intern)
         {
             if (!intern)
             {

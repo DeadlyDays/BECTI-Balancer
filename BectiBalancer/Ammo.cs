@@ -8,7 +8,7 @@ namespace BectiBalancer
 {
     class Ammo : Item
     {
-        //Classname _c
+        //Classname _i
         private String classNameVar;
         public String ClassNameVar
         {
@@ -32,7 +32,7 @@ namespace BectiBalancer
             }
         }
 
-        //Picture _p
+        //_o
         private String ordinanceLevel;
         public String OrdinanceLevel
         {
@@ -54,7 +54,7 @@ namespace BectiBalancer
                 }
             }
         }
-        //Name _n
+        //_u
         private String upgradeLevel;
         public String UpgradeLevel
         {
@@ -77,7 +77,7 @@ namespace BectiBalancer
                 }
             }
         }
-        //Price _o
+        //_p
         private String price;
         public String Price
         {
@@ -123,7 +123,10 @@ namespace BectiBalancer
                 }
             }
         }
-        
+
+        private String[] arrayNames;
+        public override String[] ArrayNames
+        { get { return arrayNames; } set { arrayNames = value; } }
 
         public Ammo()
         {
@@ -133,6 +136,7 @@ namespace BectiBalancer
             UpgradeLevel = "";
             Price = "";
             RearmTimeRound = "";
+            ArrayNames = new String[] { "_i", "_o", "_u", "_p", "_t" };
         }
         public Ammo(String name)
         {
@@ -144,7 +148,7 @@ namespace BectiBalancer
             RearmTimeRound = null;
         }
 
-        public void addField(Field newField, Boolean intern)
+        public override void addField(Field newField, Boolean intern)
         {
             if (!intern)
             {

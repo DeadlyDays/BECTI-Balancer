@@ -8,7 +8,7 @@ namespace BectiBalancer
 {
     class Gear : Item
     {
-        //Classname _c
+        //Classname _i
         private String classNameVar;
         public String ClassNameVar
         {
@@ -31,7 +31,7 @@ namespace BectiBalancer
 
             }
         }
-        //Name _n
+        //_u
         private String upgradeLevel;
         public String UpgradeLevel
         {
@@ -54,7 +54,7 @@ namespace BectiBalancer
                 }
             }
         }
-        //Price _o
+        //_p
         private String price;
         public String Price
         {
@@ -77,7 +77,7 @@ namespace BectiBalancer
                 }
             }
         }
-        //Build Time _t
+        //Build Time _g
         private String filter;
         public String Filter
         {
@@ -101,6 +101,9 @@ namespace BectiBalancer
             }
         }
 
+        private String[] arrayNames;
+        public override String[] ArrayNames
+        { get { return arrayNames; } set { arrayNames = value; } }
 
         public Gear()
         {
@@ -109,6 +112,7 @@ namespace BectiBalancer
             UpgradeLevel = "";
             Price = "";
             Filter = "";
+            ArrayNames = new String[] { "_i", "_u", "_p", "_g" };
         }
         public Gear(String name)
         {
@@ -119,7 +123,7 @@ namespace BectiBalancer
             Filter = null;
         }
 
-        public void addField(Field newField, Boolean intern)
+        public override void addField(Field newField, Boolean intern)
         {
             if (!intern)
             {

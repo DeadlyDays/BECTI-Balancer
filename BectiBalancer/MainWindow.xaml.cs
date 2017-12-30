@@ -403,10 +403,10 @@ namespace BectiBalancer
         private void btnAddTag_Click(object sender, RoutedEventArgs e)
         {
             //Type of data
-            String type = cbTypeAddTag.Text;
+            //String type = cbTypeAddTag.Text;
 
             //New Tag
-            String tag = tbAddTag.Text;
+            //String tag = tbAddTag.Text;
             
             //Tag Format - tenative
             //Name:Value

@@ -341,25 +341,50 @@ namespace BectiBalancer
             //
             System.Reflection.PropertyInfo[] prop = typeof(T).GetProperties();
             
-            String pattern = "";
+            String pattern =
+                @"(?:(?:.*)" +//specify front of search has nothing above it, or a ; with any amount of characters between it and next part
+                @"(?:\/\/\[Tag;(?:.+?):(?:.+?)?\])" +//find 0 or more instances of tags [Tag;tagName:tagValue]
+                @"(?:.*.*?\n.*?))*"//space between tag and everything else
+                ;
             T thisClass = new T();//we need to get values of the static array to get the names of the arrays declared in the config
             
             if(prop.Length > 5)
                 for(int i = 0; i < prop.Length - 5; i++)
                 {
-                    pattern += ".*?" + (thisClass.ArrayNames[i]) + " pushBack (?<" + prop[i].Name.ToString() + ">.+?);.*?\n.*?";
-                    String test = "";
+                    pattern += @"(?:.*)" + (thisClass.ArrayNames[i]) + @" pushBack (?<" + prop[i].Name.ToString() + @">.+?);.*?\n.*?";
                 }
 
             //Every item
-            MatchCollection matchCol = Regex.Matches(file, pattern, RegexOptions.None, Regex.InfiniteMatchTimeout);
+            MatchCollection matchCol = Regex.Matches(file, @pattern, RegexOptions.None, Regex.InfiniteMatchTimeout);
             
             //Populate Items
             if(matchCol.Count > 0)
                 foreach (Match p in matchCol)//Iterate through each item p in matchCol
                 {
                     thisClass = new T();
-                    for (int i = 0; i < thisClass.ArrayNames.Length; i++)//Iterate through each property i in matchCol.Group
+
+                    //
+                    //---Grabs Tags
+                    //
+                    String tagPattern =
+                        @"(?:(?:.*)" +//specify front of search has nothing above it, or a ; with any amount of characters between it and next part
+                        @"(?:\/\/\[Tag;(?:.+?):(?:.+?)?\])" +//find 0 or more instances of tags [Tag;tagName:tagValue]
+                        @"(?:.*.*?\n.*?))*"//space between tag and everything else
+                        ;
+                    if (p.Captures.Count > 0)
+                        foreach(Capture c in p.Captures)
+                        {
+                            if (Regex.IsMatch(c.Value, @tagPattern))
+                            {
+                                //divide the matches
+                            }
+                        }
+                    
+                    //
+                    //---This grabs all the property fields and populates every item found
+                    //
+                    
+                    for (int i = 0; i < (thisClass.ArrayNames.Length); i++)//Iterate through each property i in matchCol.Group
                     {
                         thisClass.addField(new Field(thisClass.ArrayNames[i], "", p.Groups[i+1].Value, prop[i].Name.ToString()), false);
                     }

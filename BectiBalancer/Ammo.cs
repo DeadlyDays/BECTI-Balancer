@@ -128,6 +128,9 @@ namespace BectiBalancer
         public override String[] ArrayNames
         { get { return arrayNames; } set { arrayNames = value; } }
 
+        private String footer;
+        public override string Footer { get {return footer; } set { footer = value; } }
+
         public Ammo()
         {
             ClassNameVar = "";
@@ -137,6 +140,7 @@ namespace BectiBalancer
             Price = "";
             RearmTimeRound = "";
             ArrayNames = new String[] { "_i", "_o", "_u", "_p", "_t" };
+            Footer = "[_faction, _i, _o, _u, _p, _t] call compile preprocessFileLineNumbers \"Common\\Config\\Common\\Ammo\\Ammo_Config_Set.sqf\";";
         }
         public Ammo(String name)
         {
@@ -146,6 +150,8 @@ namespace BectiBalancer
             UpgradeLevel = null;
             Price = null;
             RearmTimeRound = null;
+            ArrayNames = new String[] { "_i", "_o", "_u", "_p", "_t" };
+            Footer = "[_faction, _i, _o, _u, _p, _t] call compile preprocessFileLineNumbers \"Common\\Config\\Common\\Ammo\\Ammo_Config_Set.sqf\";";
         }
 
         public override void addField(Field newField, Boolean intern)

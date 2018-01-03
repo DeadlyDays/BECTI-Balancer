@@ -253,6 +253,9 @@ namespace BectiBalancer
         public override String[] ArrayNames
         { get { return arrayNames; } set { arrayNames = value; } }
 
+        private String footer;
+        public override string Footer { get { return footer; } set { footer = value; } }
+
         public Unit()
         {
             ClassNameVar = "";
@@ -266,6 +269,7 @@ namespace BectiBalancer
             Distance = "";
             Camo = "";
             ArrayNames = new String[] { "_c", "_p", "_n", "_o", "_t", "_u", "_f", "_s", "_d", "_g" };
+            Footer = "[_side, _faction, _c, _p, _n, _o, _t, _u, _f, _s, _d, _g] call compile preprocessFileLineNumbers 'Common\\Config\\Common\\Units\\Set_Units.sqf';";
         }
         public Unit(String name)
         {
@@ -279,6 +283,8 @@ namespace BectiBalancer
             Script = null;
             Distance = null;
             Camo = null;
+            ArrayNames = new String[] { "_c", "_p", "_n", "_o", "_t", "_u", "_f", "_s", "_d", "_g" };
+            Footer = "[_side, _faction, _c, _p, _n, _o, _t, _u, _f, _s, _d, _g] call compile preprocessFileLineNumbers 'Common\\Config\\Common\\Units\\Set_Units.sqf';";
         }
 
         public override void addField(Field newField, Boolean intern)

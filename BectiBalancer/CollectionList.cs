@@ -91,6 +91,13 @@ namespace BectiBalancer
 
         public Boolean filtered;
 
+        private String[,] view;
+        public String[,] View
+        {
+            get;
+            set;
+        }
+
         private String type;//is this a Unit, Gear, etc type file
         public String Type
         {
@@ -187,6 +194,20 @@ namespace BectiBalancer
         public void readTags()
         {
 
+        }
+
+        public void buildView()
+        {
+            //Size array to UnitList
+            System.Reflection.PropertyInfo[] prop = typeof(Unit).GetProperties();
+            View = new String[UnitList.Count, prop.Length - 6];
+            for(int i = 0; i < UnitList.Count;i++)
+            {
+                for(int p = 0; p < (prop.Length - 6); p++)
+                {
+                    View[i, p] = UnitList[i].returnField(prop[p].Name).Value;
+                }
+            }
         }
 
         public void populateFromCSV(String path, String type)
@@ -348,8 +369,8 @@ namespace BectiBalancer
                 ;
             T thisClass = new T();//we need to get values of the static array to get the names of the arrays declared in the config
             
-            if(prop.Length > 5)
-                for(int i = 0; i < prop.Length - 5; i++)
+            if(prop.Length > 6)
+                for(int i = 0; i < prop.Length - 6; i++)
                 {
                     pattern += @"(?:.*)" + (thisClass.ArrayNames[i]) + @" pushBack (?<" + prop[i].Name.ToString() + @">.+?);.*?\n.*?";
                 }
@@ -368,15 +389,25 @@ namespace BectiBalancer
                     //
                     String tagPattern =
                         @"(?:(?:.*)" +//specify front of search has nothing above it, or a ; with any amount of characters between it and next part
-                        @"(?:\/\/\[Tag;(?:.+?):(?:.+?)?\])" +//find 0 or more instances of tags [Tag;tagName:tagValue]
-                        @"(?:.*.*?\n.*?))*"//space between tag and everything else
+                        @"(?<tag>\/\/\[Tag;(?<tagName>.+?):(?<tagValue>.+?)?\])" +//find 0 or more instances of tags [Tag;tagName:tagValue]
+                        @"(?:.*.*?\n*?))+"//space between tag and everything else
                         ;
                     if (p.Captures.Count > 0)
                         foreach(Capture c in p.Captures)
+                            //This will only go once as there is only 1 capture per match
                         {
                             if (Regex.IsMatch(c.Value, @tagPattern))
                             {
                                 //divide the matches
+                                MatchCollection tagCollection = Regex.Matches(c.Value, @tagPattern);
+                                //add tags to Item
+                                if(tagCollection.Count > 0)
+                                foreach(Match m in tagCollection)
+                                {
+                                    //Group 2 is tagName, Group 3 is tagValue
+                                    Tag t = new Tag(m.Groups[2].Value, m.Groups[3].Value);
+                                    thisClass.addTag(t);
+                                }
                             }
                         }
                     

@@ -91,7 +91,9 @@ namespace BectiBalancer
 
                 //dgBalancingFields.CommitEdit();
                 dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = currentList.UnitList;
+                currentList.buildView();
+                dgViewBalance.ItemsSource = currentList.View;
+                //dgViewBalance.ItemsSource = currentList.UnitList;
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
                 dgViewBalance.CanUserAddRows = true;
             }

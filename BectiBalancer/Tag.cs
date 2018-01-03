@@ -91,6 +91,11 @@ namespace BectiBalancer
         {
             parseTag(tag);
         }
+        public Tag(String tagName, String tagValue)
+        {
+            this.tagName = tagName;
+            this.tagValue = tagValue;
+        }
 
         //name:value
         public void parseTag(String tag)

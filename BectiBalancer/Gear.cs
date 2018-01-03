@@ -105,6 +105,9 @@ namespace BectiBalancer
         public override String[] ArrayNames
         { get { return arrayNames; } set { arrayNames = value; } }
 
+        private String footer;
+        public override string Footer { get { return footer; } set { footer = value; } }
+
         public Gear()
         {
             ClassNameVar = "";
@@ -113,6 +116,7 @@ namespace BectiBalancer
             Price = "";
             Filter = "";
             ArrayNames = new String[] { "_i", "_u", "_p", "_g" };
+            Footer = "[_faction, _i, _u, _p, _g] call compile preprocessFileLineNumbers \"Common\\Config\\Common\\Gear\\Gear_Config_Set.sqf\";";
         }
         public Gear(String name)
         {
@@ -121,6 +125,8 @@ namespace BectiBalancer
             UpgradeLevel = null;
             Price = null;
             Filter = null;
+            ArrayNames = new String[] { "_i", "_u", "_p", "_g" };
+            Footer = "[_faction, _i, _u, _p, _g] call compile preprocessFileLineNumbers \"Common\\Config\\Common\\Gear\\Gear_Config_Set.sqf\";";
         }
 
         public override void addField(Field newField, Boolean intern)

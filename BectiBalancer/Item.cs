@@ -80,6 +80,10 @@ namespace BectiBalancer
             }
         }
 
+        private String footer;
+        public virtual String Footer
+        { get { return footer; } set{ footer = value; } }
+
         private String[] arrayNames = { };
         public virtual String[] ArrayNames
         { get; set; }
@@ -89,12 +93,14 @@ namespace BectiBalancer
             ClassName = "";
             FieldList = null;
             ArrayNames = new String[] { "" };
+            TagList = null;
         }
 
         public Item(String className)
         {
             ClassName = className;
             FieldList = null;
+            TagList = null;
             addField(new BectiBalancer.Field("_c", ClassName), false);
         }
 
@@ -104,6 +110,11 @@ namespace BectiBalancer
                 if (newField.Name == "_c")
                     ClassName = newField.Value;
             FieldList.Add(newField);
+        }
+        public void addTag(Tag newTag)
+        {
+            if(newTag != null)
+                TagList.Add(newTag);
         }
         public void editValue(String fieldName, String value)
         {
@@ -125,5 +136,6 @@ namespace BectiBalancer
             }
             return new Field();
         }
+        
     }
 }

@@ -421,7 +421,14 @@ namespace BectiBalancer
             //--Setup View
             //
             View = DisplayTable.DefaultView;
-           
+            String filterBuilder = "";
+            for(int p = 0; p < myItem.FormatNames.Count; p++)
+            {
+                if (p > 0)
+                    filterBuilder += " OR ";
+                filterBuilder += myItem.FormatNames[p] + " LIKE '%" + keyword + "%'";
+            }
+            View.RowFilter = filterBuilder;
         }
         //
         //--Read a file into a string(to be interpreted)

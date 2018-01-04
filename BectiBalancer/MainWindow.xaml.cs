@@ -411,7 +411,11 @@ namespace BectiBalancer
             //
             if(e.Key == Key.Return)
             {
-                //filterLists();
+                currentList.updateView(tbFilterText.Text);
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = currentList.View;
+                dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                dgViewBalance.CanUserAddRows = true;
             }
         }
 
@@ -466,7 +470,11 @@ namespace BectiBalancer
         private void tbFilterText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             //
-            //filterLists();
+            currentList.updateView(tbFilterText.Text);
+            dgViewBalance.ItemsSource = null;
+            dgViewBalance.ItemsSource = currentList.View;
+            dgViewBalance.IsSynchronizedWithCurrentItem = true;
+            dgViewBalance.CanUserAddRows = true;
         }
 
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)

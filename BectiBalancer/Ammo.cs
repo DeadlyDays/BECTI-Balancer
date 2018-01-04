@@ -13,13 +13,49 @@ namespace BectiBalancer
         { get; set; }
         private List<String> formatNames;
         public override List<String> FormatNames
-        { get; set; }
+        {
+            get
+            {
+                return formatNames;
+            }
+
+            set
+            {
+                if (value != null)
+                    formatNames = value;
+                else formatNames = new List<String>();
+            }
+        }
         private List<String> formatArrays;
         public override List<String> FormatArrays
-        { get; set; }
+        {
+            get
+            {
+                return formatArrays;
+            }
+
+            set
+            {
+                if (value != null)
+                    formatArrays = value;
+                else formatArrays = new List<String>();
+            }
+        }
         private List<String> formatDefaults;
         public override List<String> FormatDefaults
-        { get; set; }
+        {
+            get
+            {
+                return formatDefaults;
+            }
+
+            set
+            {
+                if (value != null)
+                    formatDefaults = value;
+                else formatDefaults = new List<String>();
+            }
+        }
 
         public Ammo()
         {

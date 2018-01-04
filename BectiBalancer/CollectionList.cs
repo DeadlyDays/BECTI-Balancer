@@ -38,7 +38,9 @@ namespace BectiBalancer
             }
         }
 
-        
+        private static Unit myUnit = new Unit();
+        private static Gear myGear = new Gear();
+        private static Ammo myAmmo = new Ammo();
 
         public CollectionList()
         {
@@ -87,15 +89,15 @@ namespace BectiBalancer
             //Add Types
             DataRow row = Data.Tables[1].NewRow();
             row.SetField("Type", "Unit");
-            row.SetField("Footer", new Unit().Footer);
+            row.SetField("Footer", myUnit.Footer);
             Data.Tables[1].Rows.Add(row);
             row = Data.Tables[1].NewRow();
             row.SetField("Type", "Gear");
-            row.SetField("Footer", new Gear().Footer);
+            row.SetField("Footer", myGear.Footer);
             Data.Tables[1].Rows.Add(row);
             row = Data.Tables[1].NewRow();
             row.SetField("Type", "Ammo");
-            row.SetField("Footer", new Ammo().Footer);
+            row.SetField("Footer", myAmmo.Footer);
             Data.Tables[1].Rows.Add(row);
 
 
@@ -141,7 +143,7 @@ namespace BectiBalancer
         //
         //--Read a formated String, as if from a config file
         //
-        public void populateData(String input, String version)
+        public void populateData(String input, Boolean version)
         {
             //
             //---Wipe Comment Blocks, Comment blocks are just comments we dont give no fuck
@@ -170,39 +172,40 @@ namespace BectiBalancer
             //
             String unitPattern, gearPattern, ammoPattern;
             unitPattern = ".*";
-            for (int i = 0; i < new Unit().FormatArrays.Count; i++)
+            for (int i = 0; i < (myUnit.FormatArrays).Count; i++)
             {
                 unitPattern +=
                     "(" +
-                    new Unit().FormatArrays[i] +
-                    " pushBack (.*);.*\n*.*"
+                    myUnit.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
                     ;
 
             }
+            
             gearPattern = ".*";
-            for (int i = 0; i < new Gear().FormatArrays.Count; i++)
+            for (int i = 0; i < myGear.FormatArrays.Count; i++)
             {
                 gearPattern +=
                     "(" +
-                    new Gear().FormatArrays[i] +
-                    " pushBack (.*);.*\n*.*"
+                    myGear.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
                     ;
 
             }
             ammoPattern = ".*";
-            for (int i = 0; i < new Ammo().FormatArrays.Count; i++)
+            for (int i = 0; i < myAmmo.FormatArrays.Count; i++)
             {
                 ammoPattern +=
                     "(" +
-                    new Ammo().FormatArrays[i] +
-                    " pushBack (.*);.*\n*.*"
+                    myAmmo.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
                     ;
 
             }
 
             //Dynamic Type Detection
             String type = "";
-            if (Regex.IsMatch(input, unitPattern))
+            if (Regex.IsMatch(input, @unitPattern))
             {
                 type = "Unit";
             }
@@ -230,7 +233,7 @@ namespace BectiBalancer
 
             switch (version)
             {
-                case "Current":
+                case false://Current
                     switch (type)
                     {
                         case "Unit":
@@ -246,7 +249,7 @@ namespace BectiBalancer
                             break;
                     }
                     break;
-                case "Future":
+                case true://Future
 
                     break;
                 default:
@@ -278,13 +281,13 @@ namespace BectiBalancer
                     //Make  new row for ItemDB
                     DataRow itemRow = Data.Tables[0].NewRow();
                     //new UID
-                    int itemUID = Data.Tables[0].Rows.Count + 1;
+                    int itemUID = Data.Tables[0].Rows.Count;
                     //Set UID
                     itemRow.SetField("UID", itemUID);
                     //Set Classname
                     itemRow.SetField("ClassName", p.Groups[1].Value);
                     //Set TypeDB_Type
-                    itemRow.SetField("TypeDB_Type", typeof(T).ToString());
+                    itemRow.SetField("TypeDB_Type", typeof(T).Name.ToString());
                     //Commit Row
                     Data.Tables[0].Rows.Add(itemRow);
                     //
@@ -310,7 +313,7 @@ namespace BectiBalancer
                                         //Make new row for TagsDB
                                         DataRow tagsRow = Data.Tables[3].NewRow();
                                         //Set UID
-                                        itemRow.SetField("UID", Data.Tables[3].Rows.Count + 1);
+                                        itemRow.SetField("UID", Data.Tables[3].Rows.Count);
                                         //
                                         //--Group 2 is tagName, Group 3 is tagValue
                                         //
@@ -339,7 +342,7 @@ namespace BectiBalancer
                         //Create new row in FieldsTB
                         DataRow fieldRow = Data.Tables[2].NewRow();
                         //Set UID
-                        fieldRow.SetField("UID", Data.Tables[2].Rows.Count + 1);
+                        fieldRow.SetField("UID", Data.Tables[2].Rows.Count);
                         //Set Name
                         fieldRow.SetField("Name", new T().FormatNames[i]);
                         //Set Value
@@ -361,7 +364,10 @@ namespace BectiBalancer
 
                 }
         }
+        public void updateView(String keyword)
+        {
 
+        }
         //
         //--Read a file into a string(to be interpreted)
         //

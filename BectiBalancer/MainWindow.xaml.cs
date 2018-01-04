@@ -33,6 +33,7 @@ namespace BectiBalancer
             isConnected = false;
             //currentList = workingList;//point at workingList
             showVersion();
+            
         }
 
         private void showVersion()
@@ -73,8 +74,9 @@ namespace BectiBalancer
             else
                 currentList.clearCollection();
 
-            
-            currentList.populateData(currentList.readFile(tbImportFilePath.Text), cbVersion.Text);
+            currentList.clearCollection();
+            currentList = new CollectionList();
+            currentList.populateData(currentList.readFile(tbImportFilePath.Text), cbVersion.IsChecked.Value);
             Log("Pulled Data");
             //populateFields("Gear");
 

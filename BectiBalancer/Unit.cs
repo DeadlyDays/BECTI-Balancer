@@ -13,13 +13,49 @@ namespace BectiBalancer
         { get; set; }
         private List<String> formatNames ;
         public override List<String> FormatNames
-        { get; set; }
+        {
+            get
+            {
+                return formatNames;
+            }
+
+            set
+            {
+                if (value != null)
+                    formatNames = value;
+                else formatNames = new List<String>();
+            }
+        }
         private List<String> formatArrays ;
         public override List<String> FormatArrays
-        { get; set; }
+        {
+            get
+            {
+                return formatArrays;
+            }
+
+            set
+            {
+                if (value != null)
+                    formatArrays = value;
+                else formatArrays = new List<String>();
+            }
+        }
         private List<String> formatDefaults ;
         public override List<String> FormatDefaults
-        { get; set; }
+        {
+            get
+            {
+                return formatDefaults;
+            }
+
+            set
+            {
+                if (value != null)
+                    formatDefaults = value;
+                else formatDefaults = new List<String>();
+            }
+        }
 
         public Unit()
         {
@@ -30,8 +66,9 @@ namespace BectiBalancer
             formatNames = new List<String>
         {
             "Classname",
-            "Price",
+            "Picture",
             "Name",
+            "Price",
             "BuildTime",
             "UpgradeLevel",
             "Factory",
@@ -42,12 +79,12 @@ namespace BectiBalancer
             formatArrays = new List<String>
         {
             "_c",//ClassName
-            "_p",//Price
+            "_p",//Picture
             "_n",//Name
-            "_o",//BuildTime
-            "_t",//UpgradeLevel
-            "_u",//Factory
-            "_f",//Script
+            "_o",//Price
+            "_t",//BuildTime
+            "_u",//UpgradeLevel
+            "_f",//Factory
             "_s",//Script
             "_d",//Distance
             "_g"//Camo
@@ -55,8 +92,9 @@ namespace BectiBalancer
             formatDefaults = new List<String>
         {
             "''",//ClassName
-            "''",//Price
+            "''",//Picture
             "",//Name
+            "",//Price
             "",//BuildTime
             "",//UpgradeLevel
             "",//Factory

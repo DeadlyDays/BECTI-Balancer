@@ -98,11 +98,8 @@
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="lblConvertInstructions" Content="Select From the list before using any of the Export buttons or the Update Button in Import Existing"
                            HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="529"/>
-                    <ComboBox x:Name="cbVersion" HorizontalAlignment="Left" Margin="615,2,0,2"  Width="101" Height="22">
-                        <ComboBoxItem Content="Current" HorizontalAlignment="Left" Width="140"/>
-                        <ComboBoxItem Content="Reformatted" HorizontalAlignment="Left" Width="140"/>
-                    </ComboBox>
-                    <Label x:Name="lblConvert" Content="Convert to?" HorizontalAlignment="Left" Margin="545,2,0,1"/>
+                    <Label x:Name="lblConvert" Content="Convert?" HorizontalAlignment="Left" Margin="546,2,0,1"/>
+                    <CheckBox x:Name="cbVersion" Content="Future" HorizontalAlignment="Left" Margin="608,7,0,0" VerticalAlignment="Top"/>
 
                 </Grid>
             </TabItem>

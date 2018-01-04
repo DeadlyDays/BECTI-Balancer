@@ -53,17 +53,7 @@ namespace BectiBalancer
             rtbLog.AppendText(s);
             rtbLog.ScrollToEnd();
         }
-        private void populateFields(String type)
-            //Populate the List of Items
-        {
-            /*lbItemList.ItemsSource = workingList.ItemList;*/
-            Log("Populating Fields...");
-            for (int i = 0; i < currentList.ItemList.Count; i++)
-            {
-                //lbItemList.Items.Add(workingList.ItemList[i].ClassName);
-            }
-            Log("Populated Fields.");
-        }
+        
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
             //Try to Connect to Database
@@ -83,52 +73,23 @@ namespace BectiBalancer
             else
                 currentList.clearCollection();
 
-            if (cbImportFormated.Text == "Unit")
-            {
-                currentList.populateFromFormatedFile(tbImportFilePath.Text, cbImportFormated.Text);
-                Log("Pulled Data");
-                populateFields("Unit");
+            
+            currentList.populateData(currentList.readFile(tbImportFilePath.Text), cbVersion.Text);
+            Log("Pulled Data");
+            //populateFields("Gear");
 
-                //dgBalancingFields.CommitEdit();
-                dgViewBalance.ItemsSource = null;
-                currentList.buildView();
-                dgViewBalance.ItemsSource = currentList.View;
-                //dgViewBalance.ItemsSource = currentList.UnitList;
-                dgViewBalance.IsSynchronizedWithCurrentItem = true;
-                dgViewBalance.CanUserAddRows = true;
-            }
-            else if (cbImportFormated.Text == "Ammo")
-            {
-                currentList.populateFromFormatedFile(tbImportFilePath.Text, cbImportFormated.Text);
-                Log("Pulled Data");
-                populateFields("Ammo");
+            //dgBalancingFields.CommitEdit();
+            dgViewBalance.ItemsSource = null;
+            dgViewBalance.ItemsSource = currentList.View;
+            dgViewBalance.IsSynchronizedWithCurrentItem = true;
+            dgViewBalance.CanUserAddRows = true;
 
-                //dgBalancingFields.CommitEdit();
-                dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = currentList.AmmoList;
-                dgViewBalance.IsSynchronizedWithCurrentItem = true;
-                dgViewBalance.CanUserAddRows = true;
-            }
-            else if (cbImportFormated.Text == "Gear")
-            {
-                currentList.populateFromFormatedFile(tbImportFilePath.Text, cbImportFormated.Text);
-                Log("Pulled Data");
-                populateFields("Gear");
-
-                //dgBalancingFields.CommitEdit();
-                dgViewBalance.ItemsSource = null;
-                dgViewBalance.ItemsSource = currentList.GearList;
-                dgViewBalance.IsSynchronizedWithCurrentItem = true;
-                dgViewBalance.CanUserAddRows = true;
-            }
-
-
-
-            }
+            
+        }
 
         private void btnCreateNewFileFromList_Click(object sender, RoutedEventArgs e)
             //New Collection Generated from csv List of items
-        {
+        {/*
             if (tbImportExportPath.Text == "")
             {
                 Log("Invalid Path");
@@ -181,7 +142,8 @@ namespace BectiBalancer
                     Log("Improper Type Selected");
                     break;
             }
-        }
+        */}
+        
         private Microsoft.Win32.OpenFileDialog browseForFile(String path, String filter)
         {
             // Create OpenFileDialog
@@ -268,7 +230,7 @@ namespace BectiBalancer
         }
         
         private void btnExportList_Click(object sender, RoutedEventArgs e)
-        {
+        {/*
             if (currentList.filtered)
             {
                 Log("Error: You must clear the filter before you may continue");
@@ -314,7 +276,7 @@ namespace BectiBalancer
             }
 
             
-        }
+        */}
 
         private void dgViewBalance_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -330,7 +292,7 @@ namespace BectiBalancer
         }
 
         private void btnEdit_Click(object sender, RoutedEventArgs e)
-        {
+        {/*
             //Enable Editing more than one cell at a time
 
             //Validate Type Selected
@@ -377,7 +339,7 @@ namespace BectiBalancer
                 dgViewBalance.ItemsSource = currentList.GearList;
             }
             
-        }
+        */}
 
         private void dgViewBalance_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -422,7 +384,7 @@ namespace BectiBalancer
         }
 
         private void btnCopyToClipboard_Click(object sender, RoutedEventArgs e)
-        {
+        {/*
             if (currentList.filtered)
             {
                 Log("Error: You must clear the filter before you may continue");
@@ -439,24 +401,25 @@ namespace BectiBalancer
             {
                 Log("Error: No Type Set");
             }
-        }
+        */}
 
         private void tbFilterText_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             //
             if(e.Key == Key.Return)
             {
-                filterLists();
+                //filterLists();
             }
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (currentList.filtered)
             {
                 Log("Error: You must clear the filter before you may continue");
                 return;
-            }
+            }*/
 
             //Replace contents of import file with data we now have
             if (tbImportFilePath.Text != "")
@@ -500,11 +463,11 @@ namespace BectiBalancer
         private void tbFilterText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             //
-            filterLists();
+            //filterLists();
         }
 
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)
-        {
+        {/*
             currentList.unfilterList(cbFilterType.Text);
             String type = cbFilterType.Text;
             switch (type)
@@ -539,11 +502,11 @@ namespace BectiBalancer
                     break;
             }
             Log("Cleared Filter");
-        }
+        */}
 
         //Filter things out
         private void filterLists()
-        {
+        {/*
             String type = cbFilterType.Text;
             String filterKeyword = tbFilterText.Text;
 
@@ -581,7 +544,7 @@ namespace BectiBalancer
                     break;
             }
 
-        }
+        */}
 
     }
 }

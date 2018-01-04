@@ -366,7 +366,62 @@ namespace BectiBalancer
         }
         public void updateView(String keyword)
         {
+            //
+            //--Populate DisplayTable
+            //
+            DataTable itemDB = Data.Tables["ItemDB"];
+            DataTable fieldsTB = Data.Tables["FieldsDB"];
+            var resultArray = from item in itemDB.AsEnumerable()
+                              join field in fieldsTB.AsEnumerable()
+                              on item.Field<int>("UID") equals
+                              field.Field<int>("ItemDB_UID")
+                              select new
+                              {
+                                  FieldType = 
+                                    item.Field<String>("TypeDB_Type"),
+                                  FieldName =
+                                    field.Field<String>("Name"),
+                                  FieldValue =
+                                    field.Field<String>("Value")
+                              };
+            String str = "";
+            DisplayTable = new DataTable();
+            Item myItem = new Item();
+            if (resultArray.Count() == 0);
+            else if (resultArray.ElementAt(0).FieldType == "Unit")
+                myItem = myUnit;
+            else if (resultArray.ElementAt(0).FieldType == "Gear")
+                myItem = myGear;
+            else if (resultArray.ElementAt(0).FieldType == "Ammo")
+                myItem = myAmmo;
+            if (resultArray.Count() != 0)
+            for (int i = 0; i < myItem.FormatNames.Count; i++)
+            {
+                DataColumn dc = new DataColumn(resultArray.ElementAt(i).FieldName);
+                DisplayTable.Columns.Add(dc);
+            }
+            if (resultArray.Count() != 0)
+            for (int i = 0; i < resultArray.Count(); i += myItem.FormatNames.Count)
+            //iterate through each item
+            {
+                DataRow dr = DisplayTable.NewRow();
+                for (int p = 0; p < myItem.FormatNames.Count; p++)
+                //iterate through each property
+                {
+                    //actual index is combination of both item and property indexs
+                    int val = i + p;
+                    //add each field
+                    dr.SetField(resultArray.ElementAt(val).FieldName, resultArray.ElementAt(val).FieldValue);
+                }
+                //commit new row
+                DisplayTable.Rows.Add(dr);
+            }
 
+            //
+            //--Setup View
+            //
+            View = DisplayTable.DefaultView;
+           
         }
         //
         //--Read a file into a string(to be interpreted)

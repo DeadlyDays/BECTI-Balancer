@@ -69,8 +69,7 @@ namespace BectiBalancer
             "Ordinance",
             "UpgradeLevel",
             "Price",
-            "RearmTime",
-            "MaxMags"
+            "RearmTime"
         };
             formatArrays = new List<String>
         {
@@ -78,8 +77,7 @@ namespace BectiBalancer
             "_o",//Ordinance
             "_u",//UpgradeLevel
             "_p",//Price
-            "_t",//RearmTime
-            "_m"//MaxMags
+            "_t"//RearmTime
         };
             formatDefaults = new List<String>
         {
@@ -87,8 +85,7 @@ namespace BectiBalancer
             "''",//Ordinance
             "",//UpgradeLevel
             "",//Price
-            "",//RearmTime
-            ""//MaxMags
+            ""//RearmTime
         };
         }
 

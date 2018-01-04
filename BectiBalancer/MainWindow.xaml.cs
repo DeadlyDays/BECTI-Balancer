@@ -77,6 +77,7 @@ namespace BectiBalancer
             currentList.clearCollection();
             currentList = new CollectionList();
             currentList.populateData(currentList.readFile(tbImportFilePath.Text), cbVersion.IsChecked.Value);
+            currentList.updateView(tbFilterText.Text);
             Log("Pulled Data");
             //populateFields("Gear");
 

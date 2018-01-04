@@ -65,7 +65,7 @@ namespace BectiBalancer
              " 'Common\\Config\\Common\\Units\\Set_Units.sqf';";
             formatNames = new List<String>
         {
-            "Classname",
+            "ClassName",
             "Picture",
             "Name",
             "Price",

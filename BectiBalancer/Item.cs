@@ -12,6 +12,9 @@ namespace BectiBalancer
         private String footer;
         public virtual String Footer
         { get; set; }
+        private String header;
+        public virtual String Header
+        { get; set; }
         private List<String> formatNames;
         public virtual List<String> FormatNames
         {
@@ -60,7 +63,8 @@ namespace BectiBalancer
 
         public Item()
         {
-            footer = "";
+            Footer = "";
+            Header = "";
             formatNames = new List<String>
             {
                 "Classname"

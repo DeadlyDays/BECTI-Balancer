@@ -56,12 +56,7 @@
             <TabItem Header="Export to Clipboard">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="lblCopyToClipboard" Content="Copy Output to Clipboard(Instead of to a file); Paste output anywhere:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="380" />
-                    <ComboBox x:Name="cbListTypeToClipboard" HorizontalAlignment="Left" Margin="385,4,0,0" VerticalAlignment="Top" Width="94" Height="22">
-                        <ComboBoxItem Content="Unit" HorizontalAlignment="Left" Width="172"/>
-                        <ComboBoxItem Content="Ammo" HorizontalAlignment="Left" Width="172"/>
-                        <ComboBoxItem Content="Gear" HorizontalAlignment="Left" Width="172"/>
-                    </ComboBox>
-                    <Button x:Name="btnCopyToClipboard" Content="To Clipboard" IsEnabled="True" HorizontalAlignment="Left" Margin="490,4,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnCopyToClipboard_Click"/>
+                    <Button x:Name="btnCopyToClipboard" Content="To Clipboard" IsEnabled="True" HorizontalAlignment="Left" Margin="381,4,0,0" VerticalAlignment="Top" Width="75" Height="20" Click="btnCopyToClipboard_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="DB Connect">

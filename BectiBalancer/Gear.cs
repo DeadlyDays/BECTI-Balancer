@@ -8,8 +8,11 @@ namespace BectiBalancer
 {
     class Gear : Item
     {
-        private String footer = "";
+        private String footer;
         public override String Footer
+        { get; set; }
+        private String header;
+        public override String Header
         { get; set; }
         private List<String> formatNames;
         public override List<String> FormatNames
@@ -59,10 +62,28 @@ namespace BectiBalancer
 
         public Gear()
         {
-            footer = "" +
+            Footer = "" +
              "[_faction, _i, _u, _p, _g]" +
              " call compile preprocessFileLineNumbers" +
              " \"Common\\Config\\Common\\Gear\\Gear_Config_Set.sqf\";";
+            Header = "" +
+                "private [\"_faction\", \"_g\", \"_i\", \"_p\", \"_side\", \"_u\"];\n" +
+                "\n" +
+                "_side = _this;\n" +
+                "_faction = \"East\";\n" +
+                "\n" +
+                "_i = []; //Gear Classname\n" +
+                "_u = []; //Upgrade Level\n" +
+                "_p = []; //Price\n" +
+                "_g = []; //Filter\n" +
+                "\n" +
+                "/*EXAMPLE\n" +
+                "_i pushBack \"ATMine_Range_Mag\";\n" +
+                "_u pushBack 2;\n" +
+                "_p pushBack 600;\n" +
+                "_g pushBack \"AT Mine\";\n" +
+                "*/\n" +
+                "\n"; 
             formatNames = new List<String>
         {
             "Classname",

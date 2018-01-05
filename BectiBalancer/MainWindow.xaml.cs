@@ -383,7 +383,7 @@ namespace BectiBalancer
         }
 
         private void btnCopyToClipboard_Click(object sender, RoutedEventArgs e)
-        {/*
+        {
             if (currentList.filtered)
             {
                 Log("Error: You must clear the filter before you may continue");
@@ -391,16 +391,11 @@ namespace BectiBalancer
             }
 
             //Copy output to clipboard instead of to a file so it can be pasted into a text document
-            if (cbListTypeToClipboard.Text != "")
-            {
-                System.Windows.Clipboard.SetText(currentList.returnFormatedFile(cbListTypeToClipboard.Text));
-                Log("Dataset Copied to Clipboard");
-            }
-            else
-            {
-                Log("Error: No Type Set");
-            }
-        */}
+            
+           System.Windows.Clipboard.SetText(currentList.generateFormatedString());
+           Log("Dataset Copied to Clipboard");
+            
+        }
 
         private void tbFilterText_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -417,12 +412,12 @@ namespace BectiBalancer
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            /*
+            
             if (currentList.filtered)
             {
                 Log("Error: You must clear the filter before you may continue");
                 return;
-            }*/
+            }
 
             //Replace contents of import file with data we now have
             if (tbImportFilePath.Text != "")
@@ -438,17 +433,11 @@ namespace BectiBalancer
                      * endline
                      */
 
-                    //Grab file content
-
-                    //Check for CONFIGSTART
-
-                    //Remove Text below CONFIGSTART
-
-                    //Add new Text
-
-                    //Replace file
-
-                    Log("*Feature Not Complete(Nothing done)* File: '" + tbImportFilePath.Text + "' updated");
+                    if (currentList.updateFile(tbImportFilePath.Text))
+                        Log("File: '" + tbImportFilePath.Text + "' updated");
+                    else
+                        Log("File: '" + tbImportFilePath.Text  + "' is not the same type as current Data");
+                    
                 }
                 else
                 {

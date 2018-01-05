@@ -44,6 +44,9 @@ namespace BectiBalancer
         private static Unit myUnit = new Unit();
         private static Gear myGear = new Gear();
         private static Ammo myAmmo = new Ammo();
+        String unitPattern, gearPattern, ammoPattern;
+        
+        public Boolean filtered;
 
         public CollectionList()
         {
@@ -103,8 +106,40 @@ namespace BectiBalancer
             row.SetField("Footer", myAmmo.Footer);
             Data.Tables[1].Rows.Add(row);
 
-
+            filtered = false;
             Type = null;
+
+            unitPattern = ".*";
+            for (int i = 0; i < (myUnit.FormatArrays).Count; i++)
+            {
+                unitPattern +=
+                    "(" +
+                    myUnit.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
+                    ;
+
+            }
+
+            gearPattern = ".*";
+            for (int i = 0; i < myGear.FormatArrays.Count; i++)
+            {
+                gearPattern +=
+                    "(" +
+                    myGear.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
+                    ;
+
+            }
+            ammoPattern = ".*";
+            for (int i = 0; i < myAmmo.FormatArrays.Count; i++)
+            {
+                ammoPattern +=
+                    "(" +
+                    myAmmo.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
+                    ;
+
+            }
         }
 
         public void clearCollection()
@@ -173,38 +208,8 @@ namespace BectiBalancer
             //
             //--Type
             //
-            String unitPattern, gearPattern, ammoPattern;
-            unitPattern = ".*";
-            for (int i = 0; i < (myUnit.FormatArrays).Count; i++)
-            {
-                unitPattern +=
-                    "(" +
-                    myUnit.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
-                    ;
-
-            }
             
-            gearPattern = ".*";
-            for (int i = 0; i < myGear.FormatArrays.Count; i++)
-            {
-                gearPattern +=
-                    "(" +
-                    myGear.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
-                    ;
-
-            }
-            ammoPattern = ".*";
-            for (int i = 0; i < myAmmo.FormatArrays.Count; i++)
-            {
-                ammoPattern +=
-                    "(" +
-                    myAmmo.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
-                    ;
-
-            }
+            
 
             //Dynamic Type Detection
             String type = "";
@@ -213,12 +218,12 @@ namespace BectiBalancer
                 type = "Unit";
                 Type = myUnit;
             }
-            else if(Regex.IsMatch(input, gearPattern))
+            else if(Regex.IsMatch(input, @gearPattern))
             {
                 type = "Gear";
                 Type = myGear;
             }
-            else if(Regex.IsMatch(input, ammoPattern))
+            else if(Regex.IsMatch(input, @ammoPattern))
             {
                 type = "Ammo";
                 Type = myAmmo;
@@ -373,6 +378,10 @@ namespace BectiBalancer
         }
         public void updateView(String keyword)
         {
+            if (keyword != "")
+                filtered = true;
+            else
+                filtered = false;
             updateData();
             //
             //--Populate DisplayTable
@@ -541,7 +550,7 @@ namespace BectiBalancer
         //
         //--Create File from formated String
         //
-        public void generateFile(StringBuilder str)
+        public void generateFile(String str)
         {
 
         }
@@ -549,9 +558,63 @@ namespace BectiBalancer
         //
         //--Update Existing File using current Data
         //
-        public void updateFile()
+        public Boolean updateFile(String filePath)
+            //return false if filetypes don't match
         {
+            //
+            //--Verify Data type is same as what file is filled with
+            //
 
+            String content = System.IO.File.ReadAllText(filePath, System.Text.Encoding.UTF8);
+
+
+
+            if (Regex.IsMatch(content, @unitPattern) || Regex.IsMatch(content, @gearPattern) || Regex.IsMatch(content, @ammoPattern))
+            {
+                //Datatype is good, continue
+                String newFile = "";
+                newFile += Type.Header;
+
+                //
+                //--Add Data to file
+                //
+                newFile += generateFormatedString();
+
+                newFile += Type.Footer;
+
+                //
+                //--Replace file or filecontent with newFile string
+                //
+                using (System.IO.StreamWriter newTask = new System.IO.StreamWriter(filePath, false))
+                {
+                    newTask.Write(newFile);
+                }
+
+                return true;
+            }
+            else
+                return false;
+        }
+        //
+        //--Generate formatted string from Data
+        //
+        public String generateFormatedString()
+        {
+            String output = "";
+            foreach (DataRow dr in DisplayTable.Rows)
+            {
+                for(int p = 0; p < Type.FormatNames.Count(); p++)
+                {
+                    if(Convert.ToString(dr.ItemArray[p+1]) != "")
+                        output += Type.FormatArrays[p] + " pushBack " + dr.ItemArray[p + 1] + ";\n";
+                    else
+                        output += Type.FormatArrays[p] + " pushBack " + Type.FormatDefaults[p] + ";\n";
+                }
+                output += "\n";//an extra space between items
+            }
+
+
+            return output;
         }
 
         //Old Code

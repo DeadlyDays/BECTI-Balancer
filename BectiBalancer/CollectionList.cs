@@ -25,8 +25,8 @@ namespace BectiBalancer
         { get; set; }
 
         
-        private String type;//is this a Unit, Gear, etc type file
-        public String Type
+        private Item type;//is this a Unit, Gear, etc type file
+        public Item Type
         {
             get
             {
@@ -34,7 +34,10 @@ namespace BectiBalancer
             }
             set
             {
-                type = value;
+                if (value == null)
+                    type = new Item();
+                else
+                    type = value;
             }
         }
 
@@ -101,7 +104,7 @@ namespace BectiBalancer
             Data.Tables[1].Rows.Add(row);
 
 
-            Type = "";
+            Type = null;
         }
 
         public void clearCollection()
@@ -109,7 +112,7 @@ namespace BectiBalancer
             Data = new DataSet();
             DisplayTable = new DataTable();
             View = new DataView();
-            Type = "";
+            Type = null;
         }
         
         //
@@ -208,18 +211,22 @@ namespace BectiBalancer
             if (Regex.IsMatch(input, @unitPattern))
             {
                 type = "Unit";
+                Type = myUnit;
             }
             else if(Regex.IsMatch(input, gearPattern))
             {
                 type = "Gear";
+                Type = myGear;
             }
             else if(Regex.IsMatch(input, ammoPattern))
             {
                 type = "Ammo";
+                Type = myAmmo;
             }
             else
             {
                 type = "Other";
+                Type = new Item();
             }
 
             //
@@ -366,6 +373,7 @@ namespace BectiBalancer
         }
         public void updateView(String keyword)
         {
+            updateData();
             //
             //--Populate DisplayTable
             //
@@ -377,6 +385,8 @@ namespace BectiBalancer
                               field.Field<int>("ItemDB_UID")
                               select new
                               {
+                                  UID =
+                                    item.Field<int>("UID"),
                                   FieldType = 
                                     item.Field<String>("TypeDB_Type"),
                                   FieldName =
@@ -384,7 +394,6 @@ namespace BectiBalancer
                                   FieldValue =
                                     field.Field<String>("Value")
                               };
-            String str = "";
             DisplayTable = new DataTable();
             Item myItem = new Item();
             if (resultArray.Count() == 0);
@@ -395,16 +404,25 @@ namespace BectiBalancer
             else if (resultArray.ElementAt(0).FieldType == "Ammo")
                 myItem = myAmmo;
             if (resultArray.Count() != 0)
-            for (int i = 0; i < myItem.FormatNames.Count; i++)
             {
-                DataColumn dc = new DataColumn(resultArray.ElementAt(i).FieldName);
-                DisplayTable.Columns.Add(dc);
+                //Add the PK UID
+                DataColumn c = new DataColumn("UID");
+                //Dont let anyone mess with UID, this is internal value
+                c.ReadOnly = true;
+                c.Unique = true;
+                DisplayTable.Columns.Add(c);
+                for (int i = 0; i < myItem.FormatNames.Count; i++)
+                {
+                    DataColumn dc = new DataColumn(resultArray.ElementAt(i).FieldName);
+                    DisplayTable.Columns.Add(dc);
+                }
             }
             if (resultArray.Count() != 0)
             for (int i = 0; i < resultArray.Count(); i += myItem.FormatNames.Count)
             //iterate through each item
             {
                 DataRow dr = DisplayTable.NewRow();
+                dr.SetField("UID", resultArray.ElementAt(i).UID);
                 for (int p = 0; p < myItem.FormatNames.Count; p++)
                 //iterate through each property
                 {
@@ -429,6 +447,78 @@ namespace BectiBalancer
                 filterBuilder += myItem.FormatNames[p] + " LIKE '%" + keyword + "%'";
             }
             View.RowFilter = filterBuilder;
+            //This sets a baseline for checking Changes
+            DisplayTable.AcceptChanges();
+
+        }
+        public void updateData()
+            //Updates to the DataGrid onscreen needs to be pushes to DataSet
+            //from the DataTable(DisplayTable)
+        {
+            //
+            //--Grab and commit updates from DataTable
+            //
+            if(DisplayTable != null)
+                if(DisplayTable.GetChanges() != null)
+                {
+                    DataTable changes = DisplayTable.GetChanges();
+
+                    foreach(DataRow dr in changes.Rows)
+                        //Cycle updates rows
+                    {
+                        int UID = Convert.ToInt32(dr.ItemArray[0]);
+                        //
+                        //--Locate rows to update
+                        //
+                        for (int r = 0; r < Data.Tables[0].Rows.Count; r++)
+                        //ItemDB
+                        {
+                            if(UID == Convert.ToInt32(Data.Tables[0].Rows[r].ItemArray[0]))
+                                //This Item matches this Row via UID
+                            {
+                                if(dr.ItemArray[1] != Data.Tables[0].Rows[r].ItemArray[1])
+                                    //if Classname isn't the same, update Data(dr2)
+                                {
+                                    Data.Tables[0].Rows[r].SetField(1, dr.ItemArray[1]);
+                                    break;//there can only be one....classname
+                                }
+                            }
+                        }
+                        /*
+                        foreach (DataRow dr2 in Data.Tables[1].Rows)
+                        //TypesDB
+                        {
+
+                        }*/
+                        
+                        for(int f = 1; f < (Type.FormatNames.Count + 1); f++)
+                            //Iterate through where each field should be (Columns)
+                            for(int r = 0; r < Data.Tables[2].Rows.Count; r++)// (DataRow dr2 in Data.Tables[2].Rows)
+                            //FieldsDB - Iterating through Rows
+                            {
+                                if(UID == Convert.ToInt32(Data.Tables[2].Rows[r].ItemArray[6]) && changes.Columns[f].ColumnName == (String)Data.Tables[2].Rows[r].ItemArray[1])
+                                    //if both UID match and Column Name
+                                {
+                                    if(Data.Tables[2].Rows[r].ItemArray[2] != dr.ItemArray[f])
+                                        //if fieldvalues do not match, update dr2
+                                    {
+
+                                        Data.Tables[2].Rows[r].SetField(2, dr.ItemArray[f]);
+                                    }
+                                }
+                            }
+                        /* There are no tags yet
+                        foreach (DataRow dr2 in Data.Tables[3].Rows)
+                        //TagsDB
+                        {
+
+                        }
+                        */
+
+                    }
+
+                }
+            
         }
         //
         //--Read a file into a string(to be interpreted)

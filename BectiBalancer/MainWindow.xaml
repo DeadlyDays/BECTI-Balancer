@@ -40,17 +40,17 @@
             <TabItem Header="Import From CSV">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="lblTypeOfFile" Content="Type of File:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="73"/>
-                    <TextBox x:Name="tbImportExportPath" HorizontalAlignment="Left" Height="23" Margin="176,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
-                    <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" HorizontalAlignment="Left" Margin="480,0,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
-                    <Button x:Name="btnCreateNewFileFromList" Content="New File From CSV" HorizontalAlignment="Left" Margin="560,0,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="btnCreateNewFileFromList_Click"/>
+                    <TextBox x:Name="tbImportExportPath" HorizontalAlignment="Left" Height="23" Margin="74,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
+                    <Button x:Name="btnBrowseForNewFromCSV" Content="Browse" HorizontalAlignment="Left" Margin="378,0,0,0" VerticalAlignment="Top" Width="75" Click="btnBrowseForPath_Click" Height="25"/>
+                    <Button x:Name="btnCreateNewFileFromList" Content="New File From CSV" HorizontalAlignment="Left" Margin="458,0,0,0" VerticalAlignment="Top" Width="103" Height="25" Click="btnCreateNewFileFromList_Click" IsEnabled="False"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Export as File">
                 <Grid Background="#FFE5E5E5">
                     <Label x:Name="lblTypeOfFile_Export" Content="Type of File:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="73"/>
-                    <TextBox x:Name="tbExportPath" HorizontalAlignment="Left" Height="23" Margin="176,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
-                    <Button x:Name="btnBrowseForExportPath" Content="Browse" HorizontalAlignment="Left" Margin="480,0,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
-                    <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" HorizontalAlignment="Left" Margin="560,0,0,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
+                    <TextBox x:Name="tbExportPath" HorizontalAlignment="Left" Height="23" Margin="75,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
+                    <Button x:Name="btnBrowseForExportPath" Content="Browse" HorizontalAlignment="Left" Margin="379,0,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
+                    <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" HorizontalAlignment="Left" Margin="459,0,0,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Export to Clipboard">
@@ -75,11 +75,10 @@
             </TabItem>
             <TabItem Header="Convert">
                 <Grid Background="#FFE5E5E5">
-                    <Label x:Name="lblConvertInstructions" Content="Select From the list before using any of the Export buttons or the Update Button in Import Existing"
-                           HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="529"/>
-                    <Label x:Name="lblConvert" Content="Convert?" HorizontalAlignment="Left" Margin="546,2,0,1"/>
-                    <CheckBox x:Name="cbVersion" Content="Future" HorizontalAlignment="Left" Margin="608,7,0,0" VerticalAlignment="Top"/>
-
+                    <Label x:Name="lblConvert" Content="Convert:" HorizontalAlignment="Left" Margin="0,0,0,3"/>
+                    <TextBox x:Name="tbConvertFolderPath" HorizontalAlignment="Left" Height="23" Margin="59,2,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="303"/>
+                    <Button x:Name="btnConvertBrowse" Content="Browse" IsEnabled="True" HorizontalAlignment="Left" Margin="367,3,0,0" VerticalAlignment="Top" Width="100" Height="20" Click="btnConvertBrowse_Click"/>
+                    <Button x:Name="btnConvertFolder" Content="Convert Folder" IsEnabled="True" HorizontalAlignment="Left" Margin="472,3,0,0" VerticalAlignment="Top" Width="86" Height="20" Click="btnConvertFolder_Click"/>
                 </Grid>
             </TabItem>
 
@@ -103,7 +102,7 @@
                 <Grid Background="#FFE5E5E5">
                     <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Mass Edit: Highlight Rows then use dropbox to select column. Write new Value in Text Box and hit Edit" VerticalAlignment="Top" Height="30" Width="293"/>
                     <TextBox x:Name="txtEditValue" HorizontalAlignment="Left" Height="23" Margin="433,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" GotFocus="txtEditValue_GotFocus"/>
-                    <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="553,15,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnEdit_Click"/>
+                    <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="553,15,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnEdit_Click" IsEnabled="False"/>
                     <Label x:Name="lblEditValue" Content="Change Value to:" HorizontalAlignment="Left" Margin="428,-6,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="lblColumn" Content="Edit Column" HorizontalAlignment="Left" Margin="288,-5,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbEditColumn" HorizontalAlignment="Left" Margin="293,16,0,0" VerticalAlignment="Top" Width="140"/>
@@ -119,9 +118,9 @@
                     <Label x:Name="lblTagValue" Content="Tag Value:" HorizontalAlignment="Left" Margin="465,-2,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="lblTagWeight" Content="Tag Weight:" HorizontalAlignment="Left" Margin="248,-3,0,0" VerticalAlignment="Top"/>
                     <Label x:Name="lblTagOrder" Content="Order By:" HorizontalAlignment="Left" Margin="585,-4,0,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btnAddTag" Content="Add Tag" HorizontalAlignment="Left" Margin="699,3,0,0" VerticalAlignment="Top" Width="75" Height="18" Click="btnAddTag_Click"/>
-                    <Button x:Name="btnTagOrderByName" Content="Name" HorizontalAlignment="Left" Margin="590,22,0,3.333"  Width="39" Height="18" />
-                    <Button x:Name="btnTagOrderByValue" Content="Value" HorizontalAlignment="Left" Margin="634,22,0,3.333"  Width="42" Height="18" />
+                    <Button x:Name="btnAddTag" Content="Add Tag" HorizontalAlignment="Left" Margin="699,3,0,0" VerticalAlignment="Top" Width="75" Height="18" Click="btnAddTag_Click" IsEnabled="False"/>
+                    <Button x:Name="btnTagOrderByName" Content="Name" HorizontalAlignment="Left" Margin="590,22,0,3.333"  Width="39" Height="18" IsEnabled="False" />
+                    <Button x:Name="btnTagOrderByValue" Content="Value" HorizontalAlignment="Left" Margin="634,22,0,3.333"  Width="42" Height="18" IsEnabled="False" />
                     <CheckBox x:Name="cbShowTag" Content="Show Tags" HorizontalAlignment="Left" Margin="699,23,0,0" VerticalAlignment="Top"/>
 
                 </Grid>

@@ -76,7 +76,7 @@ namespace BectiBalancer
 
             currentList.clearCollection();
             currentList = new CollectionList();
-            currentList.populateData(currentList.readFile(tbImportFilePath.Text), cbVersion.IsChecked.Value);
+            currentList.populateData(currentList.readFile(tbImportFilePath.Text));
             currentList.updateView(tbFilterText.Text);
             Log("Pulled Data");
             //populateFields("Gear");
@@ -521,7 +521,43 @@ namespace BectiBalancer
             //dgViewBalance.CommitEdit();
         }
 
-       
+        private void btnConvertFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbConvertFolderPath.Text != "")
+            {
+                if(System.IO.Directory.Exists(tbConvertFolderPath.Text))
+                {
+                    Log("Starting Conversion...");
+                    if (currentList.convertDirectory(tbConvertFolderPath.Text))
+                        Log("Directory '" + tbConvertFolderPath + "' has been converted to new format");
+                    else
+                        Log("Error: Failed to Convert Entire Directory(Progress unknown)");
+                }
+                else
+                {
+                    Log("Error: Directory does not Exist");
+                }
+                
+            }
+            else
+            {
+                Log("Error: Folder Path is Empty");
+            }
+        }
+
+        private void btnConvertBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog dlg = browseForDirectory(tbConvertFolderPath.Text);
+            // Open Dialog and verify it opens via opening via Showdialog and checking DialogResult Get the selected file name and display in a TextBox
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                // Open document
+                string folderpath = dlg.SelectedPath;
+                tbConvertFolderPath.Text = folderpath;
+            }
+        }
+
+
 
 
 

@@ -25,19 +25,34 @@ namespace BectiBalancer
         { get; set; }
 
         
-        private Item type;//is this a Unit, Gear, etc type file
-        public Item Type
+        private Item myType;//is this a Unit, Gear, etc type file
+        public Item MyType
         {
             get
             {
-                return type;
+                return myType;
             }
             set
             {
                 if (value == null)
-                    type = new Item();
+                    myType = new Item();
                 else
-                    type = value;
+                    myType = value;
+            }
+        }
+        private NewItem newtype;//is this a NewUnit, NewGear, etc type file
+        public NewItem NewType
+        {
+            get
+            {
+                return newtype;
+            }
+            set
+            {
+                if (value == null)
+                    newtype = new NewItem();
+                else
+                    newtype = value;
             }
         }
 
@@ -45,6 +60,10 @@ namespace BectiBalancer
         private static Gear myGear = new Gear();
         private static Ammo myAmmo = new Ammo();
         String unitPattern, gearPattern, ammoPattern;
+        private static NewUnit myNewUnit = new NewUnit();
+        private static NewGear myNewGear = new NewGear();
+        private static NewAmmo myNewAmmo = new NewAmmo();
+        String newUnitPattern, newGearPattern, newAmmoPattern;
         
         public Boolean filtered;
 
@@ -107,7 +126,7 @@ namespace BectiBalancer
             Data.Tables[1].Rows.Add(row);
 
             filtered = false;
-            Type = null;
+            MyType = null;
 
             unitPattern = ".*";
             for (int i = 0; i < (myUnit.FormatArrays).Count; i++)
@@ -145,43 +164,102 @@ namespace BectiBalancer
         public void clearCollection()
         {
             Data = new DataSet();
-            DisplayTable = new DataTable();
-            View = new DataView();
-            Type = null;
-        }
-        
-        //
-        //--Create a String that is formated for a config file
-        //
-        public StringBuilder formatedOutput(String version)
-        {
+            Data.Tables.Add(new DataTable("ItemDB"));
+            Data.Tables[0].Columns.Add("UID", typeof(int));
+            Data.Tables[0].Columns.Add("ClassName", typeof(String));
+            Data.Tables[0].Columns.Add("TypeDB_Type", typeof(String));
 
-            //We want ability to output both current format, and future format
+            Data.Tables.Add(new DataTable("TypeDB"));
+            Data.Tables[1].Columns.Add("Type", typeof(String));
+            Data.Tables[1].Columns.Add("Footer", typeof(String));
 
-            switch (version)
+            Data.Tables.Add(new DataTable("FieldsDB"));
+            Data.Tables[2].Columns.Add("UID", typeof(int));
+            Data.Tables[2].Columns.Add("Name", typeof(String));
+            Data.Tables[2].Columns.Add("Value", typeof(String));
+            Data.Tables[2].Columns.Add("Default", typeof(String));
+            Data.Tables[2].Columns.Add("ArrayName", typeof(String));
+            Data.Tables[2].Columns.Add("Hidden", typeof(int));
+            Data.Tables[2].Columns.Add("ItemDB_UID", typeof(int));
+
+            Data.Tables.Add(new DataTable("TagsDB"));
+            Data.Tables[3].Columns.Add("UID", typeof(int));
+            Data.Tables[3].Columns.Add("Name", typeof(String));
+            Data.Tables[3].Columns.Add("Value", typeof(String));
+            Data.Tables[3].Columns.Add("Hidden", typeof(int));
+            Data.Tables[3].Columns.Add("ItemDB_UID", typeof(int));
+
+            //Between TypeDB and ItemDB
+            Data.Relations.Add(new DataRelation("i_TypeDB_Type",
+                Data.Tables[1].Columns[0],
+                Data.Tables[0].Columns[2]
+                ));
+            //Between TagsDB and ItemDB
+            Data.Relations.Add(new DataRelation("t_ItemDB_UID",
+                Data.Tables[0].Columns[0],
+                Data.Tables[3].Columns[4]
+                ));
+            //Between FieldsTB and ItemDB
+            Data.Relations.Add(new DataRelation("f_ItemDB_UID",
+                Data.Tables[0].Columns[0],
+                Data.Tables[2].Columns[6]
+                ));
+
+            //Add Types
+            DataRow row = Data.Tables[1].NewRow();
+            row.SetField("Type", "Unit");
+            row.SetField("Footer", myUnit.Footer);
+            Data.Tables[1].Rows.Add(row);
+            row = Data.Tables[1].NewRow();
+            row.SetField("Type", "Gear");
+            row.SetField("Footer", myGear.Footer);
+            Data.Tables[1].Rows.Add(row);
+            row = Data.Tables[1].NewRow();
+            row.SetField("Type", "Ammo");
+            row.SetField("Footer", myAmmo.Footer);
+            Data.Tables[1].Rows.Add(row);
+
+            filtered = false;
+            MyType = null;
+            View = null;
+
+            unitPattern = ".*";
+            for (int i = 0; i < (myUnit.FormatArrays).Count; i++)
             {
-                case "Current":
-                    
-                    break;
-                case "Future":
-                    
-                    break;
-                default:
+                unitPattern +=
+                    "(" +
+                    myUnit.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
+                    ;
 
-                    break;
             }
 
-            return new StringBuilder();
-        }
-        public StringBuilder curFormat(StringBuilder str)
-        {
-            return new StringBuilder();
+            gearPattern = ".*";
+            for (int i = 0; i < myGear.FormatArrays.Count; i++)
+            {
+                gearPattern +=
+                    "(" +
+                    myGear.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
+                    ;
+
+            }
+            ammoPattern = ".*";
+            for (int i = 0; i < myAmmo.FormatArrays.Count; i++)
+            {
+                ammoPattern +=
+                    "(" +
+                    myAmmo.FormatArrays[i] +
+                    " pushBack (.*);.*\n){1}.*"
+                    ;
+
+            }
         }
         
         //
         //--Read a formated String, as if from a config file
         //
-        public void populateData(String input, Boolean version)
+        public void populateData(String input)
         {
             //
             //---Wipe Comment Blocks, Comment blocks are just comments we dont give no fuck
@@ -216,22 +294,22 @@ namespace BectiBalancer
             if (Regex.IsMatch(input, @unitPattern))
             {
                 type = "Unit";
-                Type = myUnit;
+                MyType = myUnit;
             }
             else if(Regex.IsMatch(input, @gearPattern))
             {
                 type = "Gear";
-                Type = myGear;
+                MyType = myGear;
             }
             else if(Regex.IsMatch(input, @ammoPattern))
             {
                 type = "Ammo";
-                Type = myAmmo;
+                MyType = myAmmo;
             }
             else
             {
                 type = "Other";
-                Type = new Item();
+                MyType = new Item();
             }
 
             //
@@ -243,7 +321,7 @@ namespace BectiBalancer
                 @"(?:.*.*?\n.*?))*"//space between tag and everything else
                 ;
 
-            switch (version)
+            switch (false)
             {
                 case false://Current
                     switch (type)
@@ -500,7 +578,7 @@ namespace BectiBalancer
 
                         }*/
                         
-                        for(int f = 1; f < (Type.FormatNames.Count + 1); f++)
+                        for(int f = 1; f < (MyType.FormatNames.Count + 1); f++)
                             //Iterate through where each field should be (Columns)
                             for(int r = 0; r < Data.Tables[2].Rows.Count; r++)// (DataRow dr2 in Data.Tables[2].Rows)
                             //FieldsDB - Iterating through Rows
@@ -573,14 +651,14 @@ namespace BectiBalancer
             {
                 //Datatype is good, continue
                 String newFile = "";
-                newFile += Type.Header;
+                newFile += MyType.Header + "\n\n";
 
                 //
                 //--Add Data to file
                 //
                 newFile += generateFormatedString();
 
-                newFile += Type.Footer;
+                newFile += MyType.Footer;
 
                 //
                 //--Replace file or filecontent with newFile string
@@ -595,6 +673,13 @@ namespace BectiBalancer
             else
                 return false;
         }
+        public void updateNewFile(String filePath, String newFile)
+        {
+            using (System.IO.StreamWriter newTask = new System.IO.StreamWriter(filePath, false))
+            {
+                newTask.Write(newFile);
+            }
+        }
         //
         //--Generate formatted string from Data
         //
@@ -603,12 +688,12 @@ namespace BectiBalancer
             String output = "";
             foreach (DataRow dr in DisplayTable.Rows)
             {
-                for(int p = 0; p < Type.FormatNames.Count(); p++)
+                for(int p = 0; p < MyType.FormatNames.Count(); p++)
                 {
                     if(Convert.ToString(dr.ItemArray[p+1]) != "")
-                        output += Type.FormatArrays[p] + " pushBack " + dr.ItemArray[p + 1] + ";\n";
+                        output += MyType.FormatArrays[p] + " pushBack " + dr.ItemArray[p + 1] + ";\n";
                     else
-                        output += Type.FormatArrays[p] + " pushBack " + Type.FormatDefaults[p] + ";\n";
+                        output += MyType.FormatArrays[p] + " pushBack " + MyType.FormatDefaults[p] + ";\n";
                 }
                 output += "\n";//an extra space between items
             }
@@ -616,217 +701,120 @@ namespace BectiBalancer
 
             return output;
         }
-
-        //Old Code
-        /*
-        public void populateFromCSV(String path, String type)
+        public String generateNewFormatedString()
+        //for new format
         {
-            String file = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
-            //populates String file with entire documents text
-
-            //UNITS
-            if (type == "Unit")
-                //Populate Units
+            String output = "";
+            foreach (DataRow dr in DisplayTable.Rows)
+                //Iterate through displayRows
             {
-                Type = "Unit";
-                //String _c, _p, _n, _o, _t, _u, _f, _s, _d;
-                //values to populate
-
-                //int iPointer = 0;//current index Number
-                //String sPointer;//current index Value
-
-                List<String> content = splitStringBy(file, ",");
-                if (content.Count <= 0)
-                    //If file has no content, Exit
+                output += NewType.ArrayName + " pushBack [";
+                for (int p = 0; p < NewType.FormatNames.Count(); p++)
+                    //Iterates through Output properties(maybe this is wrong way to go about this)
                 {
-                    return;//Empty File, exit
-                }
+                    Boolean found = false;
+                    for( int c = 0; c < DisplayTable.Columns.Count; c++)
+                    //Lets iterate through what we have to find correct column and value
+                    {
+                        if(DisplayTable.Columns[c].ColumnName == NewType.FormatNames[p])
+                            //This is correct
+                        {
+                            found = true;//so we found a column that matches a value we want
+                            if (p == 0)
+                                //no comma needed on first run
+                                output += "\n\t/*";
+                            else
+                                output += ",\n\t/*";
+                            if (Convert.ToString(dr.ItemArray[c]) != "")
+                                output +=  NewType.FormatNames[p] + "*/" + dr.ItemArray[c] + "";
+                            else
+                                output += NewType.FormatNames[p] + "*/" + NewType.FormatDefaults[p] + "";
 
-                for(int i = 0; i < content.Count; i++)
-                //iterate through content
-                {
-                    Unit newItem = new Unit(content[i].Replace(" ", ""));
+                            //This was the match, we can break out to next property
+                            break;
+                        }
+                    }
+                    if(!found)
+                        //if not found we need to apply the default
+                    {
+                        if (p == 0)
+                            //no comma needed on first run
+                            output += "\n\t/*";
+                        else
+                            output += ",\n\t/*";
+                        output += NewType.FormatNames[p] + "*/" + NewType.FormatDefaults[p] + "";
+                    }
                     
-                    //newItem.addField(new Field("_c", ""));
-                    newItem.addField(new Field("_p", "", "", "Picture", "\'"), false);
-                    newItem.addField(new Field("_n", "", "", "Name", "\'"), false);
-                    newItem.addField(new Field("_o", "", "", "Price"), false);
-                    newItem.addField(new Field("_t", "", "", "BuildTime"), false);
-                    newItem.addField(new Field("_u", "", "", "UpgradeLevel"), false);
-                    newItem.addField(new Field("_f", "", "", "Factory"), false);
-                    newItem.addField(new Field("_s", "", "", "Script", "\""), false);
-                    newItem.addField(new Field("_d", "", "", "Distance"), false);
-                    newItem.addField(new Field("_g", "", "", "Camo", "\""), false);
-                    newItem.FieldList[0].DisplayName = "ClassName";
-                    newItem.FieldList[0].Tags = "\"";
-                    addItem(newItem, type);
-                    //Add each line to item
-
                 }
+                output += "\n];\n\n";//an extra space between items
+            }
+            return output;
+        }
+        //
+        //--Convert Directory
+        //
+        public Boolean convertDirectory(String dirPath)
+        {
+            String[] filePaths = System.IO.Directory.GetFiles(dirPath);
+            Boolean success = true;
+            foreach(String filePath in filePaths)
+                //Iterate through all the files in the directory
+            {
+                clearCollection();
+                //
+                //--Get file Contents
+                //
+                String content = readFile(filePath);
+
+                //
+                //--Verify contents are a valid type
+                //
+                if (Regex.IsMatch(content, @unitPattern) || Regex.IsMatch(content, @gearPattern) || Regex.IsMatch(content, @ammoPattern))
+                //if this is a valid type
+                {
+                    ;
+                }
+                else
+                //not a valid type
+                {
+                    success = false;
+                    continue;//the next file might be legit, we want to convert all that we can
+                }
+
+                //
+                //--Populate Data
+                //
+                populateData(content);
+                updateView("");
+
+                //
+                //--Generate Converted String
+                //
                 
+                switch(myType.GetType().Name)
+                {
+                    case "Unit":
+                        NewType = myNewUnit;
+                        break;
+                    case "Gear":
+                        NewType = myNewGear;
+                        break;
+                    case "Ammo":
+                        NewType = myNewAmmo;
+                        break;
+                    default:
+                        NewType = new NewItem();
+                        break;
+                }
+                content = generateNewFormatedString();
+
+                //
+                //--Overwrite file with Converted String
+                //
+                updateNewFile(filePath, content);
             }
-
-            //AMMO
-            if (type == "Ammo")
-            //Populate Units
-            {
-                Type = "Ammo";
-                //String _i, _o, _u, _p, _t;
-                //values to populate
-
-                //int iPointer = 0;//current index Number
-                //String sPointer;//current index Value
-
-                List<String> content = splitStringBy(file, ",");
-                if (content.Count <= 0)
-                //If file has no content, Exit
-                {
-                    return;//Empty File, exit
-                }
-
-                for (int i = 0; i < content.Count; i++)
-                //iterate through content
-                {
-                    Ammo newItem = new Ammo(content[i].Replace(" ", ""));
-
-                    //newItem.addField(new Field("_c", ""));
-
-                    newItem.addField(new Field("_o", "", "", "OrdinanceLevel", "\""), false);
-                    newItem.addField(new Field("_u", "", "", "UpgradeLevel"), false);
-                    newItem.addField(new Field("_p", "", "", "Price"), false);
-                    newItem.addField(new Field("_t", "", "", "RearmTimeRound"), false);
-                    newItem.FieldList[0].DisplayName = "ClassName";
-                    newItem.FieldList[0].Tags = "\"";
-                    addItem(newItem, type);
-                    //Add each line to item
-
-                }
-
-            }
-
-            //GEAR
-            if (type == "Gear")
-            //Populate Units
-            {
-                Type = "Gear";
-                //String _i, _u, _p, _g;
-                //values to populate
-
-                //int iPointer = 0;//current index Number
-                //String sPointer;//current index Value
-
-                List<String> content = splitStringBy(file, ",");
-                if (content.Count <= 0)
-                //If file has no content, Exit
-                {
-                    return;//Empty File, exit
-                }
-
-                for (int i = 0; i < content.Count; i++)
-                //iterate through content
-                {
-                    Gear newItem = new Gear(content[i].Replace(" ", ""));
-
-                    //newItem.addField(new Field("_c", ""));
-                    
-                    newItem.addField(new Field("_u", "", "", "UpgradeLevel"), false);
-                    newItem.addField(new Field("_p", "", "", "Price"), false);
-                    newItem.addField(new Field("_g", "", "", "Filter"), false);
-                    newItem.FieldList[0].DisplayName = "ClassName";
-                    newItem.FieldList[0].Tags = "\"";
-                    addItem(newItem, type);
-                    //Add each line to item
-
-                }
-
-            }
+            return success;
         }
-
-        
-        public void populateFromFormatedFile(String path, String type)
-        {
-            
-            content = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
-            //populates String file with entire documents text
-            populateFromFormatedText(content, type);
-        }
-
-        public String returnFormatedFile(String Type)
-        {
-            String str = "";
-            if(Type == "Unit")
-            {
-                for (int e = 0; e < UnitList.Count; e++)
-                {
-                    for(int i = 0; i < UnitList[e].FieldList.Count(); i++)
-                    {
-                        if(UnitList[e].FieldList[i].Value.IndexOf(UnitList[e].FieldList[i].Tags) != 0 && UnitList[e].FieldList[i].Value.LastIndexOf(UnitList[e].FieldList[i].Tags) != (UnitList[e].FieldList[i].Value.Count() - 1))
-                            //if the value doesn't start and end with proper tags, add the tags
-                        {
-                            str += UnitList[e].FieldList[i].Name + " pushBack " + UnitList[e].FieldList[i].Tags + UnitList[e].FieldList[i].Value + UnitList[e].FieldList[i].Tags + ";\r\n";
-                        }
-                        else
-                        //else, paste value as is
-                        {
-                            str += UnitList[e].FieldList[i].Name + " pushBack " + UnitList[e].FieldList[i].Value + ";\r\n";
-                        }
-                        
-                    }
-                    
-                    str += "\r\n\r\n";
-                }
-                return str;
-            }
-            else if (Type == "Ammo")
-            {
-                for (int e = 0; e < AmmoList.Count; e++)
-                {
-                    for (int i = 0; i < AmmoList[e].FieldList.Count(); i++)
-                    {
-                        if (AmmoList[e].FieldList[i].Value.IndexOf(AmmoList[e].FieldList[i].Tags) != 0 && AmmoList[e].FieldList[i].Value.LastIndexOf(AmmoList[e].FieldList[i].Tags) != (AmmoList[e].FieldList[i].Value.Count() - 1))
-                        //if the value doesn't start and end with proper tags, add the tags
-                        {
-                            str += AmmoList[e].FieldList[i].Name + " pushBack " + AmmoList[e].FieldList[i].Tags + AmmoList[e].FieldList[i].Value + AmmoList[e].FieldList[i].Tags + ";\r\n";
-                        }
-                        else
-                        //else, paste value as is
-                        {
-                            str += AmmoList[e].FieldList[i].Name + " pushBack " + AmmoList[e].FieldList[i].Value + ";\r\n";
-                        }
-
-                    }
-
-                    str += "\r\n\r\n";
-                }
-                return str;
-            }
-            else if (Type == "Gear")
-            {
-                for (int e = 0; e < GearList.Count; e++)
-                {
-                    for (int i = 0; i < GearList[e].FieldList.Count(); i++)
-                    {
-                        if (GearList[e].FieldList[i].Value.IndexOf(GearList[e].FieldList[i].Tags) != 0 && GearList[e].FieldList[i].Value.LastIndexOf(GearList[e].FieldList[i].Tags) != (GearList[e].FieldList[i].Value.Count() - 1))
-                        //if the value doesn't start and end with proper tags, add the tags
-                        {
-                            str += GearList[e].FieldList[i].Name + " pushBack " + GearList[e].FieldList[i].Tags + GearList[e].FieldList[i].Value + GearList[e].FieldList[i].Tags + ";\r\n";
-                        }
-                        else
-                        //else, paste value as is
-                        {
-                            str += GearList[e].FieldList[i].Name + " pushBack " + GearList[e].FieldList[i].Value + ";\r\n";
-                        }
-
-                    }
-
-                    str += "\r\n\r\n";
-                }
-                return str;
-            }
-            return "";
-        }
-        */
-        
 
         //end
     }

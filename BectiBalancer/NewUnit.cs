@@ -63,13 +63,13 @@ namespace BectiBalancer
             FormatNames = new List<String>
             {
                 "Enabled",
-                "Name", 
-                "Class", 
+                "Name",
+                "ClassName", 
                 "MenuName", 
                 "Location",
-                "Upgrade", 
+                "UpgradeLevel", 
                 "Price",
-                "Time", 
+                "BuildTime", 
                 "Distance",
                 "Camo",
                 "Type", 
@@ -101,7 +101,7 @@ namespace BectiBalancer
                 "''",/*Name*/
                 "''",/*Class*/
                 "[]",/*MenuName*/
-                "[]",/*Location*/
+                "['']",/*Location*/
                 "",/*Upgrade*/
                 "",/*Price*/
                 "",/*Time*/

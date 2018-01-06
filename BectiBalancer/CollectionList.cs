@@ -533,7 +533,8 @@ namespace BectiBalancer
                     filterBuilder += " OR ";
                 filterBuilder += myItem.FormatNames[p] + " LIKE '%" + keyword + "%'";
             }
-            View.RowFilter = filterBuilder;
+            if(DisplayTable.Columns.Count > 0)
+                View.RowFilter = filterBuilder;
             //This sets a baseline for checking Changes
             DisplayTable.AcceptChanges();
 
@@ -725,10 +726,119 @@ namespace BectiBalancer
                                 output += "\n\t/*";
                             else
                                 output += ",\n\t/*";
+
+                            //
+                            //--Add Formated Line
+                            //
                             if (Convert.ToString(dr.ItemArray[c]) != "")
-                                output +=  NewType.FormatNames[p] + "*/" + dr.ItemArray[c] + "";
+                                //If there is a value, use it
+                            {
+                                //
+                                //--Need to check if value is properly formated for new format
+                                //
+                                if(NewType.FormatWrapper[p].Count() > 0)
+                                    //if value is supposed to be bracketed by chars
+                                {
+                                    String[] bracket = new String[]{
+                                        NewType.FormatWrapper[p].Substring(0, (NewType.FormatWrapper[p].Count()/2)),
+                                        NewType.FormatWrapper[p].Substring((NewType.FormatWrapper[p].Count()/2), (NewType.FormatWrapper[p].Count()/2))
+                                    };
+                                    //is the value we are going to store surrounded by the brackets?
+                                    if(Regex.IsMatch((String)dr.ItemArray[c], bracket[0] + @".*" + bracket[1]))
+                                        //If it is surrounded
+                                    {
+                                        String newItem = Regex.Replace((String)dr.ItemArray[c], @"[\[\]]", "");
+                                        if(newItem.Contains("\""))
+                                        //If should have ", do we also have '(replace thme if we do)
+                                        {
+                                            newItem = Regex.Replace(newItem, @"[']", "'");
+                                            output += NewType.FormatNames[p] + "*/" +
+                                            newItem;
+                                        }
+                                        else if(newItem.Contains("'"))
+                                        {
+                                            newItem = Regex.Replace(newItem, @"[""]", @"""");
+                                            output += NewType.FormatNames[p] + "*/" +
+                                            newItem;
+                                        }
+                                        else
+                                        {
+                                            output += NewType.FormatNames[p] + "*/" +
+                                            newItem;
+                                        }
+                                        
+                                    }
+                                    else
+                                    //if it isn't surrounded
+                                    {
+                                        //get rid of '' "" or []
+                                        String newItem = Regex.Replace((String)dr.ItemArray[c], @"[\[\]]", "");
+                                        if (newItem.Contains("\""))
+                                        //If should have ", do we also have '(replace them if we do)
+                                        {
+                                            newItem = Regex.Replace(newItem, @"[']", @"""");
+                                            if(bracket.Contains("\""))
+                                                //don't dupe with adding
+                                            {
+                                                output += NewType.FormatNames[p] + "*/" + newItem;
+                                            }
+                                            else if(bracket.Contains("'"))
+                                                //replace "" with ''
+                                            {
+                                                output += NewType.FormatNames[p] + "*/" + Regex.Replace(newItem,@"[""]","'");
+                                            }
+                                            else
+                                                //need added
+                                            {
+                                                output += NewType.FormatNames[p] + "*/" + bracket[0] +
+                                                    newItem + bracket[1];
+                                            }
+                                            
+                                        }
+                                        else if (newItem.Contains("'"))
+                                        {
+                                            newItem = Regex.Replace(newItem, @"[""]", "'");
+                                            if (bracket.Contains("'"))
+                                            //don't dupe with adding
+                                            {
+                                                output += NewType.FormatNames[p] + "*/" + newItem;
+                                            }
+                                            else if (bracket.Contains("\""))
+                                            //replace "" with ''
+                                            {
+                                                output += NewType.FormatNames[p] + "*/" + Regex.Replace(newItem, @"[']", "\"");
+                                            }
+                                            else
+                                            {
+                                                output += NewType.FormatNames[p] + "*/" + bracket[0] +
+                                                    newItem + bracket[1];
+                                            }
+                                        }
+                                        else
+                                        {
+                                            output += NewType.FormatNames[p] + "*/" + bracket[0] +
+                                            newItem + bracket[1];
+                                        }
+                                        
+                                    }
+                                }
+                                else
+                                //if value is supposed to not be bracketed by any chars
+                                {
+                                    //
+                                    //--if this is the case, need to strip special chars if there are any
+                                    //
+                                    output += NewType.FormatNames[p] + "*/" + Regex.Replace((String)dr.ItemArray[c], @"[^\w]", "") + "";
+                                }
+                                
+                                //Formatted line
+                                //output += NewType.FormatNames[p] + "*/" + dr.ItemArray[c] + "";
+                            }
                             else
+                                //if there is no value, then use the provided default
+                            {
                                 output += NewType.FormatNames[p] + "*/" + NewType.FormatDefaults[p] + "";
+                            }
 
                             //This was the match, we can break out to next property
                             break;

@@ -86,10 +86,10 @@ namespace BectiBalancer
                 "\n"; 
             formatNames = new List<String>
         {
-            "Classname",
+            "ClassName",
             "UpgradeLevel",
             "Price",
-            "Filter"
+            "Type"
         };
             formatArrays = new List<String>
         {

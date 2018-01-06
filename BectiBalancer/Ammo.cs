@@ -90,8 +90,8 @@ namespace BectiBalancer
                 "";
             formatNames = new List<String>
         {
-            "Classname",
-            "Ordinance",
+            "ClassName",
+            "Type",
             "UpgradeLevel",
             "Price",
             "RearmTime"

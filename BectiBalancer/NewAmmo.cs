@@ -65,9 +65,9 @@ namespace BectiBalancer
                 "Enabled",
                 "Name",
                 "Type",
-                "Class",
+                "ClassName",
                 "Location",
-                "Upgrade",
+                "UpgradeLevel",
                 "Price",
                 "RearmTime",
                 "MaxMags",
@@ -88,7 +88,16 @@ namespace BectiBalancer
             };
             FormatWrapper = new List<String>
             {
-                "'"//ClassName
+                "",/*Enabled*/
+                "''",/*Name*/
+                "''",/*Type*/
+                "''",/*Class*/
+                "[]",/*Location*/
+                "",/*Upgrade*/
+                "",/*Price*/
+                "",/*RearmTime*/
+                "",/*MaxMags*/
+                "[]"/*Filters*/
             };
         }
     }

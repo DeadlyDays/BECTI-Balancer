@@ -64,9 +64,9 @@ namespace BectiBalancer
             {
                 "Enabled",
                 "Name",
-                "Class",
+                "ClassName",
                 "Location",
-                "Upgrade",
+                "UpgradeLevel",
                 "Price",
                 "Camo",
                 "Type"
@@ -84,7 +84,14 @@ namespace BectiBalancer
             };
             FormatWrapper = new List<String>
             {
-                "'"//ClassName
+                "",/*Enabled*/
+                "''",/*Name*/
+                "''",/*Class*/
+                "[]",/*Location*/
+                "",/*Upgrade*/
+                "",/*Price*/
+                "[]",/*Camo*/
+                "[]",/*Type*/
             };
         }
     }

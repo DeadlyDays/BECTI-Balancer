@@ -50,7 +50,7 @@
                     <Label x:Name="lblTypeOfFile_Export" Content="Type of File:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" Width="73"/>
                     <TextBox x:Name="tbExportPath" HorizontalAlignment="Left" Height="23" Margin="75,2,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="300"/>
                     <Button x:Name="btnBrowseForExportPath" Content="Browse" HorizontalAlignment="Left" Margin="379,0,0,0" VerticalAlignment="Top" Width="75" Height="25" Click="btnBrowseForExportPath_Click"/>
-                    <Button x:Name="btnExportList" Content="Export as File" IsEnabled="True" HorizontalAlignment="Left" Margin="459,0,0,0" VerticalAlignment="Top" Width="104" Height="25" Click="btnExportList_Click"/>
+                    <Button x:Name="btnExportList" Content="Export as File" IsEnabled="False" HorizontalAlignment="Left" Margin="459,0,0,1" Width="104" Click="btnExportList_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Export to Clipboard">

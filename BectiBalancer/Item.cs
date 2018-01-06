@@ -67,7 +67,7 @@ namespace BectiBalancer
             Header = "";
             formatNames = new List<String>
             {
-                "Classname"
+                "ClassName"
             };
             formatArrays = new List<String>
             {

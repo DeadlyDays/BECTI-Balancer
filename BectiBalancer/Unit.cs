@@ -116,11 +116,11 @@ namespace BectiBalancer
         {
             "ClassName",
             "Picture",
-            "Name",
+            "MenuName",
             "Price",
             "BuildTime",
             "UpgradeLevel",
-            "Factory",
+            "Location",
             "Script",
             "Distance",
             "Camo"

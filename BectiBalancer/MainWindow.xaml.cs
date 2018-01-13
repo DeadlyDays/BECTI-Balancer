@@ -26,6 +26,7 @@ namespace BectiBalancer
     {
         CollectionList backupList, currentList;//Current Collection of Items
         Boolean isConnected;//Database Connection
+        Boolean isLoaded;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +34,7 @@ namespace BectiBalancer
             isConnected = false;
             //currentList = workingList;//point at workingList
             showVersion();
-            
+            isLoaded = true;
         }
 
         private void showVersion()
@@ -77,7 +78,7 @@ namespace BectiBalancer
             currentList.clearCollection();
             currentList = new CollectionList();
             currentList.populateData(currentList.readFile(tbImportFilePath.Text));
-            currentList.updateView(tbFilterText.Text);
+            currentList.updateView(tbFilterText.Text, cbShowTags.IsChecked.Value);
             Log("Pulled Data");
             //populateFields("Gear");
 
@@ -365,20 +366,32 @@ namespace BectiBalancer
 
         private void btnAddTag_Click(object sender, RoutedEventArgs e)
         {
-            //Type of data
-            //String type = cbTypeAddTag.Text;
-
-            //New Tag
-            //String tag = tbAddTag.Text;
-            
-            //Tag Format - tenative
-            //Name:Value
-            //examples
-            //Name:Kaliba 6.5mm
-            //Caliber: 6.5mm
-            //Color:Red
-
-
+            if(tbTagName.Text != "")
+                //tagName required
+            {
+                var r = dgViewBalance.SelectedItem as System.Data.DataRowView;//Selected row
+                String s = r.Row[0].ToString();//(pick column 0 value)ItemUID
+                //try to add tag
+                Boolean worked = currentList.addTag(Convert.ToInt32(s),tbTagName.Text,tbTagValue.Text);
+                if (worked)
+                {
+                    currentList.updateView(tbFilterText.Text, cbShowTags.IsChecked.Value);
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.View;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    //if it worked, logit
+                    Log("Added Tag Name:" + tbTagName.Text + ", Value:" + tbTagValue.Text + " to '" + r.Row[1].ToString() + "'");
+                }
+                else
+                    Log("Error: Tag addition failed for some reason," +
+                        "check you aren't trying to add a tag with the " + 
+                        "same name as already exists for this item");
+            }
+            else
+            {
+                Log("Error: Tag Name is Required");
+            }
 
         }
 
@@ -402,7 +415,7 @@ namespace BectiBalancer
             //
             if(e.Key == Key.Return)
             {
-                currentList.updateView(tbFilterText.Text);
+                currentList.updateView(tbFilterText.Text, cbShowTags.IsChecked.Value);
                 dgViewBalance.ItemsSource = null;
                 dgViewBalance.ItemsSource = currentList.View;
                 dgViewBalance.IsSynchronizedWithCurrentItem = true;
@@ -512,13 +525,14 @@ namespace BectiBalancer
             {
                 rowBeingEdited.EndEdit();
                 dgViewBalance.CommitEdit();
+                
             }
         }
 
         private void dgViewBalance_LostFocus(object sender, RoutedEventArgs e)
         {
-            currentList.updateData();
-            //dgViewBalance.CommitEdit();
+            currentList.updateData(cbShowTags.IsChecked.Value);
+            
         }
 
         private void btnConvertFolder_Click(object sender, RoutedEventArgs e)
@@ -554,6 +568,31 @@ namespace BectiBalancer
                 // Open document
                 string folderpath = dlg.SelectedPath;
                 tbConvertFolderPath.Text = folderpath;
+            }
+        }
+
+        private void cbShowTags_Checked(object sender, RoutedEventArgs e)
+        {
+            if(isLoaded)
+            {
+                currentList.updateView(tbFilterText.Text, cbShowTags.IsChecked.Value);
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = currentList.View;
+                dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                dgViewBalance.CanUserAddRows = true;
+            }
+            
+        }
+
+        private void cbShowTags_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (isLoaded)
+            {
+                currentList.updateView(tbFilterText.Text, cbShowTags.IsChecked.Value);
+                dgViewBalance.ItemsSource = null;
+                dgViewBalance.ItemsSource = currentList.View;
+                dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                dgViewBalance.CanUserAddRows = true;
             }
         }
 

@@ -72,6 +72,7 @@ namespace BectiBalancer
             Data = new DataSet();
             Data.Tables.Add(new DataTable("ItemDB"));
             Data.Tables[0].Columns.Add("UID", typeof(int));
+            
             Data.Tables[0].Columns.Add("ClassName", typeof(String));
             Data.Tables[0].Columns.Add("TypeDB_Type", typeof(String));
 
@@ -94,6 +95,11 @@ namespace BectiBalancer
             Data.Tables[3].Columns.Add("Value", typeof(String));
             Data.Tables[3].Columns.Add("Hidden", typeof(int));
             Data.Tables[3].Columns.Add("ItemDB_UID", typeof(int));
+
+            Data.Tables[0].PrimaryKey = new DataColumn[] { Data.Tables[0].Columns[0] };
+            Data.Tables[1].PrimaryKey = new DataColumn[] { Data.Tables[1].Columns[0] };
+            Data.Tables[2].PrimaryKey = new DataColumn[] { Data.Tables[2].Columns[0] };
+            Data.Tables[3].PrimaryKey = new DataColumn[] { Data.Tables[3].Columns[0] };
 
             //Between TypeDB and ItemDB
             Data.Relations.Add(new DataRelation("i_TypeDB_Type", 
@@ -403,17 +409,17 @@ namespace BectiBalancer
                                         //Make new row for TagsDB
                                         DataRow tagsRow = Data.Tables[3].NewRow();
                                         //Set UID
-                                        itemRow.SetField("UID", Data.Tables[3].Rows.Count);
+                                        tagsRow.SetField("UID", Data.Tables[3].Rows.Count);
                                         //
                                         //--Group 2 is tagName, Group 3 is tagValue
                                         //
                                         //Set Name
-                                        itemRow.SetField("Name", m.Groups[2].Value);
+                                        tagsRow.SetField("Name", m.Groups[2].Value);
                                         //Set Value
-                                        itemRow.SetField("Value", m.Groups[3].Value);
+                                        tagsRow.SetField("Value", m.Groups[3].Value);
                                         //Set Hidden
                                         //Set ItemDB_UID
-                                        itemRow.SetField("ItemDB_UID", itemUID);
+                                        tagsRow.SetField("ItemDB_UID", itemUID);
 
                                         //Commit Row
                                         Data.Tables[3].Rows.Add(tagsRow);
@@ -454,13 +460,13 @@ namespace BectiBalancer
 
                 }
         }
-        public void updateView(String keyword)
+        public void updateView(String keyword, Boolean showTags)
         {
             if (keyword != "")
                 filtered = true;
             else
                 filtered = false;
-            updateData();
+            updateData(showTags);
             //
             //--Populate DisplayTable
             //
@@ -468,8 +474,8 @@ namespace BectiBalancer
             DataTable fieldsTB = Data.Tables["FieldsDB"];
             var resultArray = from item in itemDB.AsEnumerable()
                               join field in fieldsTB.AsEnumerable()
-                              on item.Field<int>("UID") equals
-                              field.Field<int>("ItemDB_UID")
+                              on item.Field<int?>("UID") equals
+                              field.Field<int?>("ItemDB_UID")
                               select new
                               {
                                   UID =
@@ -481,6 +487,7 @@ namespace BectiBalancer
                                   FieldValue =
                                     field.Field<String>("Value")
                               };
+            
             DisplayTable = new DataTable();
             Item myItem = new Item();
             if (resultArray.Count() == 0);
@@ -503,6 +510,16 @@ namespace BectiBalancer
                     DataColumn dc = new DataColumn(resultArray.ElementAt(i).FieldName);
                     DisplayTable.Columns.Add(dc);
                 }
+                if(showTags)
+                    //add tag columns if enabled
+                {
+                    HashSet<String> hs = returnTagNames();
+                    for(int i = 0; i < hs.Count; i++)
+                    {
+                        DataColumn dc = new DataColumn(hs.ElementAt(i));
+                        DisplayTable.Columns.Add(dc + "(t)");
+                    }
+                }
             }
             if (resultArray.Count() != 0)
             for (int i = 0; i < resultArray.Count(); i += myItem.FormatNames.Count)
@@ -518,6 +535,30 @@ namespace BectiBalancer
                     //add each field
                     dr.SetField(resultArray.ElementAt(val).FieldName, resultArray.ElementAt(val).FieldValue);
                 }
+
+                //Add Tag Values if enabled
+                    if(showTags)
+                    {
+                        DataTable ItemDB = Data.Tables["ItemDB"];
+                        DataTable TagsTB = Data.Tables["TagsDB"];
+                        var tagsArray = from Item in ItemDB.AsEnumerable()
+                                          join Tag in TagsTB.AsEnumerable()
+                                          on Item.Field<int?>("UID") equals
+                                          Tag.Field<int?>("ItemDB_UID")
+                                          where Item.Field<int?>("UID")==Convert.ToInt32(resultArray.ElementAt(i).UID)
+                                          select new
+                                          {
+                                              TagName =
+                                                Tag.Field<String>("Name"),
+                                              TagValue =
+                                                Tag.Field<String>("Value")
+                                          };
+                        if(tagsArray.Count() > 0)
+                            for (int t = 0; t < tagsArray.Count(); t++)
+                            {
+                                dr.SetField(tagsArray.ElementAt(t).TagName + "(t)", tagsArray.ElementAt(t).TagValue);
+                            }
+                    }
                 //commit new row
                 DisplayTable.Rows.Add(dr);
             }
@@ -539,7 +580,7 @@ namespace BectiBalancer
             DisplayTable.AcceptChanges();
 
         }
-        public void updateData()
+        public void updateData(Boolean showTags)
             //Updates to the DataGrid onscreen needs to be pushes to DataSet
             //from the DataTable(DisplayTable)
         {
@@ -578,30 +619,88 @@ namespace BectiBalancer
                         {
 
                         }*/
-                        
-                        for(int f = 1; f < (MyType.FormatNames.Count + 1); f++)
-                            //Iterate through where each field should be (Columns)
-                            for(int r = 0; r < Data.Tables[2].Rows.Count; r++)// (DataRow dr2 in Data.Tables[2].Rows)
+
+                        for (int f = 1; f < (MyType.FormatNames.Count + 1); f++)
+                        //Iterate through where each field should be (Columns)
+                        {
+                            for (int r = 0; r < Data.Tables[2].Rows.Count; r++)// (DataRow dr2 in Data.Tables[2].Rows)
                             //FieldsDB - Iterating through Rows
                             {
-                                if(UID == Convert.ToInt32(Data.Tables[2].Rows[r].ItemArray[6]) && changes.Columns[f].ColumnName == (String)Data.Tables[2].Rows[r].ItemArray[1])
-                                    //if both UID match and Column Name
+                                if (UID == Convert.ToInt32(Data.Tables[2].Rows[r].ItemArray[6]) && changes.Columns[f].ColumnName == (String)Data.Tables[2].Rows[r].ItemArray[1])
+                                //if both UID match and Column Name
                                 {
-                                    if(Data.Tables[2].Rows[r].ItemArray[2] != dr.ItemArray[f])
-                                        //if fieldvalues do not match, update dr2
+                                    if (Data.Tables[2].Rows[r].ItemArray[2] != dr.ItemArray[f])
+                                    //if fieldvalues do not match, update dr2
                                     {
 
                                         Data.Tables[2].Rows[r].SetField(2, dr.ItemArray[f]);
                                     }
                                 }
                             }
-                        /* There are no tags yet
-                        foreach (DataRow dr2 in Data.Tables[3].Rows)
-                        //TagsDB
-                        {
-
                         }
-                        */
+
+                        if(showTags)
+                        { 
+                            for (int c = (DisplayTable.Columns.Count - 1);
+                                c > (DisplayTable.Columns.Count - returnTagNames().Count - 1); c--)
+                            //Iterate through only the cells that are tags
+                            //TagsDB
+                            {
+
+                                if (DisplayTable.Columns[c].ColumnName.Contains("(t)"))
+                                {
+
+                                    //This is the column name - the (t)
+                                    String Column = DisplayTable.Columns[c].ColumnName.Substring(0, DisplayTable.Columns[c].ColumnName.Length - 3);
+                                    //Value for current Column
+                                    String Value = dr.ItemArray[c].ToString();
+                                    if (Value == "" || Value == null)
+                                        continue;
+                                    Boolean found = false;
+                                    //Need to triangulate location in Dataset
+                                    for(int d = 0; d < Data.Tables[3].Rows.Count; d++)
+                                        //Iterate Dataset TagsDB rows
+                                    {
+                                        if(UID == Convert.ToInt32(Data.Tables[3].Rows[d].ItemArray[4]))
+                                            //Does it match Item
+                                        {
+                                            
+                                                if(Column == Data.Tables[3].Rows[d].ItemArray[1].ToString())
+                                                //Do column names match?
+                                                {
+                                                    if(Value == Data.Tables[3].Rows[d].ItemArray[2].ToString())
+                                                        //If values match skip
+                                                    {
+                                                        found = true;
+                                                        continue;
+                                                    }
+                                                    else
+                                                    //Values don't match, this is an updated value
+                                                    {
+                                                        Data.Tables[3].Rows[d].SetField("Value", Value);
+                                                        found = true;
+                                                        break;
+                                                    }
+                                                }
+                                            
+                                        }
+                                    }
+                                    if(!found)
+                                    //if we aren't updating existing, add new
+                                    {
+                                        DataRow newRow = Data.Tables[3].NewRow();
+                                        newRow.SetField("UID", Data.Tables[3].Rows.Count);
+                                        newRow.SetField("Name", Column);
+                                        newRow.SetField("Value", Value);
+                                        newRow.SetField("ItemDB_UID", UID);
+                                        Data.Tables[3].Rows.Add(newRow);
+                                    }
+                                }
+                            }
+                            
+                            
+                        }
+                        
 
                     }
 
@@ -688,8 +787,41 @@ namespace BectiBalancer
         {
             String output = "";
             foreach (DataRow dr in DisplayTable.Rows)
+                //Iterate Rows
             {
+                //Names
+                DataTable itemDB = Data.Tables["ItemDB"];
+                DataTable tagsDB = Data.Tables["TagsDB"];
+
+                //DataRowCollection tagRows = ;
+                if (Data.Tables[3].Rows.Count > 0)
+                    //dont look for tags if there are none
+                {
+                    var tagRows = from item in itemDB.AsEnumerable()
+                                  join tag in tagsDB.AsEnumerable()
+                                  on item.Field<int?>("UID") equals
+                                  tag.Field<int?>("ItemDB_UID")
+                                  where item.Field<int?>("UID") == Convert.ToInt64(dr.Field<String>("UID"))
+                                  select new
+                                  {
+                                      UID =
+                                        tag.Field<int>("UID"),
+                                      TagName =
+                                        tag.Field<String>("Name"),
+                                      TagValue =
+                                        tag.Field<String>("Value")
+                                  };
+
+                    if (tagRows.Count() > 0)
+                        for (int t = 0; t < tagRows.Count(); t++)
+                        //Iterate Tags
+                        {
+                            output += "//[Tag;" + tagRows.ElementAt(t).TagName + ":" + tagRows.ElementAt(t).TagValue + "]\n";
+                        }
+                }
+                //Values
                 for(int p = 0; p < MyType.FormatNames.Count(); p++)
+                    //Iterate Values
                 {
                     if(Convert.ToString(dr.ItemArray[p+1]) != "")
                         output += MyType.FormatArrays[p] + " pushBack " + dr.ItemArray[p + 1] + ";\n";
@@ -702,6 +834,7 @@ namespace BectiBalancer
 
             return output;
         }
+
         public String generateNewFormatedString()
         //for new format
         {
@@ -895,7 +1028,7 @@ namespace BectiBalancer
                 //--Populate Data
                 //
                 populateData(content);
-                updateView("");
+                updateView("", false);
 
                 //
                 //--Generate Converted String
@@ -924,6 +1057,101 @@ namespace BectiBalancer
                 updateNewFile(filePath, content);
             }
             return success;
+        }
+
+        public HashSet<String> returnTagNames()
+            //Returns a unique list of all TagNames in DataSet
+        {
+            HashSet<String> tags = new HashSet<String>();
+            if (Data.Tables[3].Rows.Count > 0)
+                foreach (DataRow r in Data.Tables[3].Rows)
+                //Iterate through every tag row
+                {
+                    if(tags.Contains(r.Field<String>("Name")))
+                        //if the name is already in the list, skip
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        tags.Add(r.Field<String>("Name"));
+                    }
+                }
+            return tags;
+        }
+
+        public Boolean checkForTag(int ItemUID, String tagName)
+        {
+            DataTable itemDB = Data.Tables["ItemDB"];
+            DataTable tagsTB = Data.Tables["TagsDB"];
+            var resultArray = from item in itemDB.AsEnumerable()
+                              join tag in tagsTB.AsEnumerable()
+                              on item.Field<int?>("UID") equals
+                              tag.Field<int?>("ItemDB_UID")
+                              where item.Field<int?>("UID")==ItemUID
+                              select new
+                              {
+                                  TagName =
+                                    tag.Field<String>("Name")
+                              };
+            if(resultArray.Count() > 0)
+            {
+                //if there are results, check for matches with tagName
+                for(int i = 0; i < resultArray.Count(); i++)
+                {
+                    if(resultArray.ElementAt(i).TagName == tagName)
+                    {
+                        //match
+                        return true;
+                    }
+                }
+                //if loop finishes without match, its nogut
+                return false;
+            }
+            else
+                return false;
+            
+        }
+        public Boolean checkForTag(int ItemUID, String tagName, String tagValue)
+        {
+            return false;
+        }
+
+        //
+        //--Add Tag
+        //
+        public Boolean addTag(int ItemUID, String tagName, String tagValue)
+            //Adds a Tag to an Item
+        {
+            //Check if TagName exists, new TagName means new Column if not hidden
+            if(returnTagNames().Contains(tagName))
+                //
+            {
+                //No new column needed
+
+            }
+            else
+            {
+                //New Column needed if not hidden
+
+            }
+            //
+            if (!checkForTag(ItemUID, tagName))
+            //if item has a tag by this name already, reject
+            {
+                DataRow newRow = Data.Tables[3].NewRow();
+                newRow.SetField("UID", Data.Tables[3].Rows.Count);
+                newRow.SetField("Name", tagName);
+                newRow.SetField("Value", tagValue);
+                newRow.SetField("ItemDB_UID", ItemUID);
+                Data.Tables[3].Rows.Add(newRow);
+                return true;
+            }
+            else
+                return false;
+            
+
+            return false;
         }
 
         //end

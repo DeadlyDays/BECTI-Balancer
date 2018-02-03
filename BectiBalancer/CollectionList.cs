@@ -595,7 +595,16 @@ namespace BectiBalancer
                     foreach(DataRow dr in changes.Rows)
                         //Cycle updates rows
                     {
-                        int UID = Convert.ToInt32(dr.ItemArray[0]);
+                        int UID = 0;
+                        if (dr.RowState == DataRowState.Deleted)
+                        //skip deleted rows, they will need to be handled seperately
+                        {
+                            dr.Delete();
+                            continue;
+                        }
+                        if (dr.ItemArray[0] == DBNull.Value)
+                            continue;
+                        UID = Convert.ToInt32(dr.ItemArray[0]);
                         //
                         //--Locate rows to update
                         //
@@ -705,7 +714,30 @@ namespace BectiBalancer
                     }
 
                 }
-            
+            Data.AcceptChanges();
+        }
+        
+        public void removeDeletedData(List<DataRowView> data)
+            //remove the specified data from the internal DB
+        {
+            if(data != null)
+            {
+                for(int rv = 0; rv < data.Count; rv++)
+                    //iterate rowsviews in data
+                {
+                    //we only need the itemUID to drop item and all related
+                    int UID = Convert.ToInt32(data[rv].Row.ItemArray[0]);
+
+                    //drop item in ItemDB
+                    Data.Tables[0].Rows.Find(UID).Delete();
+
+                    //maybe i can just orphan the other data?
+                    //drop fields in FieldDB
+                    //Data.Tables[2].
+                    //drop tags in TagsDB
+
+                }
+            }
         }
         //
         //--Read a file into a string(to be interpreted)

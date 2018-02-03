@@ -595,6 +595,39 @@ namespace BectiBalancer
                 dgViewBalance.CanUserAddRows = true;
             }
         }
+        List<System.Data.DataRowView> rowDeleteBuffer;
+        private void dgViewBalance_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+            //buffers all the deleted rows, which can then be used to update internal db
+        {
+            if (e.Key == Key.Delete)
+            {
+                if(dgViewBalance.SelectedItems.Count > 0)
+                {
+                    //find bad data
+                    for(int i = 0; i < dgViewBalance.SelectedItems.Count; i++)
+                    {
+                        if (rowDeleteBuffer != null)
+                            rowDeleteBuffer.Add((System.Data.DataRowView)dgViewBalance.SelectedItems[i]);
+                        else
+                            rowDeleteBuffer = new List<System.Data.DataRowView>() { (System.Data.DataRowView)dgViewBalance.SelectedItems[i] };
+                    }
+
+                    //wipe bad data
+                    currentList.removeDeletedData(rowDeleteBuffer);
+                    //clear buffer
+                    rowDeleteBuffer = new List<System.Data.DataRowView>();
+                }
+                
+            }
+        }
+
+        private void dgViewBalance_AddingNewItem(object sender, AddingNewItemEventArgs e)
+            //Adding new Row/Item
+        {
+            //
+            //--We need to prevent errors when adding new item from missing items(need to generate new PK for new Item, fill in required fields/prevent unique conflicts)
+            //
+        }
 
 
 

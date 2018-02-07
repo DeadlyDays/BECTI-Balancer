@@ -82,7 +82,7 @@ namespace BectiBalancer
                 "true",/*Enabled*/
                 "''",/*Name*/
                 "''",/*Class*/
-                "[]",/*MenuName*/
+                "''",/*MenuName*/
                 "[]",/*Location*/
                 "0",/*Upgrade*/
                 "0",/*Price*/
@@ -100,7 +100,7 @@ namespace BectiBalancer
                 "",/*Enabled*/
                 "''",/*Name*/
                 "''",/*Class*/
-                "[]",/*MenuName*/
+                "''",/*MenuName*/
                 "['']",/*Location*/
                 "",/*Upgrade*/
                 "",/*Price*/

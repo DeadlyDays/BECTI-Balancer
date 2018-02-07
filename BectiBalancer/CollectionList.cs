@@ -292,9 +292,6 @@ namespace BectiBalancer
             //
             //--Type
             //
-            
-            
-
             //Dynamic Type Detection
             String type = "";
             if (Regex.IsMatch(input, @unitPattern))
@@ -473,9 +470,11 @@ namespace BectiBalancer
             DataTable itemDB = Data.Tables["ItemDB"];
             DataTable fieldsTB = Data.Tables["FieldsDB"];
             var resultArray = from item in itemDB.AsEnumerable()
-                              join field in fieldsTB.AsEnumerable()
-                              on item.Field<int?>("UID") equals
-                              field.Field<int?>("ItemDB_UID")
+                              join field in fieldsTB.AsEnumerable() 
+                              on item.Field<int?>("UID") 
+                              equals field.Field<int?>("ItemDB_UID")
+                              into gj
+                              from subfield in gj.DefaultIfEmpty()
                               select new
                               {
                                   UID =
@@ -483,9 +482,9 @@ namespace BectiBalancer
                                   FieldType = 
                                     item.Field<String>("TypeDB_Type"),
                                   FieldName =
-                                    field.Field<String>("Name"),
+                                    subfield?.Field<String>("Name") ?? String.Empty,
                                   FieldValue =
-                                    field.Field<String>("Value")
+                                    subfield?.Field<String>("Value") ?? String.Empty
                               };
             
             DisplayTable = new DataTable();
@@ -739,6 +738,65 @@ namespace BectiBalancer
                 }
             }
         }
+
+        public Boolean addRow(DataRow row)
+            //handle adding a row to dataset, return false if item exists
+        {
+            if (row.ItemArray[1] == DBNull.Value)
+                return false;
+            //grab the className
+            String className = (String)row.ItemArray[1];
+            //check and make sure there are no conflicts for this new className
+            if (Data.Tables[0].Select("ClassName = '" + className + "'").Count() > 0)
+                return false;
+
+
+            //Make  new row for ItemDB
+            DataRow itemRow = Data.Tables[0].NewRow();
+            //new UID
+            int itemUID = Data.Tables[0].Rows.Count;
+            //Set UID
+            itemRow.SetField("UID", itemUID);
+            //Set Classname
+            itemRow.SetField("ClassName", className);
+            //Set TypeDB_Type
+            itemRow.SetField("TypeDB_Type", MyType.GetType().Name.ToString());
+            //Commit Row
+            Data.Tables[0].Rows.Add(itemRow);
+
+            //we need to add fields, empty all but classname
+
+            //
+            //---This grabs all the property fields and populates every item found
+            //
+
+            for (int i = 0; i < (row.ItemArray.Count() - 1); i++)//Iterate through each property i in matchCol.Group
+            {
+                //This is where we store fields
+
+                //Create new row in FieldsTB
+                DataRow fieldRow = Data.Tables[2].NewRow();
+                //Set UID
+                fieldRow.SetField("UID", Data.Tables[2].Rows.Count);
+                //Set Name
+                fieldRow.SetField("Name", MyType.FormatNames[i]);
+                //Set Value
+                fieldRow.SetField("Value", row[i + 1]);
+                //Set Default
+                fieldRow.SetField("Default", MyType.FormatDefaults[i]);
+                //Set ArrayName
+                fieldRow.SetField("ArrayName", MyType.FormatArrays[i]);
+                //Set Hidden
+                //Set ItemDB_UID
+                fieldRow.SetField("ItemDB_UID", itemUID);
+
+                //Commit Row
+                Data.Tables[2].Rows.Add(fieldRow);
+            }
+
+            return true;
+        }
+
         //
         //--Read a file into a string(to be interpreted)
         //

@@ -518,13 +518,73 @@ namespace BectiBalancer
             
             System.Data.DataRowView rowView = e.Row.Item as System.Data.DataRowView;
             rowBeingEdited = rowView;
+            if (rowBeingEdited != null)
+                if (rowBeingEdited.IsNew)
+                {
+
+                    addRow();
+                }
+        }
+        private void addRow()
+        {
+            for (int i = 0; i < rowBeingEdited.Row.ItemArray.Count(); i++)
+            //iterate and check for any new values(new values need to be saved as new items)
+            {
+                if (rowBeingEdited.Row.ItemArray[i] != DBNull.Value)
+                //new value
+                {
+                    //
+                    //--we need to get the collectionlist object to create a new PK and reload the grid with the new item
+                    //      this means we need to add a new row to ItemDB table in the DataSet object 'Data'
+                    //      then we need to call for an update of the datatable and dataview and refresh the datagrid
+                    //
+
+                    //add row, false if exists
+                    if (currentList.addRow(rowBeingEdited.Row))
+                    //add succeeded
+                    { }
+                    else
+                    //add failed, notify user that item exists/invalid and exit
+                    {
+                        Log("Error: Item Exists or is Invalid '" + rowBeingEdited.Row.ItemArray.ToString() + "'");
+
+                        return;
+                    }
+
+                    //update datatable, dataview
+                    currentList.updateView("", cbShowTags.IsEnabled);
+
+                    //refresh datagrid
+                    dgViewBalance.ItemsSource = null;
+                    dgViewBalance.ItemsSource = currentList.View;
+                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
+                    dgViewBalance.CanUserAddRows = true;
+                    rowBeingEdited.EndEdit();
+                    dgViewBalance.CommitEdit();
+                    return;
+                }
+                else
+                //no new value
+                {
+                    continue;
+                }
+            }
         }
         private void dgViewBalance_CurrentCellChanged(object sender, EventArgs e)
         {
             if (rowBeingEdited != null)
             {
-                rowBeingEdited.EndEdit();
-                dgViewBalance.CommitEdit();
+                if (rowBeingEdited.IsNew)
+                {
+
+                    addRow();
+                }
+                else
+                {
+                    rowBeingEdited.EndEdit();
+                    dgViewBalance.CommitEdit();
+                }
+                
                 
             }
         }
@@ -617,7 +677,23 @@ namespace BectiBalancer
                     //clear buffer
                     rowDeleteBuffer = new List<System.Data.DataRowView>();
                 }
-                
+                if (rowBeingEdited != null)
+                    if (rowBeingEdited.IsNew)
+                    {
+
+                        addRow();
+                    }
+
+            }
+        }
+
+        private void dgViewBalance_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            if(rowBeingEdited != null)
+            if (rowBeingEdited.IsNew)
+            {
+
+                addRow();
             }
         }
 
@@ -627,6 +703,9 @@ namespace BectiBalancer
             //
             //--We need to prevent errors when adding new item from missing items(need to generate new PK for new Item, fill in required fields/prevent unique conflicts)
             //
+
+            
+
         }
 
 
@@ -636,47 +715,7 @@ namespace BectiBalancer
 
 
 
-        //Filter things out
-        private void filterLists()
-        {/*
-            String type = cbFilterType.Text;
-            String filterKeyword = tbFilterText.Text;
-
-            currentList.filterList(type, filterKeyword);
-
-            switch (type)
-            //Switch to populate different types of CollectionLists
-            {
-                case "Unit":
-                    
-                    Log("Filtered Item List as Unit Type");
-                    dgViewBalance.ItemsSource = null;
-                    dgViewBalance.ItemsSource = currentList.UnitList;
-                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
-                    dgViewBalance.CanUserAddRows = true;
-                    break;
-                case "Ammo":
-                    
-                    Log("Populated Item List as Ammo Type");
-                    dgViewBalance.ItemsSource = null;
-                    dgViewBalance.ItemsSource = currentList.AmmoList;
-                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
-                    dgViewBalance.CanUserAddRows = true;
-                    break;
-                case "Gear":
-                    
-                    Log("Filtered Item List as Gear Type");
-                    dgViewBalance.ItemsSource = null;
-                    dgViewBalance.ItemsSource = currentList.GearList;
-                    dgViewBalance.IsSynchronizedWithCurrentItem = true;
-                    dgViewBalance.CanUserAddRows = true;
-                    break;
-                default:
-                    Log("Error: Improper Filter Type Selected");
-                    break;
-            }
-
-        */}
+        
 
     }
 }

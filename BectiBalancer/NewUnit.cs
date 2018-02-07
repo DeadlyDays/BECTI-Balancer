@@ -100,7 +100,7 @@ namespace BectiBalancer
                 "",/*Enabled*/
                 "''",/*Name*/
                 "''",/*Class*/
-                "''",/*MenuName*/
+                "",/*MenuName*/
                 "['']",/*Location*/
                 "",/*Upgrade*/
                 "",/*Price*/

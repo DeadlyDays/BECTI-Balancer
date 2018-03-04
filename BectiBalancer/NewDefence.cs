@@ -99,14 +99,14 @@ namespace BectiBalancer
                 "",//Headers
                 "''",//Class
                 "",//Price
-                "[]",//Placement
-                "[]",//Tags
-                "[]",//Coinmenus
-                "[]",//Blacklist
+                "",//Placement
+                "",//Tags
+                "",//Coinmenus
+                "",//Blacklist
                 "",//Upgrade
                 "",//MaxCount
                 "",//Cooldown
-                "[]"//Specials
+                ""//Specials
             };
         }
     }

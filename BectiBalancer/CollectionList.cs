@@ -59,11 +59,13 @@ namespace BectiBalancer
         private static Unit myUnit = new Unit();
         private static Gear myGear = new Gear();
         private static Ammo myAmmo = new Ammo();
-        String unitPattern, gearPattern, ammoPattern;
+        private static Defence myDefence = new Defence();
+        String unitPattern, gearPattern, ammoPattern, defencePattern;
         private static NewUnit myNewUnit = new NewUnit();
         private static NewGear myNewGear = new NewGear();
         private static NewAmmo myNewAmmo = new NewAmmo();
-        String newUnitPattern, newGearPattern, newAmmoPattern;
+        private static NewDefence myNewDefence = new NewDefence();
+        String newUnitPattern, newGearPattern, newAmmoPattern, newDefencePattern;
         
         public Boolean filtered;
 
@@ -130,6 +132,10 @@ namespace BectiBalancer
             row.SetField("Type", "Ammo");
             row.SetField("Footer", myAmmo.Footer);
             Data.Tables[1].Rows.Add(row);
+            row = Data.Tables[1].NewRow();
+            row.SetField("Type", "Defence");
+            row.SetField("Footer", myDefence.Footer);
+            Data.Tables[1].Rows.Add(row);
 
             filtered = false;
             MyType = null;
@@ -140,7 +146,7 @@ namespace BectiBalancer
                 unitPattern +=
                     "(" +
                     myUnit.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n){1}.*"
                     ;
 
             }
@@ -151,7 +157,7 @@ namespace BectiBalancer
                 gearPattern +=
                     "(" +
                     myGear.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n){1}.*"
                     ;
 
             }
@@ -161,7 +167,17 @@ namespace BectiBalancer
                 ammoPattern +=
                     "(" +
                     myAmmo.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n){1}.*"
+                    ;
+
+            }
+            defencePattern = ".*";
+            for (int i = 0; i < myDefence.FormatArrays.Count; i++)
+            {
+                defencePattern +=
+                    "(" +
+                    myDefence.FormatArrays[i] +
+                    " pushBack(.*);.*\n){1}.*"
                     ;
 
             }
@@ -224,6 +240,10 @@ namespace BectiBalancer
             row.SetField("Type", "Ammo");
             row.SetField("Footer", myAmmo.Footer);
             Data.Tables[1].Rows.Add(row);
+            row = Data.Tables[1].NewRow();
+            row.SetField("Type", "Defence");
+            row.SetField("Footer", myDefence.Footer);
+            Data.Tables[1].Rows.Add(row);
 
             filtered = false;
             MyType = null;
@@ -235,7 +255,7 @@ namespace BectiBalancer
                 unitPattern +=
                     "(" +
                     myUnit.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n){1}.*"
                     ;
 
             }
@@ -246,7 +266,7 @@ namespace BectiBalancer
                 gearPattern +=
                     "(" +
                     myGear.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n){1}.*"
                     ;
 
             }
@@ -256,7 +276,17 @@ namespace BectiBalancer
                 ammoPattern +=
                     "(" +
                     myAmmo.FormatArrays[i] +
-                    " pushBack (.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n){1}.*"
+                    ;
+
+            }
+            defencePattern = ".*";
+            for (int i = 0; i < myDefence.FormatArrays.Count; i++)
+            {
+                defencePattern +=
+                    "(" +
+                    myDefence.FormatArrays[i] +
+                    " pushBack(.*);.*\n){1}.*"
                     ;
 
             }
@@ -309,6 +339,11 @@ namespace BectiBalancer
                 type = "Ammo";
                 MyType = myAmmo;
             }
+            else if (Regex.IsMatch(input, @defencePattern))
+            {
+                type = "Defence";
+                MyType = myDefence;
+            }
             else
             {
                 type = "Other";
@@ -338,6 +373,9 @@ namespace BectiBalancer
                         case "Ammo":
                             currDataPop<Ammo>(pattern, input);
                             break;
+                        case "Defence":
+                            currDataPop<Defence>(pattern, input);
+                            break;
                         default:
                             break;
                     }
@@ -360,7 +398,7 @@ namespace BectiBalancer
 
             for(int p = 0; p < new T().FormatArrays.Count;p++)
             {
-                pattern += @"(?:.*)" + (new T().FormatArrays[p]) + @" pushBack (?<" + new T().FormatNames[p] + @">.+?);.*?\n.*?";
+                pattern += @"(?:.*)" + (new T().FormatArrays[p]) + @" pushBack[ \t]+(?<" + new T().FormatNames[p] + @">.+?);.*?\n.*?";
             }
             //Every item
             MatchCollection matchCol = Regex.Matches(input, @pattern, RegexOptions.None, Regex.InfiniteMatchTimeout);
@@ -377,8 +415,17 @@ namespace BectiBalancer
                     int itemUID = Data.Tables[0].Rows.Count;
                     //Set UID
                     itemRow.SetField("UID", itemUID);
-                    //Set Classname
-                    itemRow.SetField("ClassName", p.Groups[1].Value);
+                    if(typeof(T) == typeof(Defence))
+                    {
+                        //Set Classname
+                        itemRow.SetField("ClassName", p.Groups[2].Value);
+                    }
+                    else
+                    {
+                        //Set Classname
+                        itemRow.SetField("ClassName", p.Groups[1].Value);
+                    }
+                    
                     //Set TypeDB_Type
                     itemRow.SetField("TypeDB_Type", typeof(T).Name.ToString());
                     //Commit Row
@@ -496,6 +543,8 @@ namespace BectiBalancer
                 myItem = myGear;
             else if (resultArray.ElementAt(0).FieldType == "Ammo")
                 myItem = myAmmo;
+            else if (resultArray.ElementAt(0).FieldType == "Defence")
+                myItem = myDefence;
             if (resultArray.Count() != 0)
             {
                 //Add the PK UID
@@ -837,7 +886,7 @@ namespace BectiBalancer
 
 
 
-            if (Regex.IsMatch(content, @unitPattern) || Regex.IsMatch(content, @gearPattern) || Regex.IsMatch(content, @ammoPattern))
+            if (Regex.IsMatch(content, @unitPattern) || Regex.IsMatch(content, @gearPattern) || Regex.IsMatch(content, @ammoPattern) || Regex.IsMatch(content, @defencePattern))
             {
                 //Datatype is good, continue
                 String newFile = "";
@@ -972,7 +1021,7 @@ namespace BectiBalancer
                                     {
                                         String newItem = Regex.Replace((String)dr.ItemArray[c], @"[\[\]]", "");
                                         if(newItem.Contains("\""))
-                                        //If should have ", do we also have '(replace thme if we do)
+                                        //If should have ", do we also have '(replace them if we do)
                                         {
                                             newItem = Regex.Replace(newItem, @"[']", "'");
                                             output += NewType.FormatNames[p] + "*/" +
@@ -1051,7 +1100,9 @@ namespace BectiBalancer
                                     //
                                     //--if this is the case, need to strip special chars if there are any
                                     //
-                                    output += NewType.FormatNames[p] + "*/" + Regex.Replace((String)dr.ItemArray[c], @"[^\w]", "") + "";
+
+                                    //This behavior might need to change
+                                    output += NewType.FormatNames[p] + "*/" + (String)dr.ItemArray[c] + "";
                                 }
                                 
                                 //Formatted line
@@ -1102,7 +1153,7 @@ namespace BectiBalancer
                 //
                 //--Verify contents are a valid type
                 //
-                if (Regex.IsMatch(content, @unitPattern) || Regex.IsMatch(content, @gearPattern) || Regex.IsMatch(content, @ammoPattern))
+                if (Regex.IsMatch(content, @unitPattern) || Regex.IsMatch(content, @gearPattern) || Regex.IsMatch(content, @ammoPattern) || Regex.IsMatch(content, @defencePattern))
                 //if this is a valid type
                 {
                     ;
@@ -1134,6 +1185,9 @@ namespace BectiBalancer
                         break;
                     case "Ammo":
                         NewType = myNewAmmo;
+                        break;
+                    case "Defence":
+                        NewType = myNewDefence;
                         break;
                     default:
                         NewType = new NewItem();

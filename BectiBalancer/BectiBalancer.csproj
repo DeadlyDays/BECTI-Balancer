@@ -95,9 +95,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Ammo.cs" />
+    <Compile Include="Defence.cs" />
     <Compile Include="Gear.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="NewAmmo.cs" />
+    <Compile Include="NewDefence.cs" />
     <Compile Include="NewGear.cs" />
     <Compile Include="NewItem.cs" />
     <Compile Include="NewUnit.cs" />

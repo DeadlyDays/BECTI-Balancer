@@ -73,7 +73,8 @@ namespace BectiBalancer
                 "Distance",
                 "Camo",
                 "Type", 
-                "Ammmo",      
+                "Ammmo",
+                "Modifiers",
                 "Script",
                 "Picture"
             };
@@ -91,6 +92,7 @@ namespace BectiBalancer
                 "[]",/*Camo*/
                 "[]",/*Type*/
                 "true",/*Ammmo*/
+                "[]",/*Modifiers*/
                 "''",/*Script*/
                 "''"/*Picture*/
             };
@@ -109,6 +111,7 @@ namespace BectiBalancer
                 "[]",/*Camo*/
                 "[]",/*Type*/
                 "",/*Ammmo*/
+                "",/*Modifiers*/
                 "''",/*Script*/
                 "''"/*Picture*/
             };

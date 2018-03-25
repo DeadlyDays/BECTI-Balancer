@@ -70,12 +70,12 @@ namespace BectiBalancer
             Header = "";
             formatNames = new List<String>
             {
-                "Headers",
                 "Class",
+                "Class_old",
                 "Price",
                 "Placement",
                 "Tags",
-                "Coinmenus",
+                "Location",
                 "Blacklist",
                 "Upgrade",
                 "Specials"
@@ -87,7 +87,7 @@ namespace BectiBalancer
                 "_prices",//Price
                 "_placements",//Placement
                 "_categories",//Tags
-                "_coinmenus",//Coinmenus
+                "_coinmenus",//Location
                 "_coinblacklist",//Blacklist
                 "_upgrade",//Upgrade
                 "_specials"//Specials
@@ -99,7 +99,7 @@ namespace BectiBalancer
                 "0",//Price
                 "[]",//Placement
                 "''",//Tags
-                "[]",//Coinmenus
+                "[]",//Location
                 "[] ",//Blacklist
                 "0 ",//Upgrade
                 "[]"//Specials

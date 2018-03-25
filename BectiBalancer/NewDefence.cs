@@ -64,12 +64,12 @@ namespace BectiBalancer
             {
                 "Enabled",
                 "Name",
-                "Headers",
                 "Class",
+                "Class_old",
                 "Price",
                 "Placement",
                 "Tags",
-                "Coinmenus",
+                "Location",
                 "Blacklist",
                 "Upgrade",
                 "MaxCount",
@@ -78,14 +78,14 @@ namespace BectiBalancer
             };
             formatDefaults = new List<String>
             {
-                "false",//Enabled
+                "true",//Enabled
                 "''",//Name
-                "''",//Headers
                 "''",//Class
+                "''",//Class_old
                 "0",//Price
                 "[]",//Placement
                 "[]",//Tags
-                "[]",//Coinmenus
+                "[]",//Location
                 "[]",//Blacklist
                 "0",//Upgrade
                 "-1",//MaxCount
@@ -96,12 +96,12 @@ namespace BectiBalancer
             {
                 "",//Enabled
                 "''",//Name
-                "",//Headers
-                "''",//Class
+                "",//Class
+                "",//Class_old
                 "",//Price
                 "",//Placement
-                "",//Tags
-                "",//Coinmenus
+                "[]",//Tags
+                "",//Location
                 "",//Blacklist
                 "",//Upgrade
                 "",//MaxCount

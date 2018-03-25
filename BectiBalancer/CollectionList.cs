@@ -312,7 +312,7 @@ namespace BectiBalancer
                             continue;
                         }
                     int istart = input.IndexOf("/*");
-                    int iend = input.IndexOf("*/") + 2;
+                    int iend = input.IndexOf("*/", istart) + 2;
                     iCount = (iend - istart);
                     if (iCount > 0 /*&& startIndex > 0*/)
                         input = input.Remove(startIndex, iCount);//Get rid of comment blocks

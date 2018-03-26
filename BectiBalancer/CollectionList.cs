@@ -146,7 +146,7 @@ namespace BectiBalancer
                 unitPattern +=
                     "(" +
                     myUnit.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -157,7 +157,7 @@ namespace BectiBalancer
                 gearPattern +=
                     "(" +
                     myGear.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -167,7 +167,7 @@ namespace BectiBalancer
                 ammoPattern +=
                     "(" +
                     myAmmo.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -177,7 +177,7 @@ namespace BectiBalancer
                 defencePattern +=
                     "(" +
                     myDefence.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -255,7 +255,7 @@ namespace BectiBalancer
                 unitPattern +=
                     "(" +
                     myUnit.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -266,7 +266,7 @@ namespace BectiBalancer
                 gearPattern +=
                     "(" +
                     myGear.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -276,7 +276,7 @@ namespace BectiBalancer
                 ammoPattern +=
                     "(" +
                     myAmmo.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -286,7 +286,7 @@ namespace BectiBalancer
                 defencePattern +=
                     "(" +
                     myDefence.FormatArrays[i] +
-                    " pushBack(.*);.*\n){1}.*"
+                    " pushBack(.*);.*\n*){1}.*"
                     ;
 
             }
@@ -356,7 +356,7 @@ namespace BectiBalancer
             String pattern =
                 @"(?:(?:.*)" +//specify front of search has nothing above it, or a ; with any amount of characters between it and next part
                 @"(?:\/\/\[Tag;(?:.+?):(?:.+?)?\])" +//find 0 or more instances of tags [Tag;tagName:tagValue]
-                @"(?:.*.*?\n.*?))*"//space between tag and everything else
+                @"(?:.*.*?\n*.*?))*"//space between tag and everything else
                 ;
 
             switch (false)
@@ -398,7 +398,7 @@ namespace BectiBalancer
 
             for(int p = 0; p < new T().FormatArrays.Count;p++)
             {
-                pattern += @"(?:.*)" + (new T().FormatArrays[p]) + @" pushBack[ \t]+(?<" + new T().FormatNames[p] + @">.+?);.*?\n.*?";
+                pattern += @"(?:.*)" + (new T().FormatArrays[p]) + @" pushBack[ \t]+(?<" + new T().FormatNames[p] + @">.+?);.*?\n*.*?";
             }
             //Every item
             MatchCollection matchCol = Regex.Matches(input, @pattern, RegexOptions.None, Regex.InfiniteMatchTimeout);
